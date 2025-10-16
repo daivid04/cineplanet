@@ -149,7 +149,6 @@ CREATE TABLE compra(
     id_compra INT PRIMARY KEY AUTO_INCREMENT,
     fecha DATE NOT NULL,
     id_usuario INT NOT NULL,
-    id_trabajador INT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) 
     ON UPDATE CASCADE 
     ON DELETE RESTRICT
