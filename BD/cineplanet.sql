@@ -85,7 +85,6 @@ CREATE TABLE trabajador(
 
 CREATE TABLE producto(
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
-    stock INT NOT NULL,
     nombre VARCHAR(50) NOT NULL,
     precio_unitario FLOAT NOT NULL
 );
