@@ -60,6 +60,7 @@ CREATE TABLE funcion(
     hora TIME NOT NULL,
     id_pelicula INT NOT NULL,
     id_sala INT NOT NULL,
+    detalles_funcion JSON NULL,
     FOREIGN KEY (id_pelicula) REFERENCES pelicula(id_pelicula) 
     ON UPDATE CASCADE 
     ON DELETE CASCADE,
@@ -106,7 +107,8 @@ CREATE TABLE producto_sede(
 CREATE TABLE combos(
     id_combo INT PRIMARY KEY AUTO_INCREMENT,
     precio FLOAT NOT NULL,
-    nombre VARCHAR(50) NOT NULL
+    nombre VARCHAR(50) NOT NULL,
+    contenido_combo JSON NULL
 );
 
 CREATE TABLE usuario(
@@ -158,6 +160,7 @@ CREATE TABLE compra(
     id_compra INT PRIMARY KEY AUTO_INCREMENT,
     fecha DATE NOT NULL,
     id_usuario INT NOT NULL,
+    detalles_pago JSON NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) 
     ON UPDATE CASCADE 
     ON DELETE RESTRICT
