@@ -135,7 +135,7 @@ INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`) 
 --
 -- Poblando la tabla `trabajador`
 --
-INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `esado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`) VALUES
+INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`) VALUES
 (1, 'Gerente', 'Activo', '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1),
 (2, 'Boletería', 'Activo', '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1),
 (3, 'Dulcería', 'Activo', '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2),
