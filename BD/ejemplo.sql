@@ -1,71 +1,50 @@
 USE cineplanet;
 
--- =====================================================================================
--- PASO 1: PREPARAR DESCRIPCIONES DE COMPRA (deben existir primero)
--- =====================================================================================
+SET @id_usuario = 2;
+SET @id_funcion = 3;
+SET @id_sede = 1;
+SET @id_sala = 2;
 
--- Descripción para el combo
-INSERT INTO compra_cliente (tipo, id_combo) VALUES ('Combo', 2);
-SET @id_desc_combo = LAST_INSERT_ID();
+SET @id_asiento_1 = 13;
+SET @id_asiento_2 = 14;
 
--- Descripción para el producto individual
-INSERT INTO compra_cliente (tipo, id_combo) VALUES ('Individual', NULL);
-SET @id_desc_producto = LAST_INSERT_ID();
+SET @id_combo = 1;
+SET @id_producto_individual = 7;
 
--- =====================================================================================
--- PASO 2: PREPARAR DATOS DE LA COMPRA
--- =====================================================================================
+SET @precio_boleto = 22.00;
+SET @precio_combo = 35.00;
+SET @precio_nachos = 18.00;
 
-SET @id_usuario = 1;              -- Socio: Miguel Grau
-SET @fecha_compra = CURDATE();
+CALL descripcion_asiento_insert(@id_asiento_1);
+SET @id_desc_asiento_1 = (SELECT LAST_INSERT_ID());
 
--- JSON con los boletos a comprar
-SET @boletos_json = JSON_ARRAY(
-    JSON_OBJECT(
-        'id_funcion', 1,
-        'id_descripcion', 1,
-        'id_sala', 1,
-        'id_sede', 1,
-        'precio', 18.00
-    ),
-    JSON_OBJECT(
-        'id_funcion', 1,
-        'id_descripcion', 2,
-        'id_sala', 1,
-        'id_sede', 1,
-        'precio', 18.00
-    )
-);
+CALL descripcion_asiento_insert(@id_asiento_2);
+SET @id_desc_asiento_2 = (SELECT LAST_INSERT_ID());
 
--- JSON con los productos a comprar (usando las descripciones creadas)
-SET @productos_json = JSON_ARRAY(
-    JSON_OBJECT(
-        'id_producto', NULL,
-        'id_combo', 2,
-        'id_descripcion_de_compra', @id_desc_combo,
-        'precio', 55.00
-    ),
-    JSON_OBJECT(
-        'id_producto', 10,
-        'id_combo', NULL,
-        'id_descripcion_de_compra', @id_desc_producto,
-        'precio', 14.00
-    )
-);
+CALL compra_cliente_insert('Combo', @id_combo);
+SET @id_desc_combo = (SELECT LAST_INSERT_ID());
 
--- =====================================================================================
--- PASO 3: EJECUTAR LA COMPRA COMPLETA
--- =====================================================================================
+CALL compra_cliente_insert('Individual', NULL);
+SET @id_desc_individual = (SELECT LAST_INSERT_ID());
 
-CALL compra_completa_insert(
-    @fecha_compra,
-    @id_usuario,
-    @boletos_json,
-    @productos_json
-);
+CALL compra_insert(CURDATE(), @id_usuario);
+SET @id_compra = (SELECT LAST_INSERT_ID());
 
--- =====================================================================================
--- PASO 4: VERIFICAR RESULTADO
--- =====================================================================================
+CALL compra_boleto_insert(@precio_boleto, @id_compra, @id_funcion, @id_desc_asiento_1, @id_sala, @id_sede);
+CALL compra_boleto_insert(@precio_boleto, @id_compra, @id_funcion, @id_desc_asiento_2, @id_sala, @id_sede);
 
-SELECT '==================== RESULTADO ====================' AS '';
+CALL compra_productos_insert(@precio_combo, @id_compra, NULL, @id_combo, @id_desc_combo);
+CALL compra_productos_insert(@precio_nachos, @id_compra, @id_producto_individual, NULL, @id_desc_individual);
+
+UPDATE producto_sede ps
+JOIN producto_combo pc ON ps.id_producto = pc.id_producto
+SET ps.stock = ps.stock - 1
+WHERE pc.id_combo = @id_combo AND ps.id_sede = @id_sede;
+
+UPDATE producto_sede
+SET stock = stock - 1
+WHERE id_producto = @id_producto_individual AND id_sede = @id_sede;
+
+SELECT 'El stock de los productos ha sido actualizado correctamente.' AS 'Mensaje de Stock';
+SELECT '======================================================================' AS '';
+SELECT '¡Gracias por su compra! ¡Disfrute de la función!' AS 'Mensaje Final';
