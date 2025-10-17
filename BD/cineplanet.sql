@@ -71,7 +71,7 @@ CREATE TABLE funcion(
 CREATE TABLE trabajador(
     id_trabajador INT PRIMARY KEY AUTO_INCREMENT,
     tipo VARCHAR(50) NOT NULL,
-    esado VARCHAR(50) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
     dni VARCHAR(8) NOT NULL UNIQUE,
     numero VARCHAR(9) NOT NULL,
     correo VARCHAR(50) NOT NULL,
