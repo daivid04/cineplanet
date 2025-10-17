@@ -63,8 +63,6 @@ BEGIN
     END IF;
 END$$
 
-
-
 DROP PROCEDURE IF EXISTS compra_boleto_insert$$
 CREATE PROCEDURE compra_boleto_insert(
     IN p_precio_total_boleto DECIMAL(10,2),
@@ -133,8 +131,6 @@ BEGIN
     END IF;
 END$$
 
-
-
 DROP PROCEDURE IF EXISTS compra_productos_insert$$
 CREATE PROCEDURE compra_productos_insert(
     IN p_precio_compra DECIMAL(10,2),
@@ -200,13 +196,11 @@ BEGIN
     END IF;
 END$$
 
-
-
 DROP PROCEDURE IF EXISTS compra_completa_insert$$
 CREATE PROCEDURE compra_completa_insert(
     IN p_fecha DATE,
     IN p_id_usuario INT,
-    IN p_boletos JSON,  
+    IN p_boletos JSON,
     IN p_productos JSON
 )
 BEGIN
@@ -216,17 +210,19 @@ BEGIN
     DECLARE v_productos_count INT;
     DECLARE v_precio DECIMAL(10,2);
     DECLARE v_id_funcion INT;
-    DECLARE v_id_descripcion INT;
+    DECLARE v_id_asiento INT;
     DECLARE v_id_sala INT;
     DECLARE v_id_sede INT;
     DECLARE v_id_producto INT;
     DECLARE v_id_combo INT;
+    DECLARE v_tipo_compra VARCHAR(50);
+    DECLARE v_id_descripcion_asiento INT;
     DECLARE v_id_descripcion_compra INT;
     
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
-        SELECT 0 AS success, 'Error en la transacción de compra completa' AS mensaje, NULL AS id_compra_completa_insertada;
+        SELECT 0 AS success, 'Error en la transacción de compra completa' AS mensaje, NULL AS id_compra_insertada;
     END;
     
     START TRANSACTION;
@@ -241,14 +237,19 @@ BEGIN
         SET v_index = 0;
         
         WHILE v_index < v_boletos_count DO
-            SET v_id_funcion = JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_funcion'));
-            SET v_id_descripcion = JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_descripcion'));
-            SET v_id_sala = JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_sala'));
-            SET v_id_sede = JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_sede'));
-            SET v_precio = JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].precio'));
+            SET v_id_funcion = JSON_UNQUOTE(JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_funcion')));
+            SET v_id_asiento = JSON_UNQUOTE(JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_asiento')));
+            SET v_id_sala = JSON_UNQUOTE(JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_sala')));
+            SET v_id_sede = JSON_UNQUOTE(JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].id_sede')));
+            SET v_precio = JSON_UNQUOTE(JSON_EXTRACT(p_boletos, CONCAT('$[', v_index, '].precio')));
             
+            -- Crear descripción del asiento automáticamente
+            INSERT INTO descripcion_asiento(id_asiento) VALUES (v_id_asiento);
+            SET v_id_descripcion_asiento = LAST_INSERT_ID();
+            
+            -- Insertar el boleto
             INSERT INTO compra_boleto(precio_total_boleto, id_compra, id_funcion, id_descripcion, id_sala, id_sede)
-            VALUES (v_precio, v_id_compra, v_id_funcion, v_id_descripcion, v_id_sala, v_id_sede);
+            VALUES (v_precio, v_id_compra, v_id_funcion, v_id_descripcion_asiento, v_id_sala, v_id_sede);
             
             SET v_index = v_index + 1;
         END WHILE;
@@ -259,18 +260,50 @@ BEGIN
         SET v_productos_count = JSON_LENGTH(p_productos);
         SET v_index = 0;
         
+        -- Extraer sede desde el primer boleto (si existe)
+        IF p_boletos IS NOT NULL AND JSON_LENGTH(p_boletos) > 0 THEN
+            SET v_id_sede = JSON_UNQUOTE(JSON_EXTRACT(p_boletos, '$[0].id_sede'));
+        ELSE
+            SET v_id_sede = 1;
+        END IF;
+        
         WHILE v_index < v_productos_count DO
             SET v_id_producto = JSON_UNQUOTE(JSON_EXTRACT(p_productos, CONCAT('$[', v_index, '].id_producto')));
             SET v_id_combo = JSON_UNQUOTE(JSON_EXTRACT(p_productos, CONCAT('$[', v_index, '].id_combo')));
-            SET v_id_descripcion_compra = JSON_EXTRACT(p_productos, CONCAT('$[', v_index, '].id_descripcion_de_compra'));
-            SET v_precio = JSON_EXTRACT(p_productos, CONCAT('$[', v_index, '].precio'));
+            SET v_precio = JSON_UNQUOTE(JSON_EXTRACT(p_productos, CONCAT('$[', v_index, '].precio')));
             
             -- Convertir 'null' string a NULL real
             IF v_id_producto = 'null' THEN SET v_id_producto = NULL; END IF;
             IF v_id_combo = 'null' THEN SET v_id_combo = NULL; END IF;
             
+            -- Determinar tipo de compra
+            IF v_id_combo IS NOT NULL THEN
+                SET v_tipo_compra = 'Combo';
+            ELSE
+                SET v_tipo_compra = 'Individual';
+            END IF;
+            
+            -- Crear descripción de compra automáticamente
+            INSERT INTO compra_cliente(tipo, id_combo) VALUES (v_tipo_compra, v_id_combo);
+            SET v_id_descripcion_compra = LAST_INSERT_ID();
+            
+            -- Insertar producto/combo
             INSERT INTO compra_productos(precio_compra, id_compra, id_producto, id_combo, id_descripcion_de_compra)
             VALUES (v_precio, v_id_compra, v_id_producto, v_id_combo, v_id_descripcion_compra);
+            
+            -- Actualizar inventario automáticamente
+            IF v_id_combo IS NOT NULL THEN
+                -- Reducir stock de todos los productos del combo
+                UPDATE producto_sede ps
+                INNER JOIN producto_combo pc ON ps.id_producto = pc.id_producto
+                SET ps.stock = ps.stock - 1
+                WHERE pc.id_combo = v_id_combo AND ps.id_sede = v_id_sede AND ps.stock > 0;
+            ELSE
+                -- Reducir stock del producto individual
+                UPDATE producto_sede
+                SET stock = stock - 1
+                WHERE id_producto = v_id_producto AND id_sede = v_id_sede AND stock > 0;
+            END IF;
             
             SET v_index = v_index + 1;
         END WHILE;
@@ -278,7 +311,10 @@ BEGIN
     
     COMMIT;
     
-    SELECT 1 AS success, 'Compra completa exitosa' AS mensaje, v_id_compra AS id_compra_completa_insertada;
+    SELECT 1 AS success, 
+           'Compra completa exitosa' AS mensaje, 
+           v_id_compra AS id_compra_insertada,
+           CONCAT('Boletos: ', IFNULL(v_boletos_count, 0), ' | Productos: ', IFNULL(v_productos_count, 0)) AS detalle;
 END$$
 
 DELIMITER ;
