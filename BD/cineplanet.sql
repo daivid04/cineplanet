@@ -87,12 +87,22 @@ CREATE TABLE producto(
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
     stock INT NOT NULL,
     nombre VARCHAR(50) NOT NULL,
-    precio_unitario FLOAT NOT NULL,
-    id_sede INT NOT NULL,
-    FOREIGN KEY (id_sede) REFERENCES sede(id_sede) 
-    ON UPDATE CASCADE 
-    ON DELETE CASCADE
+    precio_unitario FLOAT NOT NULL
 );
+
+CREATE TABLE producto_sede(
+    id_producto_sede INT PRIMARY KEY AUTO_INCREMENT,
+    stock INT NOT NULL,
+    id_producto INT NOT NULL,
+    id_sede INT NOT NULL,
+    FOREIGN KEY(id_producto) REFERENCES producto(id_producto)
+    ON UPDATE CASCADE
+	ON DELETE RESTRICT,
+    FOREIGN KEY(id_sede) REFERENCES sede(id_sede)
+    ON UPDATE CASCADE
+	ON DELETE RESTRICT
+);
+
 
 CREATE TABLE combos(
     id_combo INT PRIMARY KEY AUTO_INCREMENT,
