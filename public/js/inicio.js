@@ -33,7 +33,7 @@ const peliculas = [
 
     {
         id: 5,
-        nombre: "Good Boy",
+        nombre: "Goood Boy",
         genero: "Terror",
         clasificacion: "+16",
         imagenUrl: "../assets/images/goodboy.jpg",
