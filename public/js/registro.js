@@ -119,8 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Datos listos para enviar al backend (MySQL):', datosUsuario);
 
-        // Esta es la URL de tu API de usuario que me mostraste
-        const apiURL = '../public/api/usuario_api.php?tipo=socio';
+        const apiURL = '../api/socio.php';
 
         try {
             const response = await fetch(apiURL, {
