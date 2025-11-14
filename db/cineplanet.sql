@@ -120,6 +120,7 @@ CREATE TABLE socio(
     fecha_nacimiento DATETIME NOT NULL,
     documento VARCHAR(8) NOT NULL,
     id_tipo_socio INT NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) 
     ON UPDATE CASCADE 
     ON DELETE CASCADE,
