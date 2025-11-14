@@ -1,5 +1,14 @@
 -- Usar la base de datos
-USE cineplanet;
+USE u914095763_g1;
+
+-- Primero poblar la tabla metodo
+INSERT INTO `metodo` (`id_metodo`, `nombre_metodo`) VALUES
+(1, 'Tarjeta de Crédito'),
+(2, 'Tarjeta de Débito'),
+(3, 'Efectivo'),
+(4, 'Yape'),
+(5, 'Plin'),
+(6, 'Transferencia Bancaria');
 
 --
 -- Poblando la tabla `ciudad`
@@ -135,7 +144,7 @@ INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`) 
 --
 -- Poblando la tabla `trabajador`
 --
-INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `esado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`) VALUES
+INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`) VALUES
 (1, 'Gerente', 'Activo', '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1),
 (2, 'Boletería', 'Activo', '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1),
 (3, 'Dulcería', 'Activo', '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2),
@@ -205,7 +214,17 @@ INSERT INTO `usuario` (`id_usuario`, `correo`) VALUES
 (7, 'cliente7@example.com'),
 (8, 'cliente8@example.com'),
 (9, 'cliente9@example.com'),
-(10, 'cliente10@example.com');
+(10, 'cliente10@example.com'),
+(11, 'cliente10@example.com'),
+(12, 'cliente10@example.com'),
+(13, 'cliente10@example.com'),
+(14, 'cliente10@example.com'),
+(15, 'cliente10@example.com'),
+(16, 'cliente10@example.com'),
+(17, 'cliente10@example.com'),
+(18, 'cliente10@example.com'),
+(19, 'cliente10@example.com'),
+(20, 'cliente10@example.com');
 
 --
 -- Poblando la tabla `tipo_socio` (3 tipos tradicionales)
@@ -217,16 +236,16 @@ INSERT INTO `tipo_socio` (`id_socio`, `nombre`, `desc_dulces`, `desc_boleto`) VA
 
 
 INSERT INTO `socio` (`id_usuario`, `nombre`, `apellido`, `genero`, `fecha_nacimiento`, `documento`, `id_tipo_socio`) VALUES
-(1, 'Miguel', 'Grau', 'Masculino', '1990-07-27 10:00:00', '12345678', 1),
-(2, 'Francisco', 'Bolognesi', 'Masculino', '1985-11-04 15:30:00', '23456789', 2),
-(3, 'Andres', 'Caceres', 'Masculino', '2000-02-10 08:45:00', '34567890', 3),
-(4, 'Tupac', 'Amaru', 'Masculino', '1995-05-19 12:00:00', '45678901', 1),
-(5, 'Micaela', 'Bastidas', 'Femenino', '1998-09-23 18:20:00', '56789012', 2),
-(6, 'Jose', 'Olaya', 'Masculino', '1988-01-15 09:00:00', '67890123', 1),
-(7, 'Jorge', 'Basadre', 'Masculino', '1992-03-12 20:00:00', '78901234', 3),
-(8, 'Ricardo', 'Palma', 'Masculino', '1999-08-07 14:10:00', '89012345', 2),
-(9, 'Cesar', 'Vallejo', 'Masculino', '2001-04-16 11:35:00', '90123456', 1),
-(10, 'Mario', 'Vargas', 'Masculino', '1986-12-28 22:05:00', '01234567', 3);
+(11, 'Miguel', 'Grau', 'Masculino', '1990-07-27 10:00:00', '12345678', 1),
+(12, 'Francisco', 'Bolognesi', 'Masculino', '1985-11-04 15:30:00', '23456789', 2),
+(13, 'Andres', 'Caceres', 'Masculino', '2000-02-10 08:45:00', '34567890', 3),
+(14, 'Tupac', 'Amaru', 'Masculino', '1995-05-19 12:00:00', '45678901', 1),
+(15, 'Micaela', 'Bastidas', 'Femenino', '1998-09-23 18:20:00', '56789012', 2),
+(16, 'Jose', 'Olaya', 'Masculino', '1988-01-15 09:00:00', '67890123', 1),
+(17, 'Jorge', 'Basadre', 'Masculino', '1992-03-12 20:00:00', '78901234', 3),
+(18, 'Ricardo', 'Palma', 'Masculino', '1999-08-07 14:10:00', '89012345', 2),
+(19, 'Cesar', 'Vallejo', 'Masculino', '2001-04-16 11:35:00', '90123456', 1),
+(20, 'Mario', 'Vargas', 'Masculino', '1986-12-28 22:05:00', '01234567', 3);
 --
 -- Poblando la tabla `invitado`
 --
@@ -242,80 +261,87 @@ INSERT INTO `invitado` (`id_usuario`, `nombre`) VALUES
 (9, 'Cesar Vallejo'),
 (10, 'Mario Vargas Llosa');
 
---
--- Poblando la tabla `compra_cliente`
---
-INSERT INTO `compra_cliente` (`id_descripcion_de_compra`, `tipo`, `id_combo`) VALUES
-(1, 'Combo', 1),
-(2, 'Combo', 2),
-(3, 'Combo', 3),
-(4, 'Combo', 4),
-(5, 'Individual', NULL),
-(6, 'Individual', NULL),
-(7, 'Individual', NULL),
-(8, 'Combo', 5),
-(9, 'Combo', 6),
-(10, 'Individual', NULL);
+
 
 --
 -- Poblando la tabla `compra`
 --
-INSERT INTO `compra` (`id_compra`, `fecha`, `id_usuario`) VALUES
-(1, '2025-10-16', 1),
-(2, '2025-10-16', 2),
-(3, '2025-10-16', 3),
-(4, '2025-10-15', 4),
-(5, '2025-10-15', 5),
-(6, '2025-10-14', 6),
-(7, '2025-10-14', 7),
-(8, '2025-10-13', 8),
-(9, '2025-10-13', 9),
-(10, '2025-10-13', 10);
+INSERT INTO `compra` (`id_compra`, `fecha`, `id_usuario`, `id_metodo`) VALUES
+(1, '2025-10-16', 1, 1),
+(2, '2025-10-16', 2, 2),
+(3, '2025-10-16', 3, 3),
+(4, '2025-10-15', 4, 1),
+(5, '2025-10-15', 5, 4),
+(6, '2025-10-14', 6, 3),
+(7, '2025-10-14', 7, 2),
+(8, '2025-10-13', 8, 1),
+(9, '2025-10-13', 9, 5),
+(10, '2025-10-13', 10, 3);
+
+
+
+-- Poblando la tabla `compra_boleto`
+--
+INSERT INTO `compra_boleto` (`id_compra_boleto`, `precio_total_boleto`, `id_compra`, `id_funcion`, `id_sala`, `id_sede`) VALUES
+(1, 30.00, 1, 1, 1, 1),
+(2, 30.00, 1, 1, 1, 1),
+(3, 15.00, 2, 2, 1, 1),
+(4, 25.00, 3, 3, 2, 1),
+(5, 25.00, 3, 3, 2, 1),
+(6, 20.00, 4, 4, 1, 1),
+(7, 20.00, 5, 5, 1, 1),
+(8, 22.00, 6, 6, 2, 1),
+(9, 18.00, 7, 7, 2, 1),
+(10, 40.00, 8, 8, 2, 1);
+
+--
 
 --
 -- Poblando la tabla `descripcion_asiento`
 --
-INSERT INTO `descripcion_asiento` (`id_descripcion`, `id_asiento`) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 6),
-(5, 7),
-(6, 11),
-(7, 12),
-(8, 15),
-(9, 16),
-(10, 20);
+INSERT INTO `descripcion_asiento` (`id_descripcion`, `id_asiento`, `id_compra_boleto`) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 6, 4),
+(5, 7, 5),
+(6, 11, 6),
+(7, 12, 7),
+(8, 15, 8),
+(9, 16, 9),
+(10, 20, 10);
 
---
--- Poblando la tabla `compra_boleto`
---
-INSERT INTO `compra_boleto` (`id_compra_boleto`, `precio_total_boleto`, `id_compra`, `id_funcion`, `id_descripcion`, `id_sala`, `id_sede`) VALUES
-(1, 30.00, 1, 1, 1, 1, 1),
-(2, 30.00, 1, 1, 2, 1, 1),
-(3, 15.00, 2, 2, 3, 1, 1),
-(4, 25.00, 3, 3, 6, 2, 1),
-(5, 25.00, 3, 3, 7, 2, 1),
-(6, 20.00, 4, 4, 4, 1, 1),
-(7, 20.00, 5, 5, 5, 1, 1),
-(8, 22.00, 6, 6, 8, 2, 1),
-(9, 18.00, 7, 7, 9, 2, 1),
-(10, 40.00, 8, 8, 10, 2, 1);
 
---
 -- Poblando la tabla `compra_productos`
 --
-INSERT INTO `compra_productos` (`id_precio_productos`, `precio_compra`, `id_compra`, `id_producto`, `id_combo`, `id_descripcion_de_compra`) VALUES
-(1, 35.00, 1, NULL, 1, 1),
-(2, 55.00, 2, NULL, 2, 2),
-(3, 18.00, 3, 7, NULL, 5),
-(4, 12.00, 4, 4, NULL, 6),
-(5, 25.50, 5, 1, NULL, 7),
-(6, 25.00, 6, NULL, 4, 4),
-(7, 14.00, 7, 10, NULL, 10),
-(8, 75.00, 8, NULL, 5, 8),
-(9, 30.00, 9, NULL, 6, 9),
-(10, 6.00, 10, 8, NULL, 5);
+-- Poblando la tabla `compra_productos` (CORREGIDO - solo campos existentes)
+INSERT INTO `compra_productos` (`id_precio_productos`, `precio_compra`, `id_compra`) VALUES
+(1, 35.00, 1),
+(2, 55.00, 2),
+(3, 18.00, 3),
+(4, 12.00, 4),
+(5, 25.50, 5),
+(6, 25.00, 6),
+(7, 14.00, 7),
+(8, 75.00, 8),
+(9, 30.00, 9),
+(10, 6.00, 10);
+
+
+--
+-- Poblando la tabla `compra_cliente`
+--
+INSERT INTO `compra_cliente` (`id_descripcion_de_compra`, `tipo`, `id_combo`, `id_producto_sede`, `id_compra_productos`) VALUES
+(1, 'Combo', 1, 1, 1),
+(2, 'Combo', 2, 2, 2),
+(3, 'Combo', 3, 3, 3),
+(4, 'Combo', 4, 4, 4),
+(5, 'Individual', NULL, 5, 5),
+(6, 'Individual', NULL, 6, 6),
+(7, 'Individual', NULL, 7, 7),
+(8, 'Combo', 5, 8, 8),
+(9, 'Combo', 6, 9, 9),
+(10, 'Individual', NULL, 10, 10);
 
 --
 -- Poblando la tabla `idiomas_pelicula`
@@ -350,7 +376,7 @@ INSERT INTO `formato_pelicula` (`id_formato_pelicula`, `id_pelicula`, `id_format
 --
 -- Poblando la tabla `producto_combo`
 --
-INSERT INTO `producto_combo` (`id_productos_combos`, `id_combo`, `id_producto`) VALUES
+INSERT INTO `producto_combo` (`id_productos_combos`, `id_combo`, `id_producto_sede`) VALUES
 (1, 1, 2), -- Combo Clásico: Canchita Grande
 (2, 1, 5), -- Combo Clásico: Gaseosa Mediana
 (3, 2, 1), -- Combo Pareja: Canchita Gigante
@@ -362,3 +388,4 @@ INSERT INTO `producto_combo` (`id_productos_combos`, `id_combo`, `id_producto`) 
 (9, 4, 5), -- Combo Hot-Dog: Gaseosa Mediana
 (10, 10, 10), -- Combo Tequeños: Tequeños
 (11, 10, 5); -- Combo Tequeños: Gaseosa Mediana
+

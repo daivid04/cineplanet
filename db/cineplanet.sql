@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS cineplanet;
-CREATE DATABASE cineplanet;
-USE cineplanet;
+DROP DATABASE IF EXISTS u914095763_g1;
+CREATE DATABASE u914095763_g1;
+USE u914095763_g1;
 
 CREATE TABLE ciudad(
     id_ciudad INT PRIMARY KEY AUTO_INCREMENT,
@@ -102,7 +102,7 @@ CREATE TABLE usuario(
 
 CREATE TABLE metodo(
 	id_metodo INT PRIMARY KEY AUTO_INCREMENT,
-    metodo VARCHAR(50) NOT NULL
+    nombre_metodo VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE tipo_socio(
@@ -168,7 +168,7 @@ CREATE TABLE compra_boleto(
     precio_total_boleto FLOAT NOT NULL,
     id_compra INT NOT NULL,
     id_funcion INT NOT NULL,
-
+		
     id_sala INT NOT NULL,
     id_sede INT NOT NULL,
     FOREIGN KEY (id_compra) REFERENCES compra(id_compra) 
