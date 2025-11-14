@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Tron Ares - Cineplanet</title>
+    <link rel="stylesheet" href="../css/seleccion.css" />
+</head>
+
+<body>
+    <!-- Barra de navegación superior -->
+    <nav class="barra-navegacion">
+        <div class="contenedor-navegacion">
+            <!-- Logo de Cineplanet -->
+            <div class="logo-cineplanet" onclick="window.location.href='inicio.html'" style="cursor: pointer;">
+                <img src="../assets/icons/cineplanet_logo.jpg" alt="Logo Cineplanet" class="imagen-logo" />
+                <span class="texto-logo">cineplanet</span>
+            </div>
+
+            <!-- Enlaces de navegación -->
+            <ul class="menu-navegacion">
+                <li><a href="peliculas.html" class="enlace-navegacion">Películas</a></li>
+                <li><a href="#cines" class="enlace-navegacion">Cines</a></li>
+                <li><a href="#dulceria" class="enlace-navegacion">Dulcería</a></li>
+            </ul>
+
+            <!-- Iconos de usuario y búsqueda -->
+            <div class="acciones-navegacion">
+                <button class="boton-icono" aria-label="Perfil de usuario" onclick="window.location.href='login.html'">
+                    <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="10" stroke-width="2" />
+                        <circle cx="12" cy="10" r="3" stroke-width="2" />
+                        <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855" stroke-width="2" />
+                    </svg>
+                </button>
+                <button class="boton-icono" aria-label="Buscar">
+                    <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8" stroke-width="2" />
+                        <path d="m21 21-4.35-4.35" stroke-width="2" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <main class="contenedor-principal">
+        <!-- Sección de detalles de la película -->
+        <section class="seccion-detalles" id="seccion-detalles">
+            <div class="contenedor-centrado">
+                <!-- Encabezado con título y botón -->
+                <div class="header-pelicula">
+                    <div class="info-titulo">
+                        <h1 class="titulo-pelicula" id="titulo-pelicula">Tron Ares</h1>
+                        <p class="metadata-pelicula">
+                            <span id="genero-pelicula">Ciencia Ficción</span> |
+                            <span id="duracion-pelicula">2hrs 0min</span> |
+                            <span class="clasificacion" id="clasificacion-pelicula">+14</span>
+                        </p>
+                    </div>
+                    <button class="boton-comprar" id="boton-comprar">
+                        <svg class="icono-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="8" width="18" height="12" rx="2" ry="2"></rect>
+                            <line x1="7" y1="8" x2="7" y2="20"></line>
+                            <line x1="17" y1="8" x2="17" y2="20"></line>
+                        </svg>
+                        <span>Comprar</span>
+                    </button>
+                </div>
+
+                <!-- Contenedor de imagen y sinopsis -->
+                <div class="contenedor-media">
+                    <!-- Imagen de la película -->
+                    <div class="contenedor-poster">
+                        <img src="../assets/images/tron.jpg" alt="Tron Ares" class="poster-pelicula"
+                            id="poster-pelicula" />
+                    </div>
+
+                    <!-- Sinopsis y detalles -->
+                    <div class="contenedor-info">
+                        <h2 class="titulo-seccion">Sinopsis.</h2>
+                        <p class="sinopsis" id="sinopsis-pelicula">
+                            Ares, un programa altamente sofisticado, es enviado al mundo real en una misión peligrosa.
+                            Este será el primer encuentro de la humanidad con un ser de la IA.
+                        </p>
+
+                        <div class="seccion-idioma">
+                            <h3 class="subtitulo-seccion">Idioma</h3>
+                            <div class="opciones-idioma">
+                                <button class="opcion-idioma activa" data-idioma="doblada">DOBLADA</button>
+                            </div>
+                        </div>
+
+                        <div class="seccion-disponible">
+                            <h3 class="subtitulo-seccion">Disponible</h3>
+                            <p class="formatos-disponibles" id="formatos-disponibles">REGULAR, 2D</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de compra con filtros -->
+        <section class="seccion-compra" id="seccion-compra">
+            <div class="contenedor-centrado">
+                <h2 class="titulo-compra">La función perfecta para ti.</h2>
+
+                <!-- Barra de filtros -->
+                <div class="barra-filtros">
+                    <!-- Filtro por ciudad -->
+                    <div class="filtro-item">
+                        <button class="filtro-header" id="btn-ciudad">
+                            <div>
+                                <div class="filtro-titulo">Por ciudad</div>
+                                <div class="filtro-descripcion" id="ciudad-seleccionada">Dónde estás</div>
+                            </div>
+                            <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </button>
+                        <div class="filtro-dropdown" id="dropdown-ciudad">
+                            <!-- Opciones se cargarán dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Filtro por cine -->
+                    <div class="filtro-item">
+                        <button class="filtro-header" id="btn-cine" disabled>
+                            <div>
+                                <div class="filtro-titulo">Por cine</div>
+                                <div class="filtro-descripcion" id="cine-seleccionado">Elige tu Cineplanet</div>
+                            </div>
+                            <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </button>
+                        <div class="filtro-dropdown" id="dropdown-cine">
+                            <!-- Opciones se cargarán dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Filtro por fecha -->
+                    <div class="filtro-item">
+                        <button class="filtro-header" id="btn-fecha" disabled>
+                            <div>
+                                <div class="filtro-titulo">Por fecha</div>
+                                <div class="filtro-descripcion" id="fecha-seleccionada">Hoy Jueves 13</div>
+                            </div>
+                            <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </button>
+                        <div class="filtro-dropdown" id="dropdown-fecha">
+                            <!-- Opciones se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultados de cines -->
+                <div class="contenedor-cines" id="contenedor-cines">
+                    <!-- Los cines se cargarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/seleccion.js"></script>
+</body>
+
+</html>
