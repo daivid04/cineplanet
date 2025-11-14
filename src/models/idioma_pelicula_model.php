@@ -115,7 +115,7 @@ class IdiomasPeliculaModel {
     // -------------------------------------------------
     // OBTENER POR ID
     // -------------------------------------------------
-    public function getId($id) {
+    public function getById($id) {
         if (!is_numeric($id) || $id <= 0) {
             throw new Exception("ID inválido.");
         }
