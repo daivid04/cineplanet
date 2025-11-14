@@ -236,16 +236,16 @@ INSERT INTO `tipo_socio` (`id_socio`, `nombre`, `desc_dulces`, `desc_boleto`) VA
 
 
 INSERT INTO `socio` (`id_usuario`, `nombre`, `apellido`, `genero`, `fecha_nacimiento`, `documento`, `id_tipo_socio`, `contrasena`) VALUES
-(11, 'Miguel', 'Grau', 'Masculino', '1990-07-27 10:00:00', '12345678', 1, `123`),
-(12, 'Francisco', 'Bolognesi', 'Masculino', '1985-11-04 15:30:00', '23456789', 2, `123`),
-(13, 'Andres', 'Caceres', 'Masculino', '2000-02-10 08:45:00', '34567890', 3, `132`),
-(14, 'Tupac', 'Amaru', 'Masculino', '1995-05-19 12:00:00', '45678901', 1, `123`),
-(15, 'Micaela', 'Bastidas', 'Femenino', '1998-09-23 18:20:00', '56789012', 2, `123`),
-(16, 'Jose', 'Olaya', 'Masculino', '1988-01-15 09:00:00', '67890123', 1, `123`),
-(17, 'Jorge', 'Basadre', 'Masculino', '1992-03-12 20:00:00', '78901234', 3, `123`),
-(18, 'Ricardo', 'Palma', 'Masculino', '1999-08-07 14:10:00', '89012345', 2, `123`),
-(19, 'Cesar', 'Vallejo', 'Masculino', '2001-04-16 11:35:00', '90123456', 1, `123`),
-(20, 'Mario', 'Vargas', 'Masculino', '1986-12-28 22:05:00', '01234567', 3, `123`);
+(11, 'Miguel', 'Grau', 'Masculino', '1990-07-27 10:00:00', '12345678', 1, '123'),
+(12, 'Francisco', 'Bolognesi', 'Masculino', '1985-11-04 15:30:00', '23456789', 2, '123'),
+(13, 'Andres', 'Caceres', 'Masculino', '2000-02-10 08:45:00', '34567890', 3, '123'),
+(14, 'Tupac', 'Amaru', 'Masculino', '1995-05-19 12:00:00', '45678901', 1, '123'),
+(15, 'Micaela', 'Bastidas', 'Femenino', '1998-09-23 18:20:00', '56789012', 2, '123'),
+(16, 'Jose', 'Olaya', 'Masculino', '1988-01-15 09:00:00', '67890123', 1, '123'),
+(17, 'Jorge', 'Basadre', 'Masculino', '1992-03-12 20:00:00', '78901234', 3, '123'),
+(18, 'Ricardo', 'Palma', 'Masculino', '1999-08-07 14:10:00', '89012345', 2, '123'),
+(19, 'Cesar', 'Vallejo', 'Masculino', '2001-04-16 11:35:00', '90123456', 1, '123'),
+(20, 'Mario', 'Vargas', 'Masculino', '1986-12-28 22:05:00', '01234567', 3, '123');
 --
 -- Poblando la tabla `invitado`
 --
