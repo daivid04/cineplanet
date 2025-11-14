@@ -367,9 +367,8 @@ function agregarEventosClickTarjetas() {
 
             if (pelicula) {
                 console.log('Película seleccionada:', pelicula);
-                alert(`Has seleccionado: ${pelicula.nombre}`);
-                // Aquí puedes redirigir a la página de detalles
-                // window.location.href = `pelicula-detalle.html?id=${idPelicula}`;
+                // Redirige a la página de selección
+                window.location.href = `seleccion.html?id=${idPelicula}`;
             }
         });
     });
