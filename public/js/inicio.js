@@ -1,24 +1,79 @@
+// ===== DATOS DE PELÍCULAS =====
+const peliculas = [
+    {
+        id: 1,
+        nombre: "Teléfono Negro 2",
+        genero: "Terror",
+        clasificacion: "+16",
+        imagenUrl: "../assets/images/telefono-negro2.jpg",
+        esEstreno: false,
+        tamano: "grande",
+        categoria: "cartelera",
+    },
+    {
+        id: 2,
+        nombre: "Chainsaw Man",
+        genero: "Anime/Acción",
+        clasificacion: "+18",
+        imagenUrl: "../assets/images/chaninsaw.jpg",
+        esEstreno: true,
+        tamano: "normal",
+        categoria: "cartelera",
+    },
+    {
+        id: 3,
+        nombre: "Catástrofe en el Aire",
+        genero: "Acción",
+        clasificacion: "+13",
+        imagenUrl: "../assets/images/catastrofe.jpg",
+        esEstreno: true,
+        tamano: "normal",
+        categoria: "cartelera",
+    },
+
+    {
+        id: 5,
+        nombre: "Goood Boy",
+        genero: "Terror",
+        clasificacion: "+16",
+        imagenUrl: "../assets/images/goodboy.jpg",
+        esEstreno: true,
+        tamano: "mediana",
+        categoria: "cartelera",
+    },
+    {
+        id: 6,
+        nombre: "Tron",
+        genero: "Ciencia Ficción",
+        clasificacion: "+13",
+        imagenUrl: "../assets/images/tron.jpg",
+        esEstreno: false,
+        tamano: "normal",
+        categoria: "cartelera",
+    },
+    {
+        id: 7,
+        nombre: "Próximamente 1",
+        genero: "Aventura",
+        clasificacion: "+13",
+        imagenUrl: "https://via.placeholder.com/300x450/8e44ad/ffffff?text=Próximamente",
+        esEstreno: false,
+        tamano: "normal",
+        categoria: "proximamente",
+    },
+    {
+        id: 8,
+        nombre: "Preventa Especial",
+        genero: "Drama",
+        clasificacion: "ATP",
+        imagenUrl: "https://via.placeholder.com/300x450/c0392b/ffffff?text=Preventa",
+        esEstreno: true,
+        tamano: "normal",
+        categoria: "preventa",
+    },
+];
+
 // ===== FUNCIONES PRINCIPALES =====
-
-/**
- * Obtiene las películas desde la API
- * @returns {Promise<Array>} Lista de películas
- */
-
-URL_wa = "http://localhost:8000/public/api/pelicula_api.php";
-async function obtenerPeliculas() {
-    try {
-        const response = await fetch(URL_wa);
-        if (!response.ok) {
-            throw new Error(`Error al obtener películas: ${response.statusText}`);
-        }
-        const peliculas = await response.json();
-        return peliculas;
-    } catch (error) {
-        console.error("Error al obtener películas:", error);
-        return [];
-    }
-}
 
 /**
  * Crea el HTML de una tarjeta de película
@@ -32,11 +87,11 @@ function crearTarjetaPelicula(pelicula) {
         : "";
 
     return `
-    <article class="tarjeta-pelicula ${clasesTamano}" data-id="${pelicula.id_pelicula}">
+    <article class="tarjeta-pelicula ${clasesTamano}" data-id="${pelicula.id}">
       ${etiquetaEstreno}
       <div class="contenedor-imagen-pelicula">
         <img 
-          src="${pelicula.url_imagen}" 
+          src="${pelicula.imagenUrl}" 
           alt="Póster de ${pelicula.nombre}"
           class="imagen-pelicula"
           loading="lazy"
@@ -45,8 +100,8 @@ function crearTarjetaPelicula(pelicula) {
       </div>
       <div class="informacion-pelicula">
         <h2 class="nombre-pelicula">${pelicula.nombre}</h2>
-        <p class="genero-pelicula">${pelicula.sinopsis}</p>
-        <span class="clasificacion-pelicula">${pelicula.duracion} min</span>
+        <p class="genero-pelicula">${pelicula.genero}</p>
+        <span class="clasificacion-pelicula">${pelicula.clasificacion}</span>
       </div>
     </article>
   `;
@@ -88,16 +143,148 @@ function renderizarPeliculas(listaPeliculas) {
 }
 
 /**
+ * Filtra y renderiza películas por categoría
+ * @param {string} categoria - Categoría de películas a mostrar
+ */
+function filtrarPorCategoria(categoria) {
+    const peliculasFiltradas = peliculas.filter(
+        (pelicula) => pelicula.categoria === categoria
+    );
+
+    renderizarPeliculas(peliculasFiltradas);
+}
+
+/**
+ * Maneja el cambio de pestaña
+ * @param {string} categoria - Categoría seleccionada
+ */
+function cambiarPestana(categoria) {
+    // Actualiza el estado visual de las pestañas
+    const pestanas = document.querySelectorAll(".pestana");
+    pestanas.forEach((pestana) => {
+        if (pestana.dataset.categoria === categoria) {
+            pestana.classList.add("activa");
+        } else {
+            pestana.classList.remove("activa");
+        }
+    });
+
+    // Filtra y muestra las películas de esa categoría
+    filtrarPorCategoria(categoria);
+}
+
+/**
+ * Agrega eventos de click a todas las tarjetas de películas
+ */
+function agregarEventosClickTarjetas() {
+    const tarjetas = document.querySelectorAll(".tarjeta-pelicula");
+
+    tarjetas.forEach((tarjeta) => {
+        tarjeta.addEventListener("click", () => {
+            const idPelicula = tarjeta.dataset.id;
+            manejarClickPelicula(idPelicula);
+        });
+    });
+}
+
+/**
+ * Maneja el evento de click en una tarjeta de película
+ * @param {string} idPelicula - ID de la película seleccionada
+ */
+function manejarClickPelicula(idPelicula) {
+    const peliculaSeleccionada = peliculas.find(
+        (pelicula) => pelicula.id === Number(idPelicula)
+    );
+
+    if (peliculaSeleccionada) {
+        console.log("Película seleccionada:", peliculaSeleccionada);
+        // Aquí puedes agregar la lógica para mostrar detalles o redirigir
+        alert(`Has seleccionado: ${peliculaSeleccionada.nombre}`);
+    }
+}
+
+/**
+ * Maneja el evento de click en el botón filtrar
+ */
+function manejarClickFiltrar() {
+    console.log("Botón filtrar clickeado");
+    // Aquí puedes agregar la lógica de filtrado
+    alert("Función de filtrado en desarrollo");
+}
+
+/**
+ * Maneja el evento de click en los botones de filtro
+ * @param {string} tipoFiltro - Tipo de filtro (cine, ciudad, fecha)
+ */
+function manejarClickBotonFiltro(tipoFiltro) {
+    console.log(`Filtro seleccionado: ${tipoFiltro}`);
+    // Aquí puedes agregar la lógica para mostrar opciones de filtro
+    alert(`Filtro por ${tipoFiltro} en desarrollo`);
+}
+
+/**
+ * Inicializa los eventos de los botones de filtro
+ */
+function inicializarEventosFiltros() {
+    const botonesFiltro = document.querySelectorAll(".boton-filtro");
+    const botonFiltrar = document.querySelector(".boton-filtrar");
+
+    botonesFiltro.forEach((boton) => {
+        boton.addEventListener("click", () => {
+            const tipoFiltro = boton.dataset.filtro;
+            manejarClickBotonFiltro(tipoFiltro);
+        });
+    });
+
+    if (botonFiltrar) {
+        botonFiltrar.addEventListener("click", manejarClickFiltrar);
+    }
+}/**
+ * Inicializa los eventos de las pestañas de categorías
+ */
+function inicializarEventosPestanas() {
+    const pestanas = document.querySelectorAll(".pestana");
+
+    pestanas.forEach((pestana) => {
+        pestana.addEventListener("click", () => {
+            const categoria = pestana.dataset.categoria;
+            cambiarPestana(categoria);
+        });
+    });
+}
+
+/**
+ * Inicializa el evento del botón "Ver más"
+ */
+function inicializarEventoVerMas() {
+    const botonVerMas = document.querySelector(".boton-ver-mas");
+
+    if (botonVerMas) {
+        botonVerMas.addEventListener("click", () => {
+            console.log("Ver más películas clickeado");
+            alert("Cargando más películas...");
+            // Aquí puedes agregar lógica para cargar más películas
+        });
+    }
+}
+
+/**
  * Inicializa la aplicación cuando el DOM está cargado
  */
-async function inicializarAplicacion() {
+function inicializarAplicacion() {
     console.log("Iniciando aplicación Cineplanet...");
 
-    // Obtener películas desde la API
-    const peliculas = await obtenerPeliculas();
+    // Inicializa eventos de filtros
+    inicializarEventosFiltros();
 
-    // Renderizar las películas obtenidas
-    renderizarPeliculas(peliculas);
+    // Inicializa eventos de pestañas
+    inicializarEventosPestanas();
+
+    // Inicializa evento del botón ver más
+    inicializarEventoVerMas();
+
+    // Renderiza las películas de la categoría inicial (cartelera)
+    filtrarPorCategoria("cartelera");
 
     console.log("Aplicación iniciada correctamente");
 }
