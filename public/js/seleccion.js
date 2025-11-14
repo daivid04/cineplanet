@@ -404,8 +404,22 @@ function agregarEventosHorarios() {
             const cine = boton.dataset.cine;
             const hora = boton.dataset.hora;
             const formato = boton.dataset.formato;
-            console.log(`Función seleccionada: ${cine} - ${hora} - ${formato}`);
-            alert(`Has seleccionado la función de ${hora} (${formato}) en ${cine}\n\nRedirigiendo a la selección de asientos...`);
+
+            // Obtener datos de la película desde el URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const peliculaId = urlParams.get('id') || '1';
+
+            // Redirigir a la página de butacas
+            const params = new URLSearchParams({
+                pelicula: peliculaId,
+                cine: cine,
+                hora: hora,
+                formato: formato,
+                ciudad: filtrosSeleccionados.ciudad,
+                fecha: fechaSeleccionadaTexto.textContent
+            });
+
+            window.location.href = `butacas.html?${params.toString()}`;
         });
     });
 }
