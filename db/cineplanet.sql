@@ -263,7 +263,7 @@ CREATE TABLE trabajador(
     correo VARCHAR(50) NOT NULL,
     numero VARCHAR(10) NOT NULL,
     dni VARCHAR(8) NOT NULL UNIQUE,
-    estado BOOL NOT NULL,
+    estado VARCHAR(50) NOT NULL,
     tipo VARCHAR(50) NOT NULL,
     id_sede INT NOT NULL,
     FOREIGN KEY (id_sede) REFERENCES sede(id_sede)
