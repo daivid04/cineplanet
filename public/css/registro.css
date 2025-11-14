@@ -1,0 +1,90 @@
+/* ===== ESTILOS ADICIONALES PARA REGISTRO ===== */
+/* Estos estilos complementan a login.css */
+
+/* Tarjeta más ancha para el formulario de registro */
+.tarjeta-login {
+    max-width: 650px;
+}
+
+/* Estilo para poner dos campos en la misma fila */
+.grupo-doble {
+    display: flex;
+    gap: var(--espaciado-medio);
+}
+
+.grupo-doble > .grupo-input {
+    flex: 1; /* Cada campo toma 50% */
+}
+
+/* Estilo para los botones de radio (Género) */
+.grupo-radio {
+    display: flex;
+    gap: var(--espaciado-grande);
+    margin-top: var(--espaciado-pequeno);
+}
+
+.opcion-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+}
+
+.opcion-radio input[type="radio"] {
+    accent-color: var(--color-azul-principal);
+}
+
+/* Estilo para el enlace de "Ya tienes cuenta" */
+.seccion-login {
+    text-align: center;
+    padding-top: var(--espaciado-grande);
+    border-top: 1px solid var(--color-gris-medio);
+}
+
+/* Estilo para mensajes de éxito o error del formulario */
+#mensaje-formulario {
+    font-size: var(--tamano-fuente-pequeno);
+    margin-bottom: var(--espaciado-medio);
+    padding: var(--espaciado-medio);
+    border-radius: 0.25rem;
+    display: none; /* Oculto por defecto */
+}
+
+#mensaje-formulario.exito {
+    display: block;
+    background-color: #e6f7ec;
+    color: #00a651;
+    border: 1px solid #00a651;
+}
+
+#mensaje-formulario.error {
+    display: block;
+    background-color: #fdeeee;
+    color: #e50914;
+    border: 1px solid #e50914;
+}
+
+/* Estilos para checkbox de términos (reutilizando .filtro-opcion) */
+.filtro-opcion {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-pequeno);
+    cursor: pointer;
+    color: var(--color-gris-oscuro);
+}
+
+.filtro-opcion input[type="checkbox"] {
+    cursor: pointer;
+    width: 0.875rem;
+    height: 0.875rem;
+    accent-color: var(--color-azul-principal);
+}
+
+.enlace-terminos {
+    color: var(--color-azul-principal);
+    text-decoration: none;
+    font-weight: 500;
+}
+.enlace-terminos:hover {
+    text-decoration: underline;
+}
