@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Iniciar sesión - Cineplanet</title>
+    <link rel="stylesheet" href="../css/login.css" />
+</head>
+
+<body>
+    <!-- Barra superior azul -->
+    <header class="barra-superior">
+        <div class="contenedor-header">
+            <button class="boton-atras" onclick="window.location.href='/index.html'">
+                <svg class="icono-flecha-atras" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>Atrás</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Contenedor principal -->
+    <main class="contenedor-principal">
+        <div class="tarjeta-login">
+            <!-- Título -->
+            <h1 class="titulo-principal">Iniciar sesión</h1>
+            <p class="subtitulo">
+                Ingresa a tu cuenta para disfrutar de tus beneficios, acumular<br />
+                puntos y vivir al máximo la experiencia Cineplanet.
+            </p>
+
+            <!-- Formulario -->
+            <form class="formulario-login" id="formulario-login">
+                <!-- Campo N° de Socio -->
+                <div class="grupo-input">
+                    <label for="numero-socio" class="etiqueta-input">N° de Socio Cineplanet</label>
+                    <input type="text" id="numero-socio" name="numero-socio" class="input-campo" placeholder=" "
+                        required />
+                    <p class="texto-ayuda">DNI, RUT, CE o Pasaporte.</p>
+                </div>
+
+                <!-- Campo Contraseña -->
+                <div class="grupo-input">
+                    <label for="contrasena" class="etiqueta-input">Contraseña</label>
+                    <div class="contenedor-password">
+                        <input type="password" id="contrasena" name="contrasena" class="input-campo" placeholder=" "
+                            required />
+                        <button type="button" class="boton-ver-password" id="toggle-password">
+                            <svg class="icono-ojo" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Olvidaste tu contraseña -->
+                <div class="contenedor-olvido">
+                    <a href="#" class="enlace-olvido">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <!-- Botón Ingresar -->
+                <button type="submit" class="boton-ingresar">Ingresar</button>
+            </form>
+
+            <!-- Sección de registro -->
+            <div class="seccion-registro">
+                <h2 class="titulo-registro">¿No eres socio?</h2>
+                <p class="descripcion-registro">
+                    Registrándote en nuestro programa Socio Cineplanet podrás acumular<br />
+                    puntos en cada visita que realices y gozar de grandes beneficios.
+                </p>
+                <button class="boton-registrarse" onclick="window.location.href='registro.html'">
+                    Registrarse
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/login.js"></script>
+</body>
+
+</html>

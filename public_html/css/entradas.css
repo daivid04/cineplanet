@@ -1,0 +1,411 @@
+:root {
+    --color-principal-azul: #004A9F;
+    --color-principal-rojo: #e4002b;
+    --color-fondo: #f4f7f6;
+    --color-texto-principal: #333;
+    --color-texto-secundario: #666;
+    --color-borde: #ddd;
+    --color-blanco: #ffffff;
+    --color-rojo-tag: #d9534f;
+    --color-deshabilitado: #c7c7c7;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto-principal);
+    padding-top: 120px;
+    /* Espacio para el header fijo */
+}
+
+/* --- Cabecera (Header) --- */
+.header-entradas {
+    background-color: var(--color-principal-azul);
+    color: var(--color-blanco);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-entradas .header-izquierda,
+.header-entradas .header-derecha {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-entradas .header-centro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-entradas h2 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+/* Simulación de los iconos de progreso */
+.header-progreso {
+    display: flex;
+    gap: 15px;
+    font-size: 1.5rem;
+    color: #a0cfff;
+}
+
+.header-progreso .paso-activo {
+    color: var(--color-blanco);
+}
+
+.header-entradas .icono-timer {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.header-entradas .icono-header {
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--color-blanco);
+    text-decoration: none;
+    background: none;
+    border: none;
+    transition: opacity 0.3s;
+}
+
+.header-entradas .icono-header:hover {
+    opacity: 0.8;
+}
+
+.header-entradas .icono-header:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* --- Contenedor Principal --- */
+.contenedor-compra {
+    display: flex;
+    justify-content: center;
+    padding: 30px 20px;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* --- Panel Lateral Izquierdo (Resumen) --- */
+.panel-resumen {
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    align-self: flex-start;
+    position: sticky;
+    top: 20px;
+}
+
+.panel-resumen .pelicula-poster {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0 auto 15px auto;
+    display: block;
+    border: 3px solid var(--color-borde);
+    background-image: url('../assets/images/nada-es-lo-que-parece-3.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.panel-resumen h3 {
+    text-align: center;
+    margin: 10px 0 5px;
+    color: var(--color-principal-azul);
+}
+
+.panel-resumen .pelicula-detalles {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-texto-secundario);
+    margin-bottom: 20px;
+}
+
+.panel-resumen .info-funcion p {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin: 10px 0;
+    color: var(--color-texto-secundario);
+}
+
+.panel-resumen .info-funcion p i {
+    margin-right: 10px;
+    width: 16px;
+}
+
+.panel-resumen .info-butacas {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--color-borde);
+    font-weight: bold;
+}
+
+/* --- Contenido Principal (Selector de Entradas) --- */
+
+.panel-seleccion {
+    flex: 1;
+    max-width: 800px;
+    background-color: var(--color-blanco);
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.encabezado-seleccion {
+    background-color: var(--color-fondo);
+    padding: 30px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.panel-seleccion h1 {
+    margin-bottom: 10px;
+    color: var(--color-principal-azul);
+    font-size: 24px;
+}
+
+.panel-seleccion .instruccion {
+    color: var(--color-texto-secundario);
+    margin: 0;
+    font-size: 16px;
+}
+
+.columnas-entradas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+.columna-tipo-entradas {
+    padding: 0;
+    border-radius: 0;
+    border: none;
+}
+
+.columna-tipo-entradas h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-borde);
+    padding-bottom: 10px;
+}
+
+.item-entrada {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.item-entrada:last-child {
+    border-bottom: none;
+}
+
+.item-entrada .info {
+    flex: 1;
+}
+
+.item-entrada .info h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+
+.item-entrada .info .descripcion {
+    font-size: 12px;
+    color: var(--color-texto-secundario);
+    margin-bottom: 5px;
+    display: block;
+}
+
+.item-entrada .info .precio-bajo {
+    color: var(--color-rojo-tag);
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.item-entrada .info .precio-normal {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--color-texto-principal);
+}
+
+.control-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-cantidad button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--color-principal-azul);
+    background-color: var(--color-blanco);
+    color: var(--color-principal-azul);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-cantidad .cantidad {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
+.control-cantidad button:disabled {
+    border-color: var(--color-deshabilitado);
+    color: var(--color-deshabilitado);
+    cursor: not-allowed;
+}
+
+/* --- Pie de Página (Acciones y Resumen) --- */
+.panel-acciones {
+    background-color: var(--color-blanco);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px solid var(--color-borde);
+}
+
+.panel-acciones h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+
+.seccion-codigo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.seccion-codigo .descripcion {
+    font-size: 12px;
+    color: var(--color-texto-secundario);
+}
+
+.seccion-codigo input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+}
+
+.btn-canjear {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--color-deshabilitado);
+    color: var(--color-blanco);
+    cursor: not-allowed;
+}
+
+/* Resumen Inferior */
+.resumen-inferior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 15px 20px;
+    background-color: var(--color-blanco);
+    border-radius: 8px;
+    border: 1px solid var(--color-borde);
+}
+
+.resumen-inferior .total-seleccionadas {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.btn-continuar {
+    background-color: var(--color-principal-rojo);
+    color: var(--color-blanco);
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-continuar:disabled {
+    background-color: #ff7f7f;
+    cursor: not-allowed;
+}
+
+.btn-continuar.enabled {
+    background-color: var(--color-principal-rojo);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .contenedor-compra {
+        flex-direction: column;
+    }
+
+    .panel-resumen {
+        width: 100%;
+        position: static;
+        margin-bottom: 20px;
+    }
+
+    .columnas-entradas {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-entradas {
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .header-entradas .header-centro h2 {
+        order: -1;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .header-progreso {
+        gap: 10px;
+    }
+
+    .seccion-codigo {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .resumen-inferior {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

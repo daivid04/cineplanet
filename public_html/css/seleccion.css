@@ -1,0 +1,657 @@
+/* ===== VARIABLES CSS ===== */
+:root {
+    /* Colores principales */
+    --color-azul-principal: #004aad;
+    --color-azul-hover: #003a8c;
+    --color-blanco: #ffffff;
+    --color-gris-claro: #f5f5f5;
+    --color-gris-medio: #e0e0e0;
+    --color-gris-texto: #333333;
+    --color-gris-oscuro: #555555;
+    --color-borde: #d0d0d0;
+    --color-rojo: #e50914;
+    --color-rosa: #e91e63;
+
+    /* Espaciado */
+    --espaciado-pequeno: 0.5rem;
+    --espaciado-medio: 1rem;
+    --espaciado-grande: 2rem;
+
+    /* Sombras */
+    --sombra-suave: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --sombra-media: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    /* Transiciones */
+    --transicion-rapida: 0.2s ease;
+    --transicion-normal: 0.3s ease;
+}
+
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    color: var(--color-gris-texto);
+    background-color: var(--color-gris-claro);
+    line-height: 1.6;
+}
+
+/* ===== BARRA DE NAVEGACIÓN ===== */
+.barra-navegacion {
+    background-color: var(--color-blanco);
+    box-shadow: var(--sombra-suave);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.contenedor-navegacion {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--espaciado-medio) var(--espaciado-grande);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--espaciado-grande);
+}
+
+/* Logo */
+.logo-cineplanet {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-pequeno);
+}
+
+.imagen-logo {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.texto-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-gris-texto);
+    letter-spacing: 0.02rem;
+}
+
+/* Menú de navegación */
+.menu-navegacion {
+    display: flex;
+    list-style: none;
+    gap: var(--espaciado-grande);
+    margin: 0;
+    padding: 0;
+}
+
+.enlace-navegacion {
+    color: var(--color-gris-oscuro);
+    text-decoration: none;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    padding: var(--espaciado-pequeno) var(--espaciado-medio);
+    border-radius: 0.25rem;
+    transition: all var(--transicion-rapida);
+}
+
+.enlace-navegacion:hover {
+    color: var(--color-azul-principal);
+}
+
+/* Acciones de navegación */
+.acciones-navegacion {
+    display: flex;
+    gap: var(--espaciado-medio);
+}
+
+.boton-icono {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: var(--espaciado-pequeno);
+    border-radius: 50%;
+    transition: background-color var(--transicion-rapida);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boton-icono:hover {
+    background-color: var(--color-gris-claro);
+}
+
+.icono {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--color-gris-oscuro);
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.contenedor-principal {
+    background-color: var(--color-blanco);
+    min-height: calc(100vh - 80px);
+}
+
+.contenedor-centrado {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--espaciado-medio);
+}
+
+/* ===== SECCIÓN DE DETALLES ===== */
+.seccion-detalles {
+    background-color: var(--color-blanco);
+    padding: var(--espaciado-grande) 0;
+}
+
+/* Header con título y botón */
+.header-pelicula {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--espaciado-grande);
+    gap: var(--espaciado-medio);
+}
+
+.info-titulo {
+    flex: 1;
+}
+
+.titulo-pelicula {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-azul-principal);
+    margin-bottom: var(--espaciado-pequeno);
+    line-height: 1.2;
+}
+
+.metadata-pelicula {
+    font-size: 1rem;
+    color: var(--color-gris-oscuro);
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-pequeno);
+}
+
+.clasificacion {
+    background-color: var(--color-gris-medio);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+
+/* Botón Comprar */
+.boton-comprar {
+    background: linear-gradient(135deg, #e91e63, #f06292);
+    color: var(--color-blanco);
+    border: none;
+    padding: 0.875rem 2rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-pequeno);
+    transition: all var(--transicion-rapida);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+}
+
+.boton-comprar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(233, 30, 99, 0.4);
+}
+
+.icono-ticket {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Contenedor de media */
+.contenedor-media {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: var(--espaciado-grande);
+    margin-bottom: var(--espaciado-grande);
+}
+
+/* Poster de la película */
+.contenedor-poster {
+    position: relative;
+}
+
+.poster-pelicula {
+    width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: var(--sombra-media);
+}
+
+/* Información de la película */
+.contenedor-info {
+    background-color: var(--color-gris-claro);
+    padding: var(--espaciado-grande);
+    border-radius: 0.5rem;
+    border-left: 5px solid var(--color-azul-principal);
+}
+
+.titulo-seccion {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-azul-principal);
+    margin-bottom: var(--espaciado-medio);
+}
+
+.sinopsis {
+    font-size: 1rem;
+    color: var(--color-gris-texto);
+    line-height: 1.8;
+    margin-bottom: var(--espaciado-grande);
+}
+
+.subtitulo-seccion {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-gris-texto);
+    margin-bottom: var(--espaciado-pequeno);
+}
+
+/* Opciones de idioma */
+.seccion-idioma {
+    margin-bottom: var(--espaciado-grande);
+}
+
+.opciones-idioma {
+    display: flex;
+    gap: var(--espaciado-medio);
+}
+
+.opcion-idioma {
+    background-color: var(--color-blanco);
+    border: 2px solid var(--color-gris-medio);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-gris-oscuro);
+    cursor: pointer;
+    transition: all var(--transicion-rapida);
+}
+
+.opcion-idioma:hover {
+    border-color: var(--color-azul-principal);
+    color: var(--color-azul-principal);
+}
+
+.opcion-idioma.activa {
+    background-color: var(--color-azul-principal);
+    border-color: var(--color-azul-principal);
+    color: var(--color-blanco);
+}
+
+/* Formatos disponibles */
+.seccion-disponible {
+    margin-bottom: 0;
+}
+
+.formatos-disponibles {
+    font-size: 0.95rem;
+    color: var(--color-gris-texto);
+    font-weight: 500;
+}
+
+/* ===== SECCIÓN DE COMPRA ===== */
+.seccion-compra {
+    background-color: var(--color-blanco);
+    padding: var(--espaciado-grande) 0;
+    border-top: 1px solid var(--color-gris-medio);
+}
+
+.titulo-compra {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-azul-principal);
+    margin-bottom: var(--espaciado-grande);
+    text-align: left;
+}
+
+/* Barra de filtros - Estilo dinámico */
+.barra-filtros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: var(--espaciado-grande);
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-medio);
+    border-radius: 0.375rem;
+    overflow: visible;
+    position: relative;
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--color-gris-medio);
+    position: relative;
+}
+
+.filtro-item:last-child {
+    border-right: none;
+}
+
+.filtro-header {
+    background-color: transparent;
+    border: none;
+    padding: var(--espaciado-medio);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--espaciado-pequeno);
+    text-align: left;
+    width: 100%;
+    transition: background-color var(--transicion-rapida);
+}
+
+.filtro-header:hover:not(:disabled) {
+    background-color: var(--color-gris-claro);
+}
+
+.filtro-header:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.filtro-header.activo .icono-flecha {
+    transform: rotate(180deg);
+}
+
+.filtro-titulo {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-gris-texto);
+    margin-bottom: 0.25rem;
+}
+
+.filtro-descripcion {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-azul-oscuro);
+}
+
+.icono-flecha {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-gris-oscuro);
+    flex-shrink: 0;
+    transition: transform var(--transicion-rapida);
+}
+
+/* Dropdown de filtros */
+.filtro-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-medio);
+    border-top: none;
+    border-radius: 0 0 0.375rem 0.375rem;
+    box-shadow: var(--sombra-media);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    z-index: 100;
+    transition: max-height var(--transicion-normal), opacity var(--transicion-rapida);
+}
+
+.filtro-dropdown.abierto {
+    max-height: 300px;
+    opacity: 1;
+    overflow-y: auto;
+}
+
+.filtro-opcion {
+    padding: var(--espaciado-medio);
+    cursor: pointer;
+    border-bottom: 1px solid var(--color-gris-claro);
+    transition: background-color var(--transicion-rapida);
+}
+
+.filtro-opcion:last-child {
+    border-bottom: none;
+}
+
+.filtro-opcion:hover {
+    background-color: var(--color-gris-claro);
+}
+
+.filtro-opcion.seleccionado {
+    background-color: #e3f2fd;
+    color: var(--color-azul-principal);
+    font-weight: 600;
+}
+
+/* Contenedor de cines */
+.contenedor-cines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaciado-medio);
+}
+
+.cine-card {
+    border: 1px solid var(--color-gris-medio);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: #fafafa;
+    margin-bottom: var(--espaciado-medio);
+}
+
+.cine-header {
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    padding: var(--espaciado-grande);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color var(--transicion-rapida);
+}
+
+.cine-header:hover {
+    background-color: #f0f0f0;
+}
+
+.cine-header .icono-flecha {
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-azul-principal);
+    transition: transform var(--transicion-rapida);
+}
+
+.cine-nombre {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-azul-principal);
+    text-align: left;
+}
+
+.cine-contenido {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transicion-normal);
+    background-color: var(--color-blanco);
+}
+
+.cine-contenido.expandido {
+    max-height: 1000px;
+}
+
+/* Info de formato */
+.info-formato {
+    padding: var(--espaciado-medio) var(--espaciado-grande);
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-medio);
+    border-bottom: 1px solid var(--color-gris-claro);
+}
+
+.badge-formato {
+    border: 2px solid var(--color-azul-oscuro);
+    color: var(--color-azul-oscuro);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+}
+
+.texto-formato {
+    color: var(--color-azul-principal);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.grid-horarios {
+    padding: var(--espaciado-grande);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: var(--espaciado-medio);
+}
+
+.funcion-grupo {
+    background-color: var(--color-blanco);
+}
+
+.funcion-grupo:not(:last-child) {
+    border-bottom: 1px solid var(--color-gris-medio);
+}
+
+.horario-btn {
+    background-color: var(--color-blanco);
+    border: 2px solid var(--color-azul-principal);
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transicion-rapida);
+    font-weight: 600;
+    color: var(--color-azul-principal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.horario-btn:hover {
+    background-color: var(--color-azul-principal);
+    color: var(--color-blanco);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
+}
+
+.horario-hora {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+/* Mensaje de seleccionar */
+.mensaje-seleccionar {
+    text-align: center;
+    color: var(--color-gris-texto);
+    padding: var(--espaciado-grande);
+    font-size: 1rem;
+}
+
+.horario-btn:hover {
+    border-color: var(--color-azul-principal);
+    background-color: var(--color-gris-claro);
+}
+
+.horario-hora {
+    display: block;
+    font-size: 1.125rem;
+    color: var(--color-azul-principal);
+    margin-bottom: 0.25rem;
+}
+
+.horario-formato {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-gris-oscuro);
+}
+
+/* ===== SCROLL SUAVE ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .contenedor-navegacion {
+        padding: var(--espaciado-medio);
+    }
+
+    .menu-navegacion {
+        display: none;
+    }
+
+    .titulo-pelicula {
+        font-size: 1.75rem;
+    }
+
+    .header-pelicula {
+        flex-direction: column;
+    }
+
+    .boton-comprar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .contenedor-media {
+        grid-template-columns: 1fr;
+        gap: var(--espaciado-medio);
+    }
+
+    .contenedor-poster {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .contenedor-info {
+        padding: var(--espaciado-medio);
+    }
+
+    .titulo-compra {
+        font-size: 1.5rem;
+    }
+
+    .barra-filtros {
+        grid-template-columns: 1fr;
+        padding: var(--espaciado-medio);
+    }
+
+    .grid-funciones {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo-pelicula {
+        font-size: 1.5rem;
+    }
+
+    .metadata-pelicula {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .titulo-compra {
+        font-size: 1.25rem;
+    }
+}

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Socio - Cineplanet</title>
+    <!-- Reutilizamos el CSS de login y añadimos el de registro -->
+    <link rel="stylesheet" href="../css/login.css" />
+    <link rel="stylesheet" href="../css/registro.css" />
+</head>
+
+<body>
+    <!-- Barra superior azul (reutilizada de login.html) -->
+    <header class="barra-superior">
+        <div class="contenedor-header">
+            <button class="boton-atras" onclick="window.location.href='login.html'">
+                <svg class="icono-flecha-atras" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>Atrás</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Contenedor principal -->
+    <main class="contenedor-principal">
+        <!-- Usamos la misma clase tarjeta-login para reutilizar estilos -->
+        <div class="tarjeta-login">
+            <!-- Título -->
+            <h1 class="titulo-principal">Regístrate como socio</h1>
+            <p class="subtitulo">
+                Completa tus datos para empezar a acumular puntos y<br />
+                disfrutar de grandes beneficios.
+            </p>
+
+            <!-- Formulario de Registro -->
+            <form class="formulario-login" id="formulario-registro" novalidate>
+                
+                <!-- Mensaje de éxito/error -->
+                <p id="mensaje-formulario" class="mensaje-error"></p>
+
+                <!-- Fila para Nombre y Apellido -->
+                <div class="grupo-doble">
+                    <!-- Campo Nombre (de tabla socio) -->
+                    <div class="grupo-input">
+                        <label for="nombre" class="etiqueta-input">Nombres</label>
+                        <input type="text" id="nombre" name="nombre" class="input-campo" placeholder=" " required />
+                    </div>
+                    <!-- Campo Apellido (de tabla socio) -->
+                    <div class="grupo-input">
+                        <label for="apellido" class="etiqueta-input">Apellidos</label>
+                        <input type="text" id="apellido" name="apellido" class="input-campo" placeholder=" " required />
+                    </div>
+                </div>
+
+                <!-- Campo Documento (de tabla socio) -->
+                <div class="grupo-input">
+                    <label for="documento" class="etiqueta-input">N° de Documento</label>
+                    <input type="text" id="documento" name="documento" class="input-campo" placeholder=" " required
+                        maxlength="8" />
+                    <p class="texto-ayuda">DNI (8 dígitos). Este será tu N° de Socio.</p>
+                </div>
+
+                <!-- Campo Correo (de tabla usuario) -->
+                <div class="grupo-input">
+                    <label for="correo" class="etiqueta-input">Correo electrónico</label>
+                    <input type="email" id="correo" name="correo" class="input-campo" placeholder=" " required />
+                </div>
+
+                <!-- Campo Fecha de Nacimiento (de tabla socio) -->
+                <div class="grupo-input">
+                    <label for="fecha-nacimiento" class="etiqueta-input">Fecha de nacimiento</label>
+                    <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" class="input-campo" required />
+                </div>
+
+                <!-- Campo Género (de tabla socio) -->
+                <div class="grupo-input">
+                    <label class="etiqueta-input">Género</label>
+                    <div class="grupo-radio">
+                        <label class="opcion-radio">
+                            <input type="radio" name="genero" value="Masculino" required />
+                            <span>Masculino</span>
+                        </label>
+                        <label class="opcion-radio">
+                            <input type="radio" name="genero" value="Femenino" required />
+                            <span>Femenino</span>
+                        </label>
+                        <label class="opcion-radio">
+                            <input type="radio" name="genero" value="Otro" required />
+                            <span>Otro</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Campo Contraseña (¡Importante! Añadir a BD) -->
+                <div class="grupo-input">
+                    <label for="contrasena" class="etiqueta-input">Contraseña</label>
+                    <div class="contenedor-password">
+                        <input type="password" id="contrasena" name="contrasena" class="input-campo" placeholder=" "
+                            required />
+                        <button type="button" class="boton-ver-password" id="toggle-contrasena">
+                            <svg class="icono-ojo" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Campo Confirmar Contraseña -->
+                <div class="grupo-input">
+                    <label for="confirmar-contrasena" class="etiqueta-input">Confirmar contraseña</label>
+                    <div class="contenedor-password">
+                        <input type="password" id="confirmar-contrasena" name="confirmar-contrasena"
+                            class="input-campo" placeholder=" " required />
+                        <button type="button" class="boton-ver-password" id="toggle-confirmar-contrasena">
+                            <svg class="icono-ojo" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Términos y Condiciones -->
+                <div class="grupo-input">
+                    <label class="filtro-opcion (de peliculas.css)">
+                        <input type="checkbox" id="terminos" name="terminos" required />
+                        <span>Acepto los <a href="#" class="enlace-terminos">Términos y Condiciones</a> y la <a href="#" class="enlace-terminos">Política de Privacidad</a>.</span>
+                    </label>
+                </div>
+
+
+                <!-- Botón Registrarse -->
+                <button type="submit" class="boton-ingresar">Registrarme</button>
+            </form>
+
+            <!-- Sección de Login -->
+            <div class="seccion-login">
+                <p class="descripcion-registro">
+                    ¿Ya tienes una cuenta?
+                    <a href="login.html" class="enlace-olvido">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/registro.js"></script>
+</body>
+
+</html>
