@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Butacas - Cineplanet</title>
+    <link rel="stylesheet" href="../css/butacas.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header-butacas">
+        <div class="header-contenido">
+            <button class="btn-atras" id="btn-atras">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+                <span>Atrás</span>
+            </button>
+            <h1 class="header-titulo">1. Selecciona tus butacas</h1>
+            <div class="header-acciones">
+                <button class="btn-icono" id="btn-usuario">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                </button>
+                <button class="btn-icono" id="btn-cerrar">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor principal -->
+    <div class="contenedor-principal">
+        <!-- Columna izquierda - Info de la película -->
+        <aside class="info-pelicula">
+            <div class="poster-container">
+                <img src="../assets/images/poster-placeholder.jpg" alt="Poster película" class="poster-img"
+                    id="poster-pelicula">
+            </div>
+            <h2 class="titulo-pelicula" id="titulo-pelicula">Nada es lo que Parece 3</h2>
+            <div class="detalles-funcion">
+                <p class="detalle-item" id="detalle-formato">2D, REGULAR, DOBLADA</p>
+                <p class="detalle-item detalle-cine" id="detalle-cine">CP Tacna</p>
+                <p class="detalle-item" id="detalle-fecha">
+                    <svg class="icono-calendario" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+                    </svg>
+                    Mañana, 14 de Nov. 2025
+                </p>
+                <p class="detalle-item" id="detalle-hora">
+                    <svg class="icono-reloj" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                    </svg>
+                    20:00
+                </p>
+                <p class="detalle-item" id="detalle-sala">
+                    <svg class="icono-sala" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                    </svg>
+                    SALA 3-D
+                </p>
+            </div>
+        </aside>
+
+        <!-- Columna derecha - Mapa de butacas -->
+        <main class="contenedor-butacas">
+            <!-- Indicadores superiores -->
+            <div class="indicadores-superiores">
+                <div class="indicador">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M20 8h-3V6c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v10h20V10c0-1.1-.9-2-2-2zM9 6h6v2H9V6zm11 12H4v-8h16v8z" />
+                    </svg>
+                </div>
+                <div class="indicador">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+                    </svg>
+                </div>
+                <div class="indicador">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                    </svg>
+                </div>
+                <div class="indicador">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+                    </svg>
+                </div>
+                <div class="temporizador" id="temporizador">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                    </svg>
+                    <span id="tiempo-restante">04:51</span>
+                </div>
+            </div>
+
+            <!-- Pantalla -->
+            <div class="pantalla-container">
+                <div class="pantalla">Pantalla</div>
+            </div>
+
+            <!-- Mapa de asientos -->
+            <div class="mapa-asientos" id="mapa-asientos">
+                <!-- Los asientos se generarán dinámicamente -->
+            </div>
+
+            <!-- Leyenda -->
+            <div class="leyenda">
+                <div class="leyenda-item">
+                    <div class="asiento-ejemplo disponible"></div>
+                    <span>Disponible</span>
+                </div>
+                <div class="leyenda-item">
+                    <div class="asiento-ejemplo ocupada"></div>
+                    <span>Ocupada</span>
+                </div>
+                <div class="leyenda-item">
+                    <div class="asiento-ejemplo seleccionada"></div>
+                    <span>Seleccionada</span>
+                </div>
+                <div class="leyenda-item">
+                    <svg class="icono-discapacitado" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h2.2l1.8-2h4l1.8 2H18v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4z" />
+                    </svg>
+                    <span>Silla de ruedas</span>
+                </div>
+            </div>
+
+            <!-- Nota sobre accesibilidad -->
+            <p class="nota-accesibilidad">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h2.2l1.8-2h4l1.8 2H18v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4z" />
+                </svg>
+                Todas nuestras salas cuentan con espacios señalizados para sillas de ruedas, consulta en boletería la
+                ubicación de las mismas.
+            </p>
+
+            <!-- Butacas seleccionadas y botón continuar -->
+            <div class="footer-seleccion">
+                <div class="butacas-seleccionadas">
+                    <strong>Butacas seleccionadas:</strong>
+                    <span id="lista-butacas">-</span>
+                </div>
+                <button class="btn-continuar" id="btn-continuar" disabled>
+                    Continuar
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                    </svg>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/butacas.js"></script>
+</body>
+
+</html>

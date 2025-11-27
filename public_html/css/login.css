@@ -1,0 +1,375 @@
+/* ===== VARIABLES CSS ===== */
+:root {
+    /* Colores principales */
+    --color-azul-principal: #004aad;
+    --color-azul-hover: #003a8c;
+    --color-azul-claro: #0059d1;
+    --color-blanco: #ffffff;
+    --color-gris-claro: #f5f5f5;
+    --color-gris-medio: #e0e0e0;
+    --color-gris-texto: #333333;
+    --color-gris-oscuro: #555555;
+    --color-gris-placeholder: #999999;
+    --color-borde: #d0d0d0;
+
+    /* Espaciado */
+    --espaciado-pequeno: 0.5rem;
+    --espaciado-medio: 1rem;
+    --espaciado-grande: 2rem;
+    --espaciado-extra-grande: 3rem;
+
+    /* Tamaños de fuente */
+    --tamano-fuente-pequeno: 0.875rem;
+    --tamano-fuente-normal: 1rem;
+    --tamano-fuente-mediano: 1.125rem;
+    --tamano-fuente-grande: 1.5rem;
+    --tamano-fuente-titulo: 2.25rem;
+
+    /* Sombras */
+    --sombra-suave: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --sombra-media: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --sombra-fuerte: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+    /* Transiciones */
+    --transicion-rapida: 0.2s ease;
+    --transicion-normal: 0.3s ease;
+}
+
+/* ===== RESET Y ESTILOS BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: var(--tamano-fuente-normal);
+    color: var(--color-gris-texto);
+    background-color: var(--color-gris-claro);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ===== BARRA SUPERIOR ===== */
+.barra-superior {
+    background-color: var(--color-azul-principal);
+    padding: var(--espaciado-medio) var(--espaciado-grande);
+    box-shadow: var(--sombra-suave);
+}
+
+.contenedor-header {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.boton-atras {
+    background-color: transparent;
+    border: none;
+    color: var(--color-blanco);
+    font-size: var(--tamano-fuente-normal);
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-pequeno);
+    padding: var(--espaciado-pequeno);
+    transition: all var(--transicion-rapida);
+    border-radius: 0.25rem;
+}
+
+.boton-atras:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.icono-flecha-atras {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.contenedor-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--espaciado-extra-grande) var(--espaciado-medio);
+    min-height: calc(100vh - 4rem);
+}
+
+.tarjeta-login {
+    background-color: var(--color-blanco);
+    border-radius: 1rem;
+    box-shadow: var(--sombra-media);
+    padding: var(--espaciado-extra-grande);
+    max-width: 580px;
+    width: 100%;
+}
+
+/* ===== TÍTULOS ===== */
+.titulo-principal {
+    font-size: var(--tamano-fuente-titulo);
+    font-weight: 700;
+    color: var(--color-azul-principal);
+    text-align: center;
+    margin-bottom: var(--espaciado-medio);
+    letter-spacing: -0.02rem;
+}
+
+.subtitulo {
+    font-size: var(--tamano-fuente-normal);
+    color: var(--color-gris-oscuro);
+    text-align: center;
+    margin-bottom: var(--espaciado-extra-grande);
+    line-height: 1.6;
+}
+
+/* ===== FORMULARIO ===== */
+.formulario-login {
+    margin-bottom: var(--espaciado-extra-grande);
+}
+
+.grupo-input {
+    margin-bottom: var(--espaciado-grande);
+    position: relative;
+}
+
+.etiqueta-input {
+    display: block;
+    font-size: var(--tamano-fuente-mediano);
+    font-weight: 500;
+    color: var(--color-gris-texto);
+    margin-bottom: var(--espaciado-pequeno);
+    letter-spacing: -0.01rem;
+}
+
+.input-campo {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: var(--tamano-fuente-normal);
+    color: var(--color-gris-texto);
+    background-color: var(--color-blanco);
+    border: none;
+    border-bottom: 2px solid var(--color-borde);
+    outline: none;
+    transition: all var(--transicion-normal);
+    font-family: inherit;
+}
+
+.input-campo:focus {
+    border-bottom-color: var(--color-azul-principal);
+}
+
+.input-campo::placeholder {
+    color: var(--color-gris-placeholder);
+}
+
+.texto-ayuda {
+    font-size: var(--tamano-fuente-pequeno);
+    color: var(--color-gris-oscuro);
+    margin-top: var(--espaciado-pequeno);
+}
+
+/* Contenedor de contraseña con botón */
+.contenedor-password {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.contenedor-password .input-campo {
+    padding-right: 3rem;
+}
+
+.boton-ver-password {
+    position: absolute;
+    right: 0.5rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color var(--transicion-rapida);
+}
+
+.boton-ver-password:hover {
+    background-color: var(--color-gris-claro);
+}
+
+.icono-ojo {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-azul-principal);
+}
+
+/* ===== OLVIDASTE TU CONTRASEÑA ===== */
+.contenedor-olvido {
+    text-align: center;
+    margin-bottom: var(--espaciado-grande);
+}
+
+.enlace-olvido {
+    color: var(--color-azul-principal);
+    font-size: var(--tamano-fuente-normal);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transicion-rapida);
+}
+
+.enlace-olvido:hover {
+    color: var(--color-azul-hover);
+    text-decoration: underline;
+}
+
+/* ===== BOTÓN INGRESAR ===== */
+.boton-ingresar {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: var(--tamano-fuente-mediano);
+    font-weight: 600;
+    color: var(--color-blanco);
+    background-color: var(--color-azul-principal);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all var(--transicion-rapida);
+    box-shadow: var(--sombra-suave);
+    letter-spacing: 0.02rem;
+}
+
+.boton-ingresar:hover {
+    background-color: var(--color-azul-hover);
+    box-shadow: var(--sombra-media);
+    transform: translateY(-2px);
+}
+
+.boton-ingresar:active {
+    transform: translateY(0);
+}
+
+/* ===== SECCIÓN DE REGISTRO ===== */
+.seccion-registro {
+    text-align: center;
+    padding-top: var(--espaciado-grande);
+    border-top: 1px solid var(--color-gris-medio);
+}
+
+.titulo-registro {
+    font-size: var(--tamano-fuente-grande);
+    font-weight: 700;
+    color: var(--color-gris-texto);
+    margin-bottom: var(--espaciado-medio);
+}
+
+.descripcion-registro {
+    font-size: var(--tamano-fuente-normal);
+    color: var(--color-gris-oscuro);
+    margin-bottom: var(--espaciado-grande);
+    line-height: 1.6;
+}
+
+.boton-registrarse {
+    padding: 0.875rem 3rem;
+    font-size: var(--tamano-fuente-normal);
+    font-weight: 600;
+    color: var(--color-azul-principal);
+    background-color: var(--color-blanco);
+    border: 2px solid var(--color-azul-principal);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all var(--transicion-rapida);
+}
+
+.boton-registrarse:hover {
+    background-color: var(--color-azul-principal);
+    color: var(--color-blanco);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
+}
+
+.boton-registrarse:active {
+    transform: translateY(0);
+}
+
+/* ===== ESTADOS DE ERROR ===== */
+.input-campo.error {
+    border-bottom-color: #e50914;
+}
+
+.mensaje-error {
+    color: #e50914;
+    font-size: var(--tamano-fuente-pequeno);
+    margin-top: var(--espaciado-pequeno);
+    display: none;
+}
+
+.mensaje-error.mostrar {
+    display: block;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablets */
+@media (max-width: 768px) {
+    .tarjeta-login {
+        padding: var(--espaciado-grande);
+    }
+
+    .titulo-principal {
+        font-size: 2rem;
+    }
+
+    .subtitulo,
+    .descripcion-registro {
+        font-size: var(--tamano-fuente-pequeno);
+    }
+
+    .subtitulo br,
+    .descripcion-registro br {
+        display: none;
+    }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+    .barra-superior {
+        padding: var(--espaciado-medio);
+    }
+
+    .contenedor-principal {
+        padding: var(--espaciado-medio);
+        min-height: calc(100vh - 3rem);
+    }
+
+    .tarjeta-login {
+        padding: var(--espaciado-grande) var(--espaciado-medio);
+    }
+
+    .titulo-principal {
+        font-size: 1.75rem;
+    }
+
+    .boton-ingresar,
+    .boton-registrarse {
+        font-size: var(--tamano-fuente-normal);
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tarjeta-login {
+    animation: fadeIn 0.5s ease;
+}
