@@ -249,7 +249,7 @@ function iniciarTemporizador() {
         if (tiempoSesion <= 0) {
             clearInterval(intervaloTemporizador);
             alert('Se ha agotado el tiempo de selección. Serás redirigido a la página anterior.');
-            window.history.back();
+            window.location.href = 'seleccion.html';
         }
     }, 1000);
 }
@@ -262,7 +262,7 @@ function irAtras() {
         const confirmar = confirm('¿Estás seguro de que deseas salir? Perderás tu selección de butacas.');
         if (!confirmar) return;
     }
-    window.history.back();
+    window.location.href = 'seleccion.html';
 }
 
 /**
@@ -273,8 +273,9 @@ function cerrarVentana() {
         const confirmar = confirm('¿Estás seguro de que deseas salir? Perderás tu selección de butacas.');
         if (!confirmar) return;
     }
-    // Redirigir a inicio
-    window.location.href = 'inicio.html';
+    // Limpiar datos y redirigir a inicio
+    localStorage.clear();
+    window.location.href = '../../index.html';
 }
 
 /**

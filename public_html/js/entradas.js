@@ -170,7 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCerrar.addEventListener('click', () => {
             // Cerrar sesión o volver al inicio
             if (confirm('¿Deseas salir de la compra?')) {
-                window.location.href = 'inicio.html';
+                localStorage.clear();
+                window.location.href = '../../index.html';
             }
         });
     }

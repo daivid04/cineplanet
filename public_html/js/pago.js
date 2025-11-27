@@ -156,10 +156,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const btnCerrar = document.querySelector('.btn-cerrar-resumen');
+    const btnCerrarResumen = document.querySelector('.btn-cerrar-resumen');
+    if (btnCerrarResumen) {
+        btnCerrarResumen.addEventListener('click', () => {
+            window.location.href = 'dulceria.html';
+        });
+    }
+
+    // Botón cerrar (X) del header - redirige al inicio
+    const btnCerrar = document.getElementById('btn-cerrar');
     if (btnCerrar) {
         btnCerrar.addEventListener('click', () => {
-            window.location.href = 'dulceria.html';
+            if (confirm('¿Deseas salir de la compra? Perderás tu selección.')) {
+                localStorage.clear();
+                window.location.href = '../../index.html';
+            }
+        });
+    }
+
+    // Botón usuario del header
+    const btnUsuario = document.getElementById('btn-usuario');
+    if (btnUsuario) {
+        btnUsuario.addEventListener('click', () => {
+            window.location.href = 'login.html';
         });
     }
 });

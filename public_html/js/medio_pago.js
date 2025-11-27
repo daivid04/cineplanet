@@ -276,7 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (tiempoSegundos === 0) {
                     if (tiempoMinutos === 0) {
                         alert('Tiempo agotado');
-                        window.location.href = '../index.html';
+                        localStorage.clear();
+                        window.location.href = '../../index.html';
                         return;
                     }
                     tiempoMinutos--;
@@ -287,5 +288,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 timerDisplay.textContent = `${String(tiempoMinutos).padStart(2, '0')}:${String(tiempoSegundos).padStart(2, '0')}`;
             }, 1000);
         }
+    }
+
+    // ========================================
+    // HEADER BUTTONS
+    // ========================================
+
+    // Botón cerrar (X) del header - redirige al inicio
+    const btnCerrar = document.getElementById('btn-cerrar');
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', () => {
+            if (confirm('¿Deseas salir de la compra? Perderás tu selección.')) {
+                localStorage.clear();
+                window.location.href = '../../index.html';
+            }
+        });
+    }
+
+    // Botón usuario del header
+    const btnUsuario = document.getElementById('btn-usuario');
+    if (btnUsuario) {
+        btnUsuario.addEventListener('click', () => {
+            window.location.href = 'login.html';
+        });
     }
 });
