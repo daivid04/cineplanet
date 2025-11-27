@@ -11,6 +11,7 @@ CREATE TABLE sede(
     id_sede INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     id_ciudad INT NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1,
     FOREIGN KEY (id_ciudad) REFERENCES ciudad(id_ciudad) 
     ON UPDATE CASCADE 
     ON DELETE RESTRICT
@@ -20,6 +21,7 @@ CREATE TABLE sala(
     id_sala INT PRIMARY KEY AUTO_INCREMENT,
     num_sala INT NOT NULL,
     id_sede INT NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1,
     FOREIGN KEY (id_sede) REFERENCES sede(id_sede) 
     ON UPDATE CASCADE 
     ON DELETE CASCADE
@@ -41,7 +43,8 @@ CREATE TABLE pelicula(
     duracion INT NOT NULL,
     url_imagen VARCHAR(255) NOT NULL,
     nombre VARCHAR(80) NOT NULL,
-    sinopsis TEXT NOT NULL
+    sinopsis TEXT NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE idioma(
@@ -60,6 +63,7 @@ CREATE TABLE funcion(
     hora TIME NOT NULL,
     id_pelicula INT NOT NULL,
     id_sala INT NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1,
     FOREIGN KEY (id_pelicula) REFERENCES pelicula(id_pelicula) 
     ON UPDATE CASCADE 
     ON DELETE CASCADE,
@@ -72,7 +76,8 @@ CREATE TABLE funcion(
 CREATE TABLE producto(
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
-    precio_unitario FLOAT NOT NULL
+    precio_unitario FLOAT NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE producto_sede(
@@ -92,12 +97,14 @@ CREATE TABLE producto_sede(
 CREATE TABLE combos(
     id_combo INT PRIMARY KEY AUTO_INCREMENT,
     precio FLOAT NOT NULL,
-    nombre VARCHAR(50) NOT NULL
+    nombre VARCHAR(50) NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE usuario(
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    correo varchar(50) NOT NULL
+    correo varchar(50) NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE metodo(
@@ -263,7 +270,7 @@ CREATE TABLE trabajador(
     correo VARCHAR(50) NOT NULL,
     numero VARCHAR(10) NOT NULL,
     dni VARCHAR(8) NOT NULL UNIQUE,
-    estado VARCHAR(50) NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1,
     tipo VARCHAR(50) NOT NULL,
     id_sede INT NOT NULL,
     FOREIGN KEY (id_sede) REFERENCES sede(id_sede)

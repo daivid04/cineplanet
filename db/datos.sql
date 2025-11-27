@@ -27,34 +27,34 @@ INSERT INTO `ciudad` (`id_ciudad`, `nombre`) VALUES
 
 --
 -- Poblando la tabla `sede`
---
-INSERT INTO `sede` (`id_sede`, `nombre`, `id_ciudad`) VALUES
-(1, 'Cineplanet Real Plaza Tacna', 8),
-(2, 'Cineplanet Mall Aventura Chiclayo', 4),
-(3, 'Cineplanet Jockey Plaza', 1),
-(4, 'Cineplanet Mall del Sur', 1),
-(5, 'Cineplanet Real Plaza Arequipa', 2),
-(6, 'Cineplanet Mall Plaza Trujillo', 3),
-(7, 'Cineplanet Real Plaza Cusco', 6),
-(8, 'Cineplanet Real Plaza Piura', 5),
-(9, 'Cineplanet Real Plaza Huancayo', 7),
-(10, 'Cineplanet El Quinde Ica', 9);
+
+INSERT INTO `sede` (`id_sede`, `nombre`, `id_ciudad`, `estado`) VALUES
+(1, 'Cineplanet Real Plaza Tacna', 8, 1),
+(2, 'Cineplanet Mall Aventura Chiclayo', 4, 1),
+(3, 'Cineplanet Jockey Plaza', 1, 1),
+(4, 'Cineplanet Mall del Sur', 1, 1),
+(5, 'Cineplanet Real Plaza Arequipa', 2, 1),
+(6, 'Cineplanet Mall Plaza Trujillo', 3, 1),
+(7, 'Cineplanet Real Plaza Cusco', 6, 1),
+(8, 'Cineplanet Real Plaza Piura', 5, 1),
+(9, 'Cineplanet Real Plaza Huancayo', 7, 1),
+(10, 'Cineplanet El Quinde Ica', 9, 1);
 
 --
 -- Poblando la tabla `sala`
 --
-INSERT INTO `sala` (`id_sala`, `num_sala`, `id_sede`) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 1, 2),
-(4, 2, 2),
-(5, 1, 3),
-(6, 2, 3),
-(7, 3, 3),
-(8, 1, 4),
-(9, 1, 5),
-(10, 1, 6),
-(11, 4, 3); -- Sala adicional para más funciones
+INSERT INTO `sala` (`id_sala`, `num_sala`, `id_sede`, `estado`) VALUES
+(1, 1, 1, 1),
+(2, 2, 1, 1),
+(3, 1, 2, 1),
+(4, 2, 2, 1),
+(5, 1, 3, 1),
+(6, 2, 3, 1),
+(7, 3, 3, 1),
+(8, 1, 4, 1),
+(9, 1, 5, 1),
+(10, 1, 6, 1),
+(11, 4, 3, 1); -- Sala adicional para más funciones
 
 --
 -- Poblando la tabla `asiento` (20 asientos para 2 salas)
@@ -84,17 +84,17 @@ INSERT INTO `asiento` (`id_asiento`, `estado`, `fila_asiento`, `columna_asiento`
 --
 -- Poblando la tabla `pelicula`
 --
-INSERT INTO `pelicula` (`id_pelicula`, `duracion`, `url_imagen`, `nombre`, `sinopsis`) VALUES
-(1, 155, 'https://example.com/images/dune2.jpg', 'Dune: Parte Dos', 'Paul Atreides se une a los Fremen y comienza un viaje espiritual y marcial para convertirse en Muad''dib.'),
-(2, 180, 'https://example.com/images/oppenheimer.jpg', 'Oppenheimer', 'La historia del físico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atómica.'),
-(3, 114, 'https://example.com/images/barbie.jpg', 'Barbie', 'Barbie sufre una crisis que la lleva a cuestionar su mundo y su existencia.'),
-(4, 140, 'https://example.com/images/spiderverse.jpg', 'Spider-Man: A través del Spider-Verso', 'Miles Morales es catapultado a través del Multiverso, donde se encuentra con un equipo de Spider-People.'),
-(5, 150, 'https://example.com/images/gotg3.jpg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa misión para proteger a uno de los suyos.'),
-(6, 141, 'https://example.com/images/johnwick4.jpg', 'John Wick: Capítulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.'),
-(7, 124, 'https://example.com/images/mariobros.jpg', 'Super Mario Bros. La Película', 'Un fontanero llamado Mario viaja por un laberinto subterráneo con su hermano, Luigi, tratando de salvar a una princesa capturada.'),
-(8, 169, 'https://example.com/images/avatar2.jpg', 'Avatar: El Camino del Agua', 'Jake Sully y Ney''tiri han formado una familia y hacen todo lo posible por permanecer juntos. Sin embargo, deben abandonar su hogar y explorar las regiones de Pandora.'),
-(9, 102, 'https://example.com/images/elemental.jpg', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en común.'),
-(10, 146, 'https://example.com/images/theflash.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superhéroes.');
+INSERT INTO `pelicula` (`id_pelicula`, `duracion`, `url_imagen`, `nombre`, `sinopsis`, `estado`) VALUES
+(1, 155, 'https://example.com/images/dune2.jpg', 'Dune: Parte Dos', 'Paul Atreides se une a los Fremen y comienza un viaje espiritual y marcial para convertirse en Muad''dib.', 1),
+(2, 180, 'https://example.com/images/oppenheimer.jpg', 'Oppenheimer', 'La historia del físico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atómica.', 1),
+(3, 114, 'https://example.com/images/barbie.jpg', 'Barbie', 'Barbie sufre una crisis que la lleva a cuestionar su mundo y su existencia.', 1),
+(4, 140, 'https://example.com/images/spiderverse.jpg', 'Spider-Man: A través del Spider-Verso', 'Miles Morales es catapultado a través del Multiverso, donde se encuentra con un equipo de Spider-People.', 1),
+(5, 150, 'https://example.com/images/gotg3.jpg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa misión para proteger a uno de los suyos.', 1),
+(6, 141, 'https://example.com/images/johnwick4.jpg', 'John Wick: Capítulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.', 1),
+(7, 124, 'https://example.com/images/mariobros.jpg', 'Super Mario Bros. La Película', 'Un fontanero llamado Mario viaja por un laberinto subterráneo con su hermano, Luigi, tratando de salvar a una princesa capturada.', 1),
+(8, 169, 'https://example.com/images/avatar2.jpg', 'Avatar: El Camino del Agua', 'Jake Sully y Ney''tiri han formado una familia y hacen todo lo posible por permanecer juntos. Sin embargo, deben abandonar su hogar y explorar las regiones de Pandora.', 1),
+(9, 102, 'https://example.com/images/elemental.jpg', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en común.', 1),
+(10, 146, 'https://example.com/images/theflash.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superhéroes.', 0);
 
 --
 -- Poblando la tabla `idioma`
@@ -129,47 +129,47 @@ INSERT INTO `formato` (`id_formato`, `nombre`) VALUES
 --
 -- Poblando la tabla `funcion`
 --
-INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`) VALUES
-(1, '2025-10-17', '18:00:00', 1, 1),
-(2, '2025-10-17', '21:00:00', 1, 1),
-(3, '2025-10-17', '19:00:00', 2, 2),
-(4, '2025-10-18', '20:00:00', 3, 3),
-(5, '2025-10-18', '22:00:00', 4, 4),
-(6, '2025-10-19', '17:00:00', 5, 5),
-(7, '2025-10-19', '19:30:00', 6, 6),
-(8, '2025-10-20', '16:00:00', 7, 7),
-(9, '2025-10-20', '18:30:00', 8, 8),
-(10, '2025-10-21', '20:30:00', 9, 9);
+INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`, `estado`) VALUES
+(1, '2025-10-17', '18:00:00', 1, 1, 1),
+(2, '2025-10-17', '21:00:00', 1, 1, 1),
+(3, '2025-10-17', '19:00:00', 2, 2, 1),
+(4, '2025-10-18', '20:00:00', 3, 3, 1),
+(5, '2025-10-18', '22:00:00', 4, 4, 1),
+(6, '2025-10-19', '17:00:00', 5, 5, 1),
+(7, '2025-10-19', '19:30:00', 6, 6, 1),
+(8, '2025-10-20', '16:00:00', 7, 7, 1),
+(9, '2025-10-20', '18:30:00', 8, 8, 1),
+(10, '2025-10-21', '20:30:00', 9, 9, 1);
 
 --
 -- Poblando la tabla `trabajador`
 --
 INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`) VALUES
-(1, 'Gerente', 'Activo', '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1),
-(2, 'Boletería', 'Activo', '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1),
-(3, 'Dulcería', 'Activo', '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2),
-(4, 'Limpieza', 'Activo', '74567890', '987654324', 'ana.lopez@cineplanet.com', 'Ana', 'Lopez', 3),
-(5, 'Proyeccionista', 'Activo', '75678901', '987654325', 'luis.martinez@cineplanet.com', 'Luis', 'Martinez', 4),
-(6, 'Boletería', 'Activo', '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5),
-(7, 'Gerente', 'Activo', '77890123', '987654327', 'pedro.sanchez@cineplanet.com', 'Pedro', 'Sanchez', 6),
-(8, 'Dulcería', 'Inactivo', '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7),
-(9, 'Boletería', 'Activo', '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8),
-(10, 'Dulcería', 'Activo', '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9);
+(1, 'Gerente', 1, '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1),
+(2, 'Boletería', 1, '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1),
+(3, 'Dulcería', 1, '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2),
+(4, 'Limpieza', 1, '74567890', '987654324', 'ana.lopez@cineplanet.com', 'Ana', 'Lopez', 3),
+(5, 'Proyeccionista', 1, '75678901', '987654325', 'luis.martinez@cineplanet.com', 'Luis', 'Martinez', 4),
+(6, 'Boletería', 1, '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5),
+(7, 'Gerente', 1, '77890123', '987654327', 'pedro.sanchez@cineplanet.com', 'Pedro', 'Sanchez', 6),
+(8, 'Dulcería', 0, '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7),
+(9, 'Boletería', 1, '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8),
+(10, 'Dulcería', 1, '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9);
 
 --
 -- Poblando la tabla `producto`
 --
-INSERT INTO `producto` (`id_producto`, `nombre`, `precio_unitario`) VALUES
-(1, 'Canchita Gigante Salada', 25.50),
-(2, 'Canchita Grande Salada', 20.00),
-(3, 'Canchita Mediana Salada', 15.00),
-(4, 'Gaseosa Grande', 12.00),
-(5, 'Gaseosa Mediana', 10.00),
-(6, 'Hot-Dog Clásico', 8.50),
-(7, 'Nachos con Queso', 18.00),
-(8, 'Agua Mineral', 6.00),
-(9, 'Chocolate Sublime', 5.00),
-(10, 'Tequeños', 14.00);
+INSERT INTO `producto` (`id_producto`, `nombre`, `precio_unitario`, `estado`) VALUES
+(1, 'Canchita Gigante Salada', 25.50, 1),
+(2, 'Canchita Grande Salada', 20.00, 1),
+(3, 'Canchita Mediana Salada', 15.00, 1),
+(4, 'Gaseosa Grande', 12.00, 1),
+(5, 'Gaseosa Mediana', 10.00, 1),
+(6, 'Hot-Dog Clásico', 8.50, 1),
+(7, 'Nachos con Queso', 18.00, 1),
+(8, 'Agua Mineral', 6.00, 1),
+(9, 'Chocolate Sublime', 5.00, 1),
+(10, 'Tequeños', 14.00, 0);
 
 --
 -- Poblando la tabla `producto_sede`
@@ -189,42 +189,42 @@ INSERT INTO `producto_sede` (`id_producto_sede`, `stock`, `id_producto`, `id_sed
 --
 -- Poblando la tabla `combos`
 --
-INSERT INTO `combos` (`id_combo`, `precio`, `nombre`) VALUES
-(1, 35.00, 'Combo Clásico'),
-(2, 55.00, 'Combo Pareja'),
-(3, 28.00, 'Combo Nachos'),
-(4, 25.00, 'Combo Hot-Dog'),
-(5, 75.00, 'Combo Familiar'),
-(6, 30.00, 'Combo Mediano'),
-(7, 22.00, 'Combo Kids'),
-(8, 40.00, 'Combo Gigante'),
-(9, 60.00, 'Combo Amigos'),
-(10, 32.00, 'Combo Tequeños');
+INSERT INTO `combos` (`id_combo`, `precio`, `nombre`, `estado`) VALUES
+(1, 35.00, 'Combo Clásico', 1),
+(2, 55.00, 'Combo Pareja', 1),
+(3, 28.00, 'Combo Nachos', 1),
+(4, 25.00, 'Combo Hot-Dog', 1),
+(5, 75.00, 'Combo Familiar', 1),
+(6, 30.00, 'Combo Mediano', 1),
+(7, 22.00, 'Combo Kids', 1),
+(8, 40.00, 'Combo Gigante', 1),
+(9, 60.00, 'Combo Amigos', 1),
+(10, 32.00, 'Combo Tequeños', 0);
 
 --
 -- Poblando la tabla `usuario`
 --
-INSERT INTO `usuario` (`id_usuario`, `correo`) VALUES
-(1, 'cliente1@example.com'),
-(2, 'cliente2@example.com'),
-(3, 'cliente3@example.com'),
-(4, 'cliente4@example.com'),
-(5, 'cliente5@example.com'),
-(6, 'cliente6@example.com'),
-(7, 'cliente7@example.com'),
-(8, 'cliente8@example.com'),
-(9, 'cliente9@example.com'),
-(10, 'cliente10@example.com'),
-(11, 'cliente10@example.com'),
-(12, 'cliente10@example.com'),
-(13, 'cliente10@example.com'),
-(14, 'cliente10@example.com'),
-(15, 'cliente10@example.com'),
-(16, 'cliente10@example.com'),
-(17, 'cliente10@example.com'),
-(18, 'cliente10@example.com'),
-(19, 'cliente10@example.com'),
-(20, 'cliente10@example.com');
+INSERT INTO `usuario` (`id_usuario`, `correo`, `estado`) VALUES
+(1, 'cliente1@example.com', 1),
+(2, 'cliente2@example.com', 1),
+(3, 'cliente3@example.com', 1),
+(4, 'cliente4@example.com', 1),
+(5, 'cliente5@example.com', 1),
+(6, 'cliente6@example.com', 1),
+(7, 'cliente7@example.com', 1),
+(8, 'cliente8@example.com', 1),
+(9, 'cliente9@example.com', 1),
+(10, 'cliente10@example.com', 1),
+(11, 'cliente10@example.com', 1),
+(12, 'cliente10@example.com', 1),
+(13, 'cliente10@example.com', 1),
+(14, 'cliente10@example.com', 1),
+(15, 'cliente10@example.com', 1),
+(16, 'cliente10@example.com', 1),
+(17, 'cliente10@example.com', 1),
+(18, 'cliente10@example.com', 1),
+(19, 'cliente10@example.com', 1),
+(20, 'cliente10@example.com', 1);
 
 --
 -- Poblando la tabla `tipo_socio` (3 tipos tradicionales)
