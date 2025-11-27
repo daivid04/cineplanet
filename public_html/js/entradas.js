@@ -72,24 +72,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Simulación de datos de la película y función (estos datos vendrían de las páginas anteriores)
-    const movieData = {
-        title: "Nada es lo que Parece 3",
-        details: "2D, REGULAR, DOBLADA",
-        cinema: "CP Tacna",
-        date: "Hoy, 14 de Nov, 2025",
-        time: "20:00",
-        room: "SALA 3-D",
-        poster: "../assets/images/nada-es-lo-que-parece-3.jpg"
-    };
+    // Cargar datos de la reserva desde localStorage
+    const reservaData = JSON.parse(localStorage.getItem('reservaButacas'));
 
-    // Actualizar información de la película en el panel resumen
-    document.getElementById('movie-title').textContent = movieData.title;
-    document.getElementById('movie-details').textContent = movieData.details;
-    document.getElementById('cinema-name').textContent = movieData.cinema;
-    document.getElementById('showtime-date').textContent = movieData.date;
-    document.getElementById('showtime-time').textContent = movieData.time;
-    document.getElementById('room-name').textContent = movieData.room;
+    if (reservaData) {
+        document.getElementById('movie-title').textContent = reservaData.titulo;
+        document.getElementById('movie-details').textContent = `${reservaData.formato}, ${reservaData.tipo}`;
+        document.getElementById('cinema-name').textContent = reservaData.cine;
+        document.getElementById('showtime-date').textContent = reservaData.fecha;
+        document.getElementById('showtime-time').textContent = reservaData.hora;
+        document.getElementById('room-name').textContent = reservaData.sala;
+
+        // Si hay poster en los datos
+        if (reservaData.imagenUrl) {
+            const posterDiv = document.getElementById('movie-poster');
+            if (posterDiv) {
+                posterDiv.style.backgroundImage = `url('${reservaData.imagenUrl}')`;
+                posterDiv.style.backgroundSize = 'cover';
+            }
+        }
+    } else {
+        // Fallback si no hay datos (para pruebas directas)
+        const movieData = {
+            title: "Nada es lo que Parece 3",
+            details: "2D, REGULAR, DOBLADA",
+            cinema: "CP Tacna",
+            date: "Hoy, 14 de Nov, 2025",
+            time: "20:00",
+            room: "SALA 3-D"
+        };
+        document.getElementById('movie-title').textContent = movieData.title;
+        document.getElementById('movie-details').textContent = movieData.details;
+        document.getElementById('cinema-name').textContent = movieData.cinema;
+        document.getElementById('showtime-date').textContent = movieData.date;
+        document.getElementById('showtime-time').textContent = movieData.time;
+        document.getElementById('room-name').textContent = movieData.room;
+    }
 
     // Simular el temporizador (decrementar cada segundo)
     let timerMinutes = 4;
@@ -119,9 +137,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener para el botón continuar
     btnContinuar.addEventListener('click', () => {
         if (!btnContinuar.disabled) {
-            // Aquí se redirigiriría a la siguiente página (dulcería)
-            // window.location.href = 'dulceria.html';
-            console.log('Continuar a dulcería - Entradas seleccionadas:', cantEntradasSeleccionadas);
+            // Guardar número de entradas seleccionadas en localStorage
+            localStorage.setItem('numeroEntradasSeleccionadas', cantEntradasSeleccionadas);
+
+            // Calcular y guardar total de entradas
+            let totalEntradas = 0;
+            controlesCantidad.forEach(control => {
+                const cantidad = parseInt(control.querySelector('.cantidad').textContent);
+                const precio = parseFloat(control.closest('.item-entrada').getAttribute('data-precio'));
+                totalEntradas += cantidad * precio;
+            });
+            localStorage.setItem('totalEntradas', totalEntradas.toFixed(2));
+
+            // Redirigir a dulcería
+            window.location.href = 'dulceria.html';
         }
     });
 

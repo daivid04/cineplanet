@@ -1,0 +1,417 @@
+:root {
+    --color-header-bg: #003964;
+    --color-bg-body: #f2f2f2;
+    --color-text-primary: #333;
+    --color-text-secondary: #666;
+    --color-blue-btn: #0055a5;
+    --color-red-price: #e91e63;
+    --color-red-btn: #e91e63;
+    --font-family: 'Roboto', Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--color-bg-body);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Header --- */
+.header-pago {
+    background-color: var(--color-header-bg);
+    color: white;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-izquierda,
+.header-derecha {
+    display: flex;
+    align-items: center;
+    width: 200px;
+}
+
+.header-derecha {
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.separador-header {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 0 5px;
+}
+
+.btn-atras {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-centro {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.header-centro h2 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.icono-header {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* --- Layout --- */
+.layout-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    overflow-y: auto;
+}
+
+.contenedor-pago {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* --- Sidebar --- */
+.panel-resumen-lateral {
+    width: 280px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.pelicula-poster {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px;
+    background-color: #ddd;
+}
+
+.pelicula-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.panel-resumen-lateral h3 {
+    color: #003964;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.pelicula-detalles {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.info-funcion p {
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-funcion strong {
+    color: #003964;
+}
+
+.info-funcion i {
+    width: 16px;
+    text-align: center;
+    color: #666;
+}
+
+.info-compra-lateral {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.info-compra-lateral p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #003964;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.total-resumen-lateral {
+    margin-bottom: 20px;
+}
+
+.texto-total {
+    font-size: 1.1rem;
+    color: var(--color-red-price);
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.precio-total {
+    font-weight: bold;
+}
+
+.btn-ver-resumen-lateral {
+    background: transparent;
+    border: 1px solid var(--color-red-btn);
+    color: var(--color-red-btn);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* --- Main Content --- */
+.panel-principal-pago {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.barra-superior-pago {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.progreso-compra {
+    display: flex;
+    align-items: center;
+}
+
+.paso {
+    color: #ccc;
+    font-size: 1.4rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paso.completado {
+    color: #ccc;
+    /* Or blue if you want to show completed steps */
+}
+
+.paso.activo {
+    color: #003964;
+}
+
+.linea-paso {
+    width: 40px;
+    height: 1px;
+    background-color: #ccc;
+    margin: 0 5px;
+}
+
+.timer-container {
+    font-size: 1.1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    right: 0;
+}
+
+/* --- Resumen Card --- */
+.tarjeta-resumen-compra {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    /* Center it */
+}
+
+.header-tarjeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header-tarjeta h3 {
+    color: #003964;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.btn-cerrar-resumen {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.contenido-resumen {
+    margin-bottom: 30px;
+}
+
+.seccion-resumen {
+    margin-bottom: 20px;
+}
+
+.seccion-resumen h4 {
+    color: #003964;
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.fila-resumen {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.detalle-producto {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.detalle-producto small {
+    color: #777;
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+.cantidad-resumen {
+    width: 80px;
+    text-align: right;
+    font-style: italic;
+    color: #555;
+}
+
+.precio-resumen {
+    width: 80px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.subtotal-resumen {
+    text-align: right;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #333;
+    margin-top: 5px;
+}
+
+.separador-punteado {
+    border-top: 1px dashed #ccc;
+    margin: 20px 0;
+}
+
+.total-final {
+    text-align: right;
+    font-size: 1.2rem;
+    color: var(--color-red-price);
+}
+
+.total-final span {
+    font-weight: bold;
+}
+
+.footer-legal {
+    font-size: 0.7rem;
+    color: #777;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+.acciones-pago {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-continuar-pago {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s;
+}
+
+.btn-continuar-pago:hover {
+    background-color: #c2185b;
+}
+
+@media (max-width: 900px) {
+    .contenedor-pago {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .panel-resumen-lateral {
+        width: 100%;
+        max-width: 400px;
+    }
+}

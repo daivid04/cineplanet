@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Pago</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/pago.css">
+</head>
+
+<body>
+    <header class="header-pago">
+        <div class="header-izquierda">
+            <a href="dulceria.html" class="btn-atras">
+                <i class="fas fa-chevron-left"></i> Atrás
+            </a>
+        </div>
+
+        <div class="header-centro">
+            <h2>4. Pago</h2>
+        </div>
+
+        <div class="header-derecha">
+            <button class="icono-header" id="btn-usuario"><i class="far fa-user-circle"></i></button>
+            <div class="separador-header"></div>
+            <button class="icono-header" id="btn-cerrar"><i class="fas fa-times"></i></button>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <main class="contenedor-pago">
+            <!-- Sidebar (Movie Info) - Same as Dulceria -->
+            <aside class="panel-resumen-lateral">
+                <div class="pelicula-poster">
+                    <img src="../assets/images/poster-placeholder.jpg" alt="Poster" id="poster-img">
+                </div>
+                <h3 id="movie-title">Nada es lo que Parece 3</h3>
+                <p class="pelicula-detalles" id="movie-details">2D, REGULAR, DOBLADA</p>
+
+                <div class="info-funcion">
+                    <p><strong id="cinema-name">CP Tacna</strong></p>
+                    <p><i class="far fa-calendar-alt"></i> <span id="showtime-date">Hoy, 26 de Nov, 2025</span></p>
+                    <p><i class="far fa-clock"></i> <span id="showtime-time">15:30</span></p>
+                    <p><i class="far fa-circle"></i> <span id="room-name">SALA 5-D</span></p>
+                </div>
+
+                <div class="info-compra-lateral">
+                    <p><strong>Butacas:</strong> <span id="numero-butacas">2</span></p>
+                    <p><strong>Entradas:</strong> <span id="numero-entradas">2</span></p>
+                    <p><strong>Dulcería:</strong> <span id="numero-dulceria">1</span></p>
+                </div>
+
+                <div class="total-resumen-lateral">
+                    <p class="texto-total">Total: <span class="precio-total" id="precio-total-lateral">S/76.00</span>
+                    </p>
+                </div>
+
+                <button class="btn-ver-resumen-lateral">Ver Resumen de compra</button>
+            </aside>
+
+            <!-- Main Content (Payment Summary) -->
+            <section class="panel-principal-pago">
+                <!-- Progress Bar -->
+                <div class="barra-superior-pago">
+                    <div class="progreso-compra">
+                        <div class="paso completado"><i class="fas fa-couch"></i></div>
+                        <div class="linea-paso"></div>
+                        <div class="paso completado"><i class="fas fa-ticket-alt"></i></div>
+                        <div class="linea-paso"></div>
+                        <div class="paso completado"><i class="fas fa-popcorn"></i></div>
+                        <div class="linea-paso"></div>
+                        <div class="paso activo"><i class="far fa-credit-card"></i></div>
+                    </div>
+                    <div class="timer-container">
+                        <i class="far fa-clock"></i> <span id="timer-display">04:37</span>
+                    </div>
+                </div>
+
+                <!-- Resumen de Compra Card -->
+                <div class="tarjeta-resumen-compra">
+                    <div class="header-tarjeta">
+                        <h3>Resumen de compra</h3>
+                        <button class="btn-cerrar-resumen">Cerrar <i class="fas fa-times"></i></button>
+                    </div>
+
+                    <div class="contenido-resumen">
+                        <!-- Butacas -->
+                        <div class="seccion-resumen">
+                            <h4>Butacas Seleccionadas:</h4>
+                            <div class="fila-resumen">
+                                <span id="resumen-butacas">K10, K9</span>
+                                <span class="cantidad-resumen">Cant. <span id="cant-butacas">2</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Entradas -->
+                        <div class="seccion-resumen">
+                            <h4>Entradas:</h4>
+                            <div class="fila-resumen">
+                                <div class="detalle-producto">
+                                    <span id="tipo-entrada">General 2D OL</span>
+                                    <small>Incluye servicio online</small>
+                                </div>
+                                <span class="cantidad-resumen">Cant. <span id="cant-entradas">2</span></span>
+                                <span class="precio-resumen" id="precio-entradas">S/30.00</span>
+                            </div>
+                            <div class="subtotal-resumen">
+                                <span>Sub-Total <span id="subtotal-entradas">S/30.00</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Dulcería -->
+                        <div class="seccion-resumen" id="seccion-dulceria-resumen">
+                            <h4>Dulcería:</h4>
+                            <!-- Items will be injected here -->
+                        </div>
+
+                        <div class="separador-punteado"></div>
+
+                        <div class="total-final">
+                            <span>Precio Total: <span id="precio-total-final">S/76.00</span></span>
+                        </div>
+                    </div>
+
+                    <div class="footer-legal">
+                        <p>* No se hacen cambios ni devoluciones</p>
+                        <p>* Toda la información de pago es segura</p>
+                        <p>* Algunas de las tarjetas de débito con CVV podrían ser rechazadas por la plataforma de pago
+                            que utilizamos debido a las políticas de seguridad del banco</p>
+                    </div>
+
+                    <div class="acciones-pago">
+                        <button class="btn-continuar-pago">Continuar <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/pago.js"></script>
+</body>
+
+</html>

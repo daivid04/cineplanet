@@ -1,3 +1,17 @@
+// ===== DATOS DE PELÍCULAS (Simulados) =====
+const peliculasData = [
+    {
+        id: 1,
+        nombre: "Tron Ares",
+        imagenUrl: "../assets/images/tron.jpg"
+    },
+    {
+        id: 2,
+        nombre: "Amores Perros 25 Aniversario",
+        imagenUrl: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=600&fit=crop"
+    }
+];
+
 // ===== ELEMENTOS DEL DOM =====
 const btnAtras = document.getElementById('btn-atras');
 const btnCerrar = document.getElementById('btn-cerrar');
@@ -20,6 +34,7 @@ const detalleSala = document.getElementById('detalle-sala');
 let butacasSeleccionadas = [];
 let tiempoSesion = 5 * 60; // 5 minutos en segundos
 let intervaloTemporizador = null;
+let datosReservaGlobal = {}; // Para guardar todo
 
 // ===== CONFIGURACIÓN DE LA SALA =====
 // Estructura: A-L filas, con pasillos y asientos para discapacitados
@@ -51,41 +66,45 @@ const asientosOcupados = [
  */
 function cargarParametrosURL() {
     const params = new URLSearchParams(window.location.search);
+    const peliculaId = parseInt(params.get('peliculaId')) || 1;
+    const pelicula = peliculasData.find(p => p.id === peliculaId) || peliculasData[0];
 
-    const datosReserva = {
-        pelicula: params.get('pelicula') || '1',
-        titulo: 'Nada es lo que Parece 3',
+    datosReservaGlobal = {
+        peliculaId: peliculaId,
+        titulo: pelicula.nombre,
+        imagenUrl: pelicula.imagenUrl,
         cine: params.get('cine') || 'CP Tacna',
         hora: params.get('hora') || '20:00',
         formato: params.get('formato') || '2D',
         fecha: params.get('fecha') || 'Mañana, 14 de Nov. 2025',
-        sala: 'SALA 3-D'
+        sala: 'SALA 3-D',
+        tipo: params.get('tipo') || 'REGULAR, DOBLADA'
     };
 
     // Actualizar la interfaz
-    tituloPelicula.textContent = datosReserva.titulo;
-    detalleFormato.textContent = `${datosReserva.formato}, REGULAR, DOBLADA`;
-    detalleCine.textContent = datosReserva.cine;
+    tituloPelicula.textContent = datosReservaGlobal.titulo;
+    if (posterPelicula) posterPelicula.src = datosReservaGlobal.imagenUrl;
+
+    detalleFormato.textContent = `${datosReservaGlobal.formato}, ${datosReservaGlobal.tipo}`;
+    detalleCine.textContent = datosReservaGlobal.cine;
     detalleFecha.innerHTML = `
         <svg class="icono-calendario" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
         </svg>
-        ${datosReserva.fecha}
+        ${datosReservaGlobal.fecha}
     `;
     detalleHora.innerHTML = `
         <svg class="icono-reloj" viewBox="0 0 24 24" fill="currentColor">
             <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
         </svg>
-        ${datosReserva.hora}
+        ${datosReservaGlobal.hora}
     `;
     detalleSala.innerHTML = `
         <svg class="icono-sala" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
         </svg>
-        ${datosReserva.sala}
+        ${datosReservaGlobal.sala}
     `;
-
-    return datosReserva;
 }
 
 /**
@@ -97,6 +116,7 @@ function generarMapaAsientos() {
     configuracionSala.forEach(filaConfig => {
         const filaDiv = document.createElement('div');
         filaDiv.className = 'fila-asientos';
+
 
         // Letra de la fila (izquierda)
         const letraIzq = document.createElement('div');
@@ -269,7 +289,8 @@ function continuar() {
     const datosReserva = {
         butacas: butacasSeleccionadas,
         cantidad: butacasSeleccionadas.length,
-        fecha: new Date().toISOString()
+        fecha: new Date().toISOString(),
+        ...datosReservaGlobal // Incluir datos de la película
     };
 
     localStorage.setItem('reservaButacas', JSON.stringify(datosReserva));
