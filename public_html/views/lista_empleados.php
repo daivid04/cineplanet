@@ -41,7 +41,34 @@
 
                 <main class="flex-1 overflow-y-auto p-6">
                     <div class="rounded-lg bg-white p-6 shadow">
-                        <form action="" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="rounded-lg bg-white p-6 shadow">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                            <h2 class="text-xl font-bold text-gray-800">Lista de Empleados</h2>
+                            <div class="flex gap-2">
+                                <a href="?<?php echo http_build_query(array_merge($_GET, ['action' => 'export'])); ?>" class="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Exportar CSV
+                                </a>
+                                <a href="views/crear_empleado.php" class="rounded-lg bg-cineplanet-blue px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Agregar Empleado
+                                </a>
+                            </div>
+                        </div>
+
+                        <form action="" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-50 p-4 rounded-lg">
+                            <div class="relative flex gap-2">
+                                <input type="text" name="search" placeholder="Buscar por nombre o DNI..." value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue px-4 py-2">
+                                <button type="submit" class="rounded-lg bg-cineplanet-blue px-4 py-2 text-white hover:bg-blue-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </button>
+                            </div>
                             <select name="sede" class="rounded-lg border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue" onchange="this.form.submit()">
                                 <option value="">Todas las Sedes</option>
                                 <?php foreach ($data['sedes'] as $sede): ?>
@@ -63,7 +90,6 @@
                                 <option value="1" <?php echo (isset($_GET['estado']) && $_GET['estado'] === '1') ? 'selected' : ''; ?>>Activo</option>
                                 <option value="0" <?php echo (isset($_GET['estado']) && $_GET['estado'] === '0') ? 'selected' : ''; ?>>Inactivo</option>
                             </select>
-                            <a href="views/crear_empleado.php" class="w-full rounded-lg bg-cineplanet-blue px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 text-center block">+ Agregar Empleado</a>
                         </form>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-500">

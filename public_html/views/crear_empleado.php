@@ -18,7 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'dni' => $_POST['dni'] ?? '',
         'tipo' => $_POST['tipo'] ?? '',
         'id_sede' => $_POST['id_sede'] ?? '',
-        'fecha_ingreso' => $_POST['fecha_ingreso'] ?? ''
+        'fecha_ingreso' => $_POST['fecha_ingreso'] ?? '',
+        // Datos del turno opcional
+        'fecha_turno' => $_POST['fecha_turno'] ?? '',
+        'tipo_turno' => $_POST['tipo_turno'] ?? '',
+        'hora_inicio' => $_POST['hora_inicio'] ?? '',
+        'hora_fin' => $_POST['hora_fin'] ?? ''
     ];
 
     $result = $controller->create($data);
@@ -140,6 +145,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <label for="fecha_ingreso" class="block text-sm font-medium text-gray-700">Fecha de Ingreso</label>
                         <input type="date" name="fecha_ingreso" id="fecha_ingreso" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2" value="<?php echo date('Y-m-d'); ?>">
+                    </div>
+                </div>
+
+                <!-- Sección de Asignación de Turno Inicial -->
+                <div class="border-t border-gray-200 pt-6 mt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Asignar Turno Inicial (Opcional)</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label for="fecha_turno" class="block text-sm font-medium text-gray-700">Fecha del Turno</label>
+                            <input type="date" name="fecha_turno" id="fecha_turno" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
+                        </div>
+                        <div>
+                            <label for="tipo_turno" class="block text-sm font-medium text-gray-700">Tipo de Turno</label>
+                            <select name="tipo_turno" id="tipo_turno" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
+                                <option value="">Seleccione tipo</option>
+                                <option value="Apertura">Apertura</option>
+                                <option value="Intermedio">Intermedio</option>
+                                <option value="Cierre">Cierre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6 mt-4">
+                        <div>
+                            <label for="hora_inicio" class="block text-sm font-medium text-gray-700">Hora Inicio</label>
+                            <input type="time" name="hora_inicio" id="hora_inicio" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
+                        </div>
+                        <div>
+                            <label for="hora_fin" class="block text-sm font-medium text-gray-700">Hora Fin</label>
+                            <input type="time" name="hora_fin" id="hora_fin" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
+                        </div>
                     </div>
                 </div>
 

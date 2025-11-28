@@ -1,14 +1,17 @@
 <?php
 require_once __DIR__ . "/../models/EmpleadoModel.php";
 require_once __DIR__ . "/../models/SedeModelFixed.php";
+require_once __DIR__ . "/../models/HorarioModel.php";
 
 class EmpleadoController {
     private $empleadoModel;
     private $sedeModel;
+    private $horarioModel;
 
     public function __construct($conn) {
         $this->empleadoModel = new EmpleadoModel($conn);
         $this->sedeModel = new SedeModel($conn);
+        $this->horarioModel = new HorarioModel($conn);
     }
 
     // -------------------------------------------------
@@ -70,12 +73,25 @@ class EmpleadoController {
     // -------------------------------------------------
     public function create($data) {
         try {
-            $id = $this->empleadoModel->create($data);
-            
+            // Crear empleado
+            $newId = $this->empleadoModel->create($data);
+
+            // Si hay datos de turno, asignar turno
+            if (!empty($data['fecha_turno']) && !empty($data['hora_inicio']) && !empty($data['hora_fin']) && !empty($data['tipo_turno'])) {
+                $this->horarioModel->assignShift(
+                    $newId,
+                    $data['fecha_turno'],
+                    $data['hora_inicio'],
+                    $data['hora_fin'],
+                    $data['tipo_turno'],
+                    "Turno inicial asignado al crear empleado"
+                );
+            }
+
             return [
                 "success" => true,
                 "message" => "Empleado creado exitosamente",
-                "id_empleado" => $id
+                "id_empleado" => $newId
             ];
         } catch (Exception $e) {
             return [
@@ -152,6 +168,53 @@ class EmpleadoController {
                 "success" => false,
                 "message" => $e->getMessage()
             ];
+        }
+    }
+    // -------------------------------------------------
+    // EXPORTAR A CSV
+    // -------------------------------------------------
+    public function export($filters = []) {
+        try {
+            // Obtener todos los empleados filtrados (sin paginación)
+            $result = $this->empleadoModel->getAllFiltered($filters, 100000, 0);
+            $empleados = $result['data'];
+
+            // Configurar headers para descarga
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename=empleados.csv');
+
+            // Crear puntero de salida
+            $output = fopen('php://output', 'w');
+
+            // BOM para Excel
+            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Encabezados de columnas
+            fputcsv($output, ['ID', 'Nombre', 'Apellido', 'DNI', 'Correo', 'Cargo', 'Sede', 'Ciudad', 'Estado', 'Fecha Ingreso']);
+
+            // Datos
+            foreach ($empleados as $emp) {
+                fputcsv($output, [
+                    $emp['id_trabajador'],
+                    $emp['nombre'],
+                    $emp['apellido'],
+                    $emp['dni'] ?? '',
+                    $emp['correo'],
+                    $emp['cargo'],
+                    $emp['sede_nombre'],
+                    $emp['ciudad_nombre'],
+                    $emp['estado'] == 1 ? 'Activo' : 'Inactivo',
+                    $emp['fecha_ingreso']
+                ]);
+            }
+
+            fclose($output);
+            exit;
+
+        } catch (Exception $e) {
+            // En caso de error, podría redirigir o mostrar mensaje, pero en exportación directa es complicado.
+            // Lo ideal sería loguear el error.
+            die("Error al exportar: " . $e->getMessage());
         }
     }
 }

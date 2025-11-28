@@ -60,6 +60,11 @@ class EmpleadoModel {
                 $params[':estado'] = $filters['estado'];
             }
 
+            if (!empty($filters['search'])) {
+                $where[] = "(t.nombre LIKE :search OR t.apellido LIKE :search OR t.dni LIKE :search)";
+                $params[':search'] = "%" . $filters['search'] . "%";
+            }
+
             $whereSql = "";
             if (!empty($where)) {
                 $whereSql = "WHERE " . implode(" AND ", $where);

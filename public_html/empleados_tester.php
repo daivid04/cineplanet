@@ -12,12 +12,24 @@ require_once __DIR__ . '/../src/controllers/EmpleadoControllerV2.php';
 try {
     $controller = new EmpleadoController($conn);
     
+    // Manejar Exportación
+    if (isset($_GET['action']) && $_GET['action'] === 'export') {
+        $filters = [
+            'sede' => $_GET['sede'] ?? '',
+            'cargo' => $_GET['cargo'] ?? '',
+            'estado' => $_GET['estado'] ?? '',
+            'search' => $_GET['search'] ?? ''
+        ];
+        $controller->export($filters);
+    }
+
     // Capturar filtros y paginación
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $filters = [
         'sede' => $_GET['sede'] ?? '',
         'cargo' => $_GET['cargo'] ?? '',
-        'estado' => $_GET['estado'] ?? ''
+        'estado' => $_GET['estado'] ?? '',
+        'search' => $_GET['search'] ?? ''
     ];
 
     $result = $controller->list($page, $filters);
@@ -34,10 +46,10 @@ try {
             'sedes' => [], 
             'cargos' => []
         ];
-        echo "Error: " . $result['message'];
+        // echo "Error: " . $result['message']; // Opcional: mostrar error en vista
     }
 } catch (Exception $e) {
-    echo "Error crítico: " . $e->getMessage();
+    // echo "Error crítico: " . $e->getMessage();
     $data = [
         'empleados' => [], 
         'stats' => [], 
