@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'numero' => $_POST['numero'] ?? '',
         'dni' => $_POST['dni'] ?? '',
         'tipo' => $_POST['tipo'] ?? '',
-        'id_sede' => $_POST['id_sede'] ?? ''
+        'id_sede' => $_POST['id_sede'] ?? '',
+        'fecha_ingreso' => $_POST['fecha_ingreso'] ?? ''
     ];
 
     $result = $controller->create($data);
@@ -102,17 +103,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label for="dni" class="block text-sm font-medium text-gray-700">DNI</label>
+                        <input type="text" name="dni" id="dni" required pattern="\d{8}" title="Debe tener 8 dígitos" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
+                    </div>
+                    <div>
+                        <label for="tipo" class="block text-sm font-medium text-gray-700">Cargo</label>
+                        <select name="tipo" id="tipo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
+                            <option value="">Seleccione un cargo</option>
+                            <option value="Staff de Ventas">Staff de Ventas</option>
+                            <option value="Supervisora de Turno">Supervisora de Turno</option>
+                            <option value="Atención al Cliente">Atención al Cliente</option>
+                            <option value="Staff de Dulcería">Staff de Dulcería</option>
+                            <option value="Gerente">Gerente</option>
+                            <option value="Boletería">Boletería</option>
+                            <option value="Dulcería">Dulcería</option>
+                            <option value="Limpieza">Limpieza</option>
+                            <option value="Proyeccionista">Proyeccionista</option>
+                        </select>
+                    </div>
+                </div>
 
-                <div>
-                    <label for="id_sede" class="block text-sm font-medium text-gray-700">Sede</label>
-                    <select name="id_sede" id="id_sede" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
-                        <option value="">Seleccione una sede</option>
-                        <?php foreach ($sedes as $sede): ?>
-                            <option value="<?php echo $sede['id_sede']; ?>">
-                                <?php echo htmlspecialchars($sede['nombre'] . ' - ' . $sede['ciudad_nombre']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label for="id_sede" class="block text-sm font-medium text-gray-700">Sede</label>
+                        <select name="id_sede" id="id_sede" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2">
+                            <option value="">Seleccione una sede</option>
+                            <?php foreach ($sedes as $sede): ?>
+                                <option value="<?php echo $sede['id_sede']; ?>">
+                                    <?php echo htmlspecialchars($sede['nombre'] . ' - ' . $sede['ciudad_nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="fecha_ingreso" class="block text-sm font-medium text-gray-700">Fecha de Ingreso</label>
+                        <input type="date" name="fecha_ingreso" id="fecha_ingreso" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue sm:text-sm border p-2" value="<?php echo date('Y-m-d'); ?>">
+                    </div>
                 </div>
 
                 <div class="flex justify-end pt-4">

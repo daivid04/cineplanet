@@ -273,6 +273,7 @@ CREATE TABLE trabajador(
     estado BOOL NOT NULL DEFAULT 1,
     tipo VARCHAR(50) NOT NULL,
     id_sede INT NOT NULL,
+    fecha_ingreso DATE NOT NULL,
     FOREIGN KEY (id_sede) REFERENCES sede(id_sede)
     ON UPDATE CASCADE
     ON DELETE RESTRICT

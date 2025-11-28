@@ -144,17 +144,17 @@ INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`, 
 --
 -- Poblando la tabla `trabajador`
 --
-INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`) VALUES
-(1, 'Gerente', 1, '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1),
-(2, 'Boletería', 1, '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1),
-(3, 'Dulcería', 1, '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2),
-(4, 'Limpieza', 1, '74567890', '987654324', 'ana.lopez@cineplanet.com', 'Ana', 'Lopez', 3),
-(5, 'Proyeccionista', 1, '75678901', '987654325', 'luis.martinez@cineplanet.com', 'Luis', 'Martinez', 4),
-(6, 'Boletería', 1, '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5),
-(7, 'Gerente', 1, '77890123', '987654327', 'pedro.sanchez@cineplanet.com', 'Pedro', 'Sanchez', 6),
-(8, 'Dulcería', 0, '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7),
-(9, 'Boletería', 1, '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8),
-(10, 'Dulcería', 1, '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9);
+INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`, `fecha_ingreso`) VALUES
+(1, 'Gerente', 1, '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1, '2020-01-15'),
+(2, 'Boletería', 1, '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1, '2021-03-20'),
+(3, 'Dulcería', 1, '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2, '2022-05-10'),
+(4, 'Limpieza', 1, '74567890', '987654324', 'ana.lopez@cineplanet.com', 'Ana', 'Lopez', 3, '2019-11-05'),
+(5, 'Proyeccionista', 1, '75678901', '987654325', 'luis.martinez@cineplanet.com', 'Luis', 'Martinez', 4, '2023-02-28'),
+(6, 'Boletería', 1, '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5, '2021-07-15'),
+(7, 'Gerente', 1, '77890123', '987654327', 'pedro.sanchez@cineplanet.com', 'Pedro', 'Sanchez', 6, '2018-09-01'),
+(8, 'Dulcería', 0, '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7, '2022-12-10'),
+(9, 'Boletería', 1, '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8, '2023-06-20'),
+(10, 'Dulcería', 1, '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9, '2021-10-30');
 
 --
 -- Poblando la tabla `producto`
