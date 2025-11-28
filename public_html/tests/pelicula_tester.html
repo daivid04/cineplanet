@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probador de Películas - CinePlanet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .operation-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .tab-btn:hover {
+            background: #e9ecef;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .operation-content {
+            display: none;
+        }
+
+        .operation-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(244, 67, 54, 0.4);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .result-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .result-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .result-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .operation-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 Probador de Películas</h1>
+            <p>Gestiona las películas de CinePlanet con operaciones CRUD completas</p>
+        </div>
+
+        <div class="main-content">
+            <div class="operation-tabs">
+                <button class="tab-btn active" onclick="showOperation('getAll')">📖 Ver Todas</button>
+                <button class="tab-btn" onclick="showOperation('getById')">🔍 Buscar por ID</button>
+                <button class="tab-btn" onclick="showOperation('getActivas')">✅ Ver Activas</button>
+                <button class="tab-btn" onclick="showOperation('searchByName')">🔎 Buscar por Nombre</button>
+                <button class="tab-btn" onclick="showOperation('create')">➕ Crear</button>
+                <button class="tab-btn" onclick="showOperation('update')">✏️ Actualizar</button>
+                <button class="tab-btn" onclick="showOperation('cambiarEstado')">🔄 Cambiar Estado</button>
+                <button class="tab-btn" onclick="showOperation('delete')">🗑️ Eliminar</button>
+            </div>
+
+            <!-- VER TODAS -->
+            <div id="op-getAll" class="operation-content active">
+                <div class="info-box">
+                    <strong>Obtener todas las películas</strong> registradas en el sistema
+                </div>
+                <button class="btn btn-primary" onclick="executeOperation('getAll')">
+                    🚀 Ejecutar
+                </button>
+                <div id="result-getAll" class="result-section"></div>
+            </div>
+
+            <!-- BUSCAR POR ID -->
+            <div id="op-getById" class="operation-content">
+                <div class="info-box">
+                    <strong>Obtener una película específica</strong> por su ID
+                </div>
+                <div class="form-group">
+                    <label>ID de la Película:</label>
+                    <input type="number" id="id-getById" placeholder="Ej: 1">
+                </div>
+                <button class="btn btn-primary" onclick="executeOperation('getById')">
+                    🔍 Buscar
+                </button>
+                <div id="result-getById" class="result-section"></div>
+            </div>
+
+            <!-- VER ACTIVAS -->
+            <div id="op-getActivas" class="operation-content">
+                <div class="info-box">
+                    <strong>Obtener solo las películas activas</strong> (estado = 1)
+                </div>
+                <button class="btn btn-primary" onclick="executeOperation('getActivas')">
+                    ✅ Ver Activas
+                </button>
+                <div id="result-getActivas" class="result-section"></div>
+            </div>
+
+            <!-- BUSCAR POR NOMBRE -->
+            <div id="op-searchByName" class="operation-content">
+                <div class="info-box">
+                    <strong>Buscar películas por nombre</strong> (búsqueda parcial)
+                </div>
+                <div class="form-group">
+                    <label>Nombre de la Película:</label>
+                    <input type="text" id="name-search" placeholder="Ej: Dune">
+                    <div class="form-hint">Puedes buscar por palabras parciales</div>
+                </div>
+                <button class="btn btn-primary" onclick="executeOperation('searchByName')">
+                    🔎 Buscar
+                </button>
+                <div id="result-searchByName" class="result-section"></div>
+            </div>
+
+            <!-- CREAR -->
+            <div id="op-create" class="operation-content">
+                <div class="info-box">
+                    <strong>Crear una nueva película.</strong> Completa todos los campos requeridos
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="create-nombre" placeholder="Ej: Avatar 3">
+                    </div>
+                    <div class="form-group">
+                        <label>Duración (minutos):</label>
+                        <input type="number" id="create-duracion" placeholder="Ej: 120">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL de Imagen:</label>
+                    <input type="text" id="create-url" placeholder="https://example.com/imagen.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Sinopsis:</label>
+                    <textarea id="create-sinopsis" placeholder="Descripción de la película..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Estado:</label>
+                    <select id="create-estado">
+                        <option value="1">Activa (1)</option>
+                        <option value="0">Inactiva (0)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="executeOperation('create')">
+                    ➕ Crear Película
+                </button>
+                <div id="result-create" class="result-section"></div>
+            </div>
+
+            <!-- ACTUALIZAR -->
+            <div id="op-update" class="operation-content">
+                <div class="info-box">
+                    <strong>Actualizar una película existente.</strong> Solo completa los campos que deseas modificar
+                </div>
+                <div class="form-group">
+                    <label>ID de la Película:</label>
+                    <input type="number" id="update-id" placeholder="Ej: 1">
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Nombre (opcional):</label>
+                        <input type="text" id="update-nombre" placeholder="Nuevo nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Duración (opcional):</label>
+                        <input type="number" id="update-duracion" placeholder="Nueva duración">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL de Imagen (opcional):</label>
+                    <input type="text" id="update-url" placeholder="Nueva URL">
+                </div>
+                <div class="form-group">
+                    <label>Sinopsis (opcional):</label>
+                    <textarea id="update-sinopsis" placeholder="Nueva sinopsis..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Estado (opcional):</label>
+                    <select id="update-estado">
+                        <option value="">No cambiar</option>
+                        <option value="1">Activa (1)</option>
+                        <option value="0">Inactiva (0)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="executeOperation('update')">
+                    ✏️ Actualizar
+                </button>
+                <div id="result-update" class="result-section"></div>
+            </div>
+
+            <!-- CAMBIAR ESTADO -->
+            <div id="op-cambiarEstado" class="operation-content">
+                <div class="info-box">
+                    <strong>Cambiar el estado de una película</strong> (activar/desactivar)
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>ID de la Película:</label>
+                        <input type="number" id="estado-id" placeholder="Ej: 1">
+                    </div>
+                    <div class="form-group">
+                        <label>Nuevo Estado:</label>
+                        <select id="estado-valor">
+                            <option value="1">Activa (1)</option>
+                            <option value="0">Inactiva (0)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="executeOperation('cambiarEstado')">
+                    🔄 Cambiar Estado
+                </button>
+                <div id="result-cambiarEstado" class="result-section"></div>
+            </div>
+
+            <!-- ELIMINAR -->
+            <div id="op-delete" class="operation-content">
+                <div class="warning-box">
+                    <strong>⚠️ Eliminar una película.</strong> Esta acción no se puede deshacer
+                </div>
+                <div class="form-group">
+                    <label>ID de la Película a Eliminar:</label>
+                    <input type="number" id="id-delete" placeholder="Ej: 1">
+                </div>
+                <button class="btn btn-danger" onclick="executeOperation('delete')">
+                    🗑️ Eliminar Película
+                </button>
+                <div id="result-delete" class="result-section"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentOperation = 'getAll';
+
+        function showOperation(operation) {
+            currentOperation = operation;
+
+            // Actualizar tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Mostrar contenido
+            document.querySelectorAll('.operation-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById('op-' + operation).classList.add('active');
+        }
+
+        async function executeOperation(operation) {
+            const resultDiv = document.getElementById('result-' + operation);
+            resultDiv.innerHTML = '<div class="loading"></div> Ejecutando...';
+            resultDiv.classList.add('show');
+
+            try {
+                let data = {};
+
+                // Preparar datos según la operación
+                switch (operation) {
+                    case 'getById':
+                        const id = document.getElementById('id-getById').value;
+                        if (!id) {
+                            throw new Error('Por favor ingresa un ID');
+                        }
+                        data = { id: parseInt(id) };
+                        break;
+
+                    case 'searchByName':
+                        const name = document.getElementById('name-search').value;
+                        if (!name) {
+                            throw new Error('Por favor ingresa un nombre');
+                        }
+                        data = { name: name };
+                        break;
+
+                    case 'create':
+                        const nombre = document.getElementById('create-nombre').value;
+                        const duracion = document.getElementById('create-duracion').value;
+                        const url = document.getElementById('create-url').value;
+                        const sinopsis = document.getElementById('create-sinopsis').value;
+                        const estado = document.getElementById('create-estado').value;
+
+                        if (!nombre || !duracion || !url || !sinopsis) {
+                            throw new Error('Todos los campos son requeridos');
+                        }
+
+                        data = {
+                            data: {
+                                nombre: nombre,
+                                duracion: parseInt(duracion),
+                                url_imagen: url,
+                                sinopsis: sinopsis,
+                                estado: parseInt(estado)
+                            }
+                        };
+                        break;
+
+                    case 'update':
+                        const updateId = document.getElementById('update-id').value;
+                        if (!updateId) {
+                            throw new Error('Por favor ingresa el ID de la película');
+                        }
+
+                        const updateData = {};
+                        const updateNombre = document.getElementById('update-nombre').value;
+                        const updateDuracion = document.getElementById('update-duracion').value;
+                        const updateUrl = document.getElementById('update-url').value;
+                        const updateSinopsis = document.getElementById('update-sinopsis').value;
+                        const updateEstado = document.getElementById('update-estado').value;
+
+                        if (updateNombre) updateData.nombre = updateNombre;
+                        if (updateDuracion) updateData.duracion = parseInt(updateDuracion);
+                        if (updateUrl) updateData.url_imagen = updateUrl;
+                        if (updateSinopsis) updateData.sinopsis = updateSinopsis;
+                        if (updateEstado !== '') updateData.estado = parseInt(updateEstado);
+
+                        if (Object.keys(updateData).length === 0) {
+                            throw new Error('Debes proporcionar al menos un campo para actualizar');
+                        }
+
+                        data = {
+                            id: parseInt(updateId),
+                            data: updateData
+                        };
+                        break;
+
+                    case 'cambiarEstado':
+                        const estadoId = document.getElementById('estado-id').value;
+                        const estadoValor = document.getElementById('estado-valor').value;
+
+                        if (!estadoId) {
+                            throw new Error('Por favor ingresa el ID de la película');
+                        }
+
+                        data = {
+                            id: parseInt(estadoId),
+                            estado: parseInt(estadoValor)
+                        };
+                        break;
+
+                    case 'delete':
+                        const deleteId = document.getElementById('id-delete').value;
+                        if (!deleteId) {
+                            throw new Error('Por favor ingresa un ID');
+                        }
+                        if (!confirm('¿Estás seguro de eliminar esta película?')) {
+                            resultDiv.classList.remove('show');
+                            return;
+                        }
+                        data = { id: parseInt(deleteId) };
+                        break;
+                }
+
+                // Hacer petición
+                const response = await fetch(`pelicula_tester_api.php?action=${operation}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                displayResult(resultDiv, result, response.ok);
+
+            } catch (error) {
+                displayResult(resultDiv, {
+                    success: false,
+                    message: error.message
+                }, false);
+            }
+        }
+
+        function displayResult(container, result, isSuccess) {
+            const statusClass = (result.success || isSuccess) ? 'success' : 'error';
+            const statusText = (result.success || isSuccess) ? '✓ ÉXITO' : '✗ ERROR';
+
+            container.innerHTML = `
+                <div class="result-header">
+                    <h4>Resultado</h4>
+                    <span class="result-status ${statusClass}">${statusText}</span>
+                </div>
+                <div class="code-block">
+                    <pre>${syntaxHighlight(JSON.stringify(result, null, 2))}</pre>
+                </div>
+            `;
+        }
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                        return '<span style="color: #92d192;">' + match + '</span>';
+                    } else {
+                        cls = 'string';
+                        return '<span style="color: #e6db74;">' + match + '</span>';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                    return '<span style="color: #66d9ef;">' + match + '</span>';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                    return '<span style="color: #f92672;">' + match + '</span>';
+                }
+                return '<span style="color: #ae81ff;">' + match + '</span>';
+            });
+        }
+    </script>
+</body>
+
+</html>
