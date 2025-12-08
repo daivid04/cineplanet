@@ -1,16 +1,14 @@
 <?php
 /**
- * API REST para Pelicula
+ * API REST para Ciudad
  * 
  * Endpoints:
- * GET    /api/pelicula_api.php                  - Listar todas las peliculas
- * GET    /api/pelicula_api.php?id=1             - Obtener pelicula por ID
- * GET    /api/pelicula_api.php?search=matrix    - Buscar peliculas por nombre
- * GET    /api/pelicula_api.php?activos=1        - Solo peliculas activas
- * POST   /api/pelicula_api.php                  - Crear nueva pelicula
- * PUT    /api/pelicula_api.php                  - Actualizar pelicula
- * PATCH  /api/pelicula_api.php                  - Cambiar estado (toggle)
- * DELETE /api/pelicula_api.php?id=1             - Eliminar pelicula
+ * GET    /api/ciudad_api.php          - Listar todas las ciudades
+ * GET    /api/ciudad_api.php?id=1     - Obtener ciudad por ID
+ * POST   /api/ciudad_api.php          - Crear nueva ciudad
+ * PUT    /api/ciudad_api.php          - Actualizar ciudad
+ * PATCH  /api/ciudad_api.php          - Cambiar estado (toggle)
+ * DELETE /api/ciudad_api.php?id=1     - Eliminar ciudad (soft delete)
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -18,48 +16,50 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
+// Manejar preflight request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
+// Incluir dependencias
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../src/services/conexion.php';
-require_once __DIR__ . '/../../src/controllers/PeliculaController.php';
+require_once __DIR__ . '/../../src/controllers/CiudadController.php';
 
-$controller = new PeliculaController($conn);
+// Inicializar controller
+$controller = new CiudadController($conn);
+
+// Obtener metodo HTTP
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {
     switch ($method) {
         case 'GET':
+            // Obtener por ID o listar todos
             if (isset($_GET['id'])) {
-                $response = $controller->getById(intval($_GET['id']));
-            } else if (isset($_GET['search'])) {
-                $response = $controller->search($_GET['search']);
+                $id = intval($_GET['id']);
+                $response = $controller->getById($id);
             } else {
+                // Parametro opcional para solo activos
                 $soloActivos = isset($_GET['activos']) && $_GET['activos'] == '1';
                 $response = $controller->getAll($soloActivos);
             }
             break;
 
         case 'POST':
+            // Crear nueva ciudad
             $data = json_decode(file_get_contents('php://input'), true);
             
             if (!$data || !isset($data['nombre']) || trim($data['nombre']) === '') {
-                $response = ['success' => false, 'message' => 'El nombre de la pelicula es requerido'];
-            } else if (!isset($data['duracion']) || !is_numeric($data['duracion'])) {
-                $response = ['success' => false, 'message' => 'La duracion es requerida'];
-            } else if (!isset($data['url_imagen']) || trim($data['url_imagen']) === '') {
-                $response = ['success' => false, 'message' => 'La URL de imagen es requerida'];
-            } else if (!isset($data['sinopsis']) || trim($data['sinopsis']) === '') {
-                $response = ['success' => false, 'message' => 'La sinopsis es requerida'];
+                $response = ['success' => false, 'message' => 'El nombre es requerido'];
             } else {
                 $response = $controller->create($data);
             }
             break;
 
         case 'PUT':
+            // Actualizar ciudad
             $data = json_decode(file_get_contents('php://input'), true);
             
             if (!$data || !isset($data['id'])) {
@@ -72,20 +72,25 @@ try {
             break;
 
         case 'PATCH':
+            // Cambiar estado
             $data = json_decode(file_get_contents('php://input'), true);
             
             if (!$data || !isset($data['id']) || !isset($data['estado'])) {
                 $response = ['success' => false, 'message' => 'ID y estado son requeridos'];
             } else {
-                $response = $controller->toggleEstado(intval($data['id']), intval($data['estado']));
+                $id = intval($data['id']);
+                $estado = intval($data['estado']);
+                $response = $controller->toggleEstado($id, $estado);
             }
             break;
 
         case 'DELETE':
+            // Eliminar ciudad
             if (!isset($_GET['id'])) {
                 $response = ['success' => false, 'message' => 'El ID es requerido'];
             } else {
-                $response = $controller->delete(intval($_GET['id']));
+                $id = intval($_GET['id']);
+                $response = $controller->delete($id);
             }
             break;
 

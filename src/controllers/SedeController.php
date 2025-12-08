@@ -8,122 +8,71 @@ class SedeController {
         $this->sedeModel = new SedeModel($conn);
     }
 
-    // -------------------------------------------------
-    // CREAR SEDE
-    // -------------------------------------------------
     public function create($data) {
         try {
-            $id = $this->sedeModel->create($data);
-            
-            return [
-                "success" => true,
-                "message" => "Sede creada exitosamente",
-                "id_sede" => $id
-            ];
+            return $this->sedeModel->create($data);
         } catch (Exception $e) {
-            return [
-                "success" => false,
-                "message" => $e->getMessage()
-            ];
+            return ["success" => false, "message" => $e->getMessage()];
         }
     }
 
-    // -------------------------------------------------
-    // OBTENER SEDE POR ID
-    // -------------------------------------------------
     public function getById($id) {
         try {
             $sede = $this->sedeModel->getById($id);
             
             if (!$sede) {
-                return [
-                    "success" => false,
-                    "message" => "Sede no encontrada"
-                ];
+                return ["success" => false, "message" => "Sede no encontrada"];
             }
 
-            return [
-                "success" => true,
-                "data" => $sede
-            ];
+            return ["success" => true, "data" => $sede];
         } catch (Exception $e) {
-            return [
-                "success" => false,
-                "message" => $e->getMessage()
-            ];
+            return ["success" => false, "message" => $e->getMessage()];
         }
     }
 
-    // -------------------------------------------------
-    // OBTENER TODAS LAS SEDES
-    // -------------------------------------------------
-    public function getAll() {
+    public function getAll($soloActivos = false) {
         try {
-            $sedes = $this->sedeModel->getAll();
-
-            return [
-                "success" => true,
-                "data" => $sedes,
-                "total" => count($sedes)
-            ];
+            $sedes = $this->sedeModel->getAll($soloActivos);
+            return ["success" => true, "data" => $sedes, "total" => count($sedes)];
         } catch (Exception $e) {
-            return [
-                "success" => false,
-                "message" => $e->getMessage()
-            ];
+            return ["success" => false, "message" => $e->getMessage()];
         }
     }
 
-    // -------------------------------------------------
-    // ACTUALIZAR SEDE
-    // -------------------------------------------------
     public function update($id, $data) {
         try {
-            $resultado = $this->sedeModel->update($id, $data);
-
-            if ($resultado) {
-                return [
-                    "success" => true,
-                    "message" => "Sede actualizada exitosamente"
-                ];
-            } else {
-                return [
-                    "success" => false,
-                    "message" => "No se pudo actualizar la sede o no se encontró"
-                ];
-            }
+            return $this->sedeModel->update($id, $data);
         } catch (Exception $e) {
-            return [
-                "success" => false,
-                "message" => $e->getMessage()
-            ];
+            return ["success" => false, "message" => $e->getMessage()];
         }
     }
 
-    // -------------------------------------------------
-    // ELIMINAR SEDE
-    // -------------------------------------------------
     public function delete($id) {
         try {
-            $resultado = $this->sedeModel->delete($id);
-
-            if ($resultado) {
-                return [
-                    "success" => true,
-                    "message" => "Sede eliminada exitosamente"
-                ];
-            } else {
-                return [
-                    "success" => false,
-                    "message" => "No se pudo eliminar la sede o no se encontró"
-                ];
-            }
+            return $this->sedeModel->delete($id);
         } catch (Exception $e) {
-            return [
-                "success" => false,
-                "message" => $e->getMessage()
-            ];
+            return ["success" => false, "message" => $e->getMessage()];
+        }
+    }
+
+    public function toggleEstado($id, $estado) {
+        try {
+            return $this->sedeModel->toggleEstado($id, $estado);
+        } catch (Exception $e) {
+            return ["success" => false, "message" => $e->getMessage()];
+        }
+    }
+
+    public function count($soloActivos = false) {
+        return $this->sedeModel->count($soloActivos);
+    }
+
+    public function getByCiudad($idCiudad) {
+        try {
+            $sedes = $this->sedeModel->getByCiudad($idCiudad);
+            return ["success" => true, "data" => $sedes];
+        } catch (Exception $e) {
+            return ["success" => false, "message" => $e->getMessage()];
         }
     }
 }
-?>

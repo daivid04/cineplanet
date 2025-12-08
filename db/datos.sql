@@ -2,28 +2,28 @@
 USE u914095763_g1;
 
 -- Primero poblar la tabla metodo
-INSERT INTO `metodo` (`id_metodo`, `nombre_metodo`) VALUES
-(1, 'Tarjeta de Crédito'),
-(2, 'Tarjeta de Débito'),
-(3, 'Efectivo'),
-(4, 'Yape'),
-(5, 'Plin'),
-(6, 'Transferencia Bancaria');
+INSERT INTO `metodo` (`id_metodo`, `nombre_metodo`, `descripcion`, `icono`, `estado`) VALUES
+(1, 'Tarjeta de Credito', 'Pago con tarjeta de credito Visa/Mastercard', 'credit-card', 1),
+(2, 'Tarjeta de Debito', 'Pago con tarjeta de debito', 'debit-card', 1),
+(3, 'Efectivo', 'Pago en efectivo en caja', 'cash', 1),
+(4, 'Yape', 'Pago movil con Yape BCP', 'yape', 1),
+(5, 'Plin', 'Pago movil con Plin', 'plin', 1),
+(6, 'Transferencia Bancaria', 'Transferencia desde cuenta bancaria', 'bank-transfer', 1);
 
 --
 -- Poblando la tabla `ciudad`
 --
-INSERT INTO `ciudad` (`id_ciudad`, `nombre`) VALUES
-(1, 'Lima'),
-(2, 'Arequipa'),
-(3, 'Trujillo'),
-(4, 'Chiclayo'),
-(5, 'Piura'),
-(6, 'Cusco'),
-(7, 'Huancayo'),
-(8, 'Tacna'),
-(9, 'Ica'),
-(10, 'Chimbote');
+INSERT INTO `ciudad` (`id_ciudad`, `nombre`, `estado`) VALUES
+(1, 'Lima', 1),
+(2, 'Arequipa', 1),
+(3, 'Trujillo', 1),
+(4, 'Chiclayo', 1),
+(5, 'Piura', 1),
+(6, 'Cusco', 1),
+(7, 'Huancayo', 1),
+(8, 'Tacna', 1),
+(9, 'Ica', 1),
+(10, 'Chimbote', 1);
 
 --
 -- Poblando la tabla `sede`
@@ -54,7 +54,7 @@ INSERT INTO `sala` (`id_sala`, `num_sala`, `id_sede`, `estado`) VALUES
 (8, 1, 4, 1),
 (9, 1, 5, 1),
 (10, 1, 6, 1),
-(11, 4, 3, 1); -- Sala adicional para más funciones
+(11, 4, 3, 1); -- Sala adicional para mas funciones
 
 --
 -- Poblando la tabla `asiento` (20 asientos para 2 salas)
@@ -86,45 +86,45 @@ INSERT INTO `asiento` (`id_asiento`, `estado`, `fila_asiento`, `columna_asiento`
 --
 INSERT INTO `pelicula` (`id_pelicula`, `duracion`, `url_imagen`, `nombre`, `sinopsis`, `estado`) VALUES
 (1, 155, 'https://example.com/images/dune2.jpg', 'Dune: Parte Dos', 'Paul Atreides se une a los Fremen y comienza un viaje espiritual y marcial para convertirse en Muad''dib.', 1),
-(2, 180, 'https://example.com/images/oppenheimer.jpg', 'Oppenheimer', 'La historia del físico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atómica.', 1),
+(2, 180, 'https://example.com/images/oppenheimer.jpg', 'Oppenheimer', 'La historia del fisico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atomica.', 1),
 (3, 114, 'https://example.com/images/barbie.jpg', 'Barbie', 'Barbie sufre una crisis que la lleva a cuestionar su mundo y su existencia.', 1),
-(4, 140, 'https://example.com/images/spiderverse.jpg', 'Spider-Man: A través del Spider-Verso', 'Miles Morales es catapultado a través del Multiverso, donde se encuentra con un equipo de Spider-People.', 1),
-(5, 150, 'https://example.com/images/gotg3.jpg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa misión para proteger a uno de los suyos.', 1),
-(6, 141, 'https://example.com/images/johnwick4.jpg', 'John Wick: Capítulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.', 1),
-(7, 124, 'https://example.com/images/mariobros.jpg', 'Super Mario Bros. La Película', 'Un fontanero llamado Mario viaja por un laberinto subterráneo con su hermano, Luigi, tratando de salvar a una princesa capturada.', 1),
+(4, 140, 'https://example.com/images/spiderverse.jpg', 'Spider-Man: A traves del Spider-Verso', 'Miles Morales es catapultado a traves del Multiverso, donde se encuentra con un equipo de Spider-People.', 1),
+(5, 150, 'https://example.com/images/gotg3.jpg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa mision para proteger a uno de los suyos.', 1),
+(6, 141, 'https://example.com/images/johnwick4.jpg', 'John Wick: Capitulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.', 1),
+(7, 124, 'https://example.com/images/mariobros.jpg', 'Super Mario Bros. La Pelicula', 'Un fontanero llamado Mario viaja por un laberinto subterraneo con su hermano, Luigi, tratando de salvar a una princesa capturada.', 1),
 (8, 169, 'https://example.com/images/avatar2.jpg', 'Avatar: El Camino del Agua', 'Jake Sully y Ney''tiri han formado una familia y hacen todo lo posible por permanecer juntos. Sin embargo, deben abandonar su hogar y explorar las regiones de Pandora.', 1),
-(9, 102, 'https://example.com/images/elemental.jpg', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en común.', 1),
-(10, 146, 'https://example.com/images/theflash.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superhéroes.', 0);
+(9, 102, 'https://example.com/images/elemental.jpg', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en comun.', 1),
+(10, 146, 'https://example.com/images/theflash.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superheroes.', 0);
 
 --
 -- Poblando la tabla `idioma`
 --
-INSERT INTO `idioma` (`id_idioma`, `idioma`) VALUES
-(1, 'Español (Doblada)'),
-(2, 'Inglés (Subtitulada)'),
-(3, 'Español (Subtitulada)'),
-(4, 'Japonés (Subtitulada)'),
-(5, 'Portugués (Subtitulada)'),
-(6, 'Francés (Subtitulada)'),
-(7, 'Coreano (Subtitulada)'),
-(8, 'Italiano (Subtitulada)'),
-(9, 'Alemán (Subtitulada)'),
-(10, 'Chino (Subtitulada)');
+INSERT INTO `idioma` (`id_idioma`, `idioma`, `estado`) VALUES
+(1, 'Espanol (Doblada)', 1),
+(2, 'Ingles (Subtitulada)', 1),
+(3, 'Espanol (Subtitulada)', 1),
+(4, 'Japones (Subtitulada)', 1),
+(5, 'Portugues (Subtitulada)', 1),
+(6, 'Frances (Subtitulada)', 1),
+(7, 'Coreano (Subtitulada)', 1),
+(8, 'Italiano (Subtitulada)', 1),
+(9, 'Aleman (Subtitulada)', 1),
+(10, 'Chino (Subtitulada)', 1);
 
 --
 -- Poblando la tabla `formato`
 --
-INSERT INTO `formato` (`id_formato`, `nombre`) VALUES
-(1, '2D'),
-(2, '3D'),
-(3, 'IMAX'),
-(4, '4DX'),
-(5, 'XD'),
-(6, 'D-BOX'),
-(7, 'VIP'),
-(8, 'Regular'),
-(9, 'Premium'),
-(10, 'Gold');
+INSERT INTO `formato` (`id_formato`, `nombre`, `estado`) VALUES
+(1, '2D', 1),
+(2, '3D', 1),
+(3, 'IMAX', 1),
+(4, '4DX', 1),
+(5, 'XD', 1),
+(6, 'D-BOX', 1),
+(7, 'VIP', 1),
+(8, 'Regular', 1),
+(9, 'Premium', 1),
+(10, 'Gold', 1);
 
 --
 -- Poblando la tabla `funcion`
@@ -146,15 +146,15 @@ INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`, 
 --
 INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`, `fecha_ingreso`) VALUES
 (1, 'Gerente', 1, '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1, '2020-01-15'),
-(2, 'Boletería', 1, '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1, '2021-03-20'),
-(3, 'Dulcería', 1, '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2, '2022-05-10'),
+(2, 'Boleteria', 1, '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1, '2021-03-20'),
+(3, 'Dulceria', 1, '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2, '2022-05-10'),
 (4, 'Limpieza', 1, '74567890', '987654324', 'ana.lopez@cineplanet.com', 'Ana', 'Lopez', 3, '2019-11-05'),
 (5, 'Proyeccionista', 1, '75678901', '987654325', 'luis.martinez@cineplanet.com', 'Luis', 'Martinez', 4, '2023-02-28'),
-(6, 'Boletería', 1, '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5, '2021-07-15'),
+(6, 'Boleteria', 1, '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5, '2021-07-15'),
 (7, 'Gerente', 1, '77890123', '987654327', 'pedro.sanchez@cineplanet.com', 'Pedro', 'Sanchez', 6, '2018-09-01'),
-(8, 'Dulcería', 0, '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7, '2022-12-10'),
-(9, 'Boletería', 1, '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8, '2023-06-20'),
-(10, 'Dulcería', 1, '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9, '2021-10-30');
+(8, 'Dulceria', 0, '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7, '2022-12-10'),
+(9, 'Boleteria', 1, '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8, '2023-06-20'),
+(10, 'Dulceria', 1, '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9, '2021-10-30');
 
 --
 -- Poblando la tabla `producto`
@@ -165,11 +165,11 @@ INSERT INTO `producto` (`id_producto`, `nombre`, `precio_unitario`, `estado`) VA
 (3, 'Canchita Mediana Salada', 15.00, 1),
 (4, 'Gaseosa Grande', 12.00, 1),
 (5, 'Gaseosa Mediana', 10.00, 1),
-(6, 'Hot-Dog Clásico', 8.50, 1),
+(6, 'Hot-Dog Clasico', 8.50, 1),
 (7, 'Nachos con Queso', 18.00, 1),
 (8, 'Agua Mineral', 6.00, 1),
 (9, 'Chocolate Sublime', 5.00, 1),
-(10, 'Tequeños', 14.00, 0);
+(10, 'Tequenos', 14.00, 0);
 
 --
 -- Poblando la tabla `producto_sede`
@@ -190,7 +190,7 @@ INSERT INTO `producto_sede` (`id_producto_sede`, `stock`, `id_producto`, `id_sed
 -- Poblando la tabla `combos`
 --
 INSERT INTO `combos` (`id_combo`, `precio`, `nombre`, `estado`) VALUES
-(1, 35.00, 'Combo Clásico', 1),
+(1, 35.00, 'Combo Clasico', 1),
 (2, 55.00, 'Combo Pareja', 1),
 (3, 28.00, 'Combo Nachos', 1),
 (4, 25.00, 'Combo Hot-Dog', 1),
@@ -199,7 +199,7 @@ INSERT INTO `combos` (`id_combo`, `precio`, `nombre`, `estado`) VALUES
 (7, 22.00, 'Combo Kids', 1),
 (8, 40.00, 'Combo Gigante', 1),
 (9, 60.00, 'Combo Amigos', 1),
-(10, 32.00, 'Combo Tequeños', 0);
+(10, 32.00, 'Combo Tequenos', 0);
 
 --
 -- Poblando la tabla `usuario`
@@ -229,10 +229,10 @@ INSERT INTO `usuario` (`id_usuario`, `correo`, `estado`) VALUES
 --
 -- Poblando la tabla `tipo_socio` (3 tipos tradicionales)
 --
-INSERT INTO `tipo_socio` (`id_socio`, `nombre`, `desc_dulces`, `desc_boleto`) VALUES
-(1, 'Socio Clásico', '10%', '15%'),
-(2, 'Socio Oro', '15%', '25%'),
-(3, 'Socio Premium', '20%', '35%');
+INSERT INTO `tipo_socio` (`id_socio`, `nombre`, `desc_dulces`, `desc_boleto`, `estado`) VALUES
+(1, 'Socio Clasico', 10.00, 15.00, 1),
+(2, 'Socio Oro', 15.00, 25.00, 1),
+(3, 'Socio Premium', 20.00, 35.00, 1);
 
 
 INSERT INTO `socio` (`id_usuario`, `nombre`, `apellido`, `genero`, `fecha_nacimiento`, `documento`, `id_tipo_socio`, `contrasena`) VALUES
@@ -377,8 +377,8 @@ INSERT INTO `formato_pelicula` (`id_formato_pelicula`, `id_pelicula`, `id_format
 -- Poblando la tabla `producto_combo`
 --
 INSERT INTO `producto_combo` (`id_productos_combos`, `id_combo`, `id_producto_sede`) VALUES
-(1, 1, 2), -- Combo Clásico: Canchita Grande
-(2, 1, 5), -- Combo Clásico: Gaseosa Mediana
+(1, 1, 2), -- Combo Clasico: Canchita Grande
+(2, 1, 5), -- Combo Clasico: Gaseosa Mediana
 (3, 2, 1), -- Combo Pareja: Canchita Gigante
 (4, 2, 4), -- Combo Pareja: Gaseosa Grande
 (5, 2, 4), -- Combo Pareja: Gaseosa Grande
@@ -386,6 +386,6 @@ INSERT INTO `producto_combo` (`id_productos_combos`, `id_combo`, `id_producto_se
 (7, 3, 5), -- Combo Nachos: Gaseosa Mediana
 (8, 4, 6), -- Combo Hot-Dog: Hot-Dog
 (9, 4, 5), -- Combo Hot-Dog: Gaseosa Mediana
-(10, 10, 10), -- Combo Tequeños: Tequeños
-(11, 10, 5); -- Combo Tequeños: Gaseosa Mediana
+(10, 10, 10), -- Combo Tequenos: Tequenos
+(11, 10, 5); -- Combo Tequenos: Gaseosa Mediana
 

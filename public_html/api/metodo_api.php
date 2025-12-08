@@ -1,16 +1,14 @@
 <?php
 /**
- * API REST para Pelicula
+ * API REST para Metodo de Pago
  * 
  * Endpoints:
- * GET    /api/pelicula_api.php                  - Listar todas las peliculas
- * GET    /api/pelicula_api.php?id=1             - Obtener pelicula por ID
- * GET    /api/pelicula_api.php?search=matrix    - Buscar peliculas por nombre
- * GET    /api/pelicula_api.php?activos=1        - Solo peliculas activas
- * POST   /api/pelicula_api.php                  - Crear nueva pelicula
- * PUT    /api/pelicula_api.php                  - Actualizar pelicula
- * PATCH  /api/pelicula_api.php                  - Cambiar estado (toggle)
- * DELETE /api/pelicula_api.php?id=1             - Eliminar pelicula
+ * GET    /api/metodo_api.php          - Listar todos los metodos
+ * GET    /api/metodo_api.php?id=1     - Obtener metodo por ID
+ * POST   /api/metodo_api.php          - Crear nuevo metodo
+ * PUT    /api/metodo_api.php          - Actualizar metodo
+ * PATCH  /api/metodo_api.php          - Cambiar estado (toggle)
+ * DELETE /api/metodo_api.php?id=1     - Eliminar metodo (soft delete)
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -25,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../src/services/conexion.php';
-require_once __DIR__ . '/../../src/controllers/PeliculaController.php';
+require_once __DIR__ . '/../../src/controllers/MetodoController.php';
 
-$controller = new PeliculaController($conn);
+$controller = new MetodoController($conn);
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {
@@ -35,8 +33,6 @@ try {
         case 'GET':
             if (isset($_GET['id'])) {
                 $response = $controller->getById(intval($_GET['id']));
-            } else if (isset($_GET['search'])) {
-                $response = $controller->search($_GET['search']);
             } else {
                 $soloActivos = isset($_GET['activos']) && $_GET['activos'] == '1';
                 $response = $controller->getAll($soloActivos);
@@ -46,14 +42,8 @@ try {
         case 'POST':
             $data = json_decode(file_get_contents('php://input'), true);
             
-            if (!$data || !isset($data['nombre']) || trim($data['nombre']) === '') {
-                $response = ['success' => false, 'message' => 'El nombre de la pelicula es requerido'];
-            } else if (!isset($data['duracion']) || !is_numeric($data['duracion'])) {
-                $response = ['success' => false, 'message' => 'La duracion es requerida'];
-            } else if (!isset($data['url_imagen']) || trim($data['url_imagen']) === '') {
-                $response = ['success' => false, 'message' => 'La URL de imagen es requerida'];
-            } else if (!isset($data['sinopsis']) || trim($data['sinopsis']) === '') {
-                $response = ['success' => false, 'message' => 'La sinopsis es requerida'];
+            if (!$data || !isset($data['nombre_metodo']) || trim($data['nombre_metodo']) === '') {
+                $response = ['success' => false, 'message' => 'El nombre del metodo es requerido'];
             } else {
                 $response = $controller->create($data);
             }

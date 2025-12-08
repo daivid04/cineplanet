@@ -1,16 +1,16 @@
 <?php
-require_once __DIR__ . "/../models/PeliculaModel.php";
+require_once __DIR__ . "/../models/SalaModel.php";
 
-class PeliculaController {
-    private $peliculaModel;
+class SalaController {
+    private $salaModel;
 
     public function __construct($conn) {
-        $this->peliculaModel = new PeliculaModel($conn);
+        $this->salaModel = new SalaModel($conn);
     }
 
     public function create($data) {
         try {
-            return $this->peliculaModel->create($data);
+            return $this->salaModel->create($data);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -18,13 +18,13 @@ class PeliculaController {
 
     public function getById($id) {
         try {
-            $pelicula = $this->peliculaModel->getById($id);
+            $sala = $this->salaModel->getById($id);
             
-            if (!$pelicula) {
-                return ["success" => false, "message" => "Pelicula no encontrada"];
+            if (!$sala) {
+                return ["success" => false, "message" => "Sala no encontrada"];
             }
 
-            return ["success" => true, "data" => $pelicula];
+            return ["success" => true, "data" => $sala];
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -32,17 +32,17 @@ class PeliculaController {
 
     public function getAll($soloActivos = false) {
         try {
-            $peliculas = $this->peliculaModel->getAll($soloActivos);
-            return ["success" => true, "data" => $peliculas, "total" => count($peliculas)];
+            $salas = $this->salaModel->getAll($soloActivos);
+            return ["success" => true, "data" => $salas, "total" => count($salas)];
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
     }
 
-    public function search($query) {
+    public function getBySede($idSede, $soloActivos = false) {
         try {
-            $peliculas = $this->peliculaModel->getByName($query);
-            return ["success" => true, "data" => $peliculas, "total" => count($peliculas)];
+            $salas = $this->salaModel->getBySede($idSede, $soloActivos);
+            return ["success" => true, "data" => $salas, "total" => count($salas)];
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -50,7 +50,7 @@ class PeliculaController {
 
     public function update($id, $data) {
         try {
-            return $this->peliculaModel->update($id, $data);
+            return $this->salaModel->update($id, $data);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -58,7 +58,7 @@ class PeliculaController {
 
     public function delete($id) {
         try {
-            return $this->peliculaModel->delete($id);
+            return $this->salaModel->delete($id);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -66,13 +66,17 @@ class PeliculaController {
 
     public function toggleEstado($id, $estado) {
         try {
-            return $this->peliculaModel->toggleEstado($id, $estado);
+            return $this->salaModel->toggleEstado($id, $estado);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
     }
 
     public function count($soloActivos = false) {
-        return $this->peliculaModel->count($soloActivos);
+        return $this->salaModel->count($soloActivos);
+    }
+
+    public function countBySede($idSede, $soloActivos = false) {
+        return $this->salaModel->countBySede($idSede, $soloActivos);
     }
 }

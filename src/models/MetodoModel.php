@@ -1,6 +1,6 @@
 <?php
 
-class CiudadModel {
+class MetodoModel {
     private $conn;
 
     public function __construct($conn) {
@@ -10,23 +10,10 @@ class CiudadModel {
     // -------------------------------------------------
     // VALIDACIONES
     // -------------------------------------------------
-    private function validarCiudad($data, $modo = "insertar") {
-        $requeridos = ["nombre"];
-
-        if ($modo === "insertar") {
-            foreach ($requeridos as $campo) {
-                if (!isset($data[$campo]) || trim($data[$campo]) === "") {
-                    throw new Exception("El campo '$campo' es obligatorio.");
-                }
-            }
-        }
-        return true;
-    }
-
     private function existsByNombre($nombre, $excludeId = null) {
-        $sql = "SELECT COUNT(*) as count FROM ciudad WHERE LOWER(nombre) = LOWER(:nombre)";
+        $sql = "SELECT COUNT(*) as count FROM metodo WHERE LOWER(nombre_metodo) = LOWER(:nombre)";
         if ($excludeId) {
-            $sql .= " AND id_ciudad != :excludeId";
+            $sql .= " AND id_metodo != :excludeId";
         }
         
         $stmt = $this->conn->prepare($sql);
@@ -41,24 +28,29 @@ class CiudadModel {
     }
 
     // -------------------------------------------------
-    // CREAR CIUDAD
+    // CREAR METODO
     // -------------------------------------------------
     public function create($data) {
-        $this->validarCiudad($data, "insertar");
+        if (!isset($data["nombre_metodo"]) || trim($data["nombre_metodo"]) === "") {
+            return ['success' => false, 'message' => 'El nombre del metodo es requerido'];
+        }
 
-        // Verificar si ya existe
-        if ($this->existsByNombre($data["nombre"])) {
-            return ['success' => false, 'message' => 'Ya existe una ciudad con ese nombre'];
+        if ($this->existsByNombre($data["nombre_metodo"])) {
+            return ['success' => false, 'message' => 'Ya existe un metodo con ese nombre'];
         }
 
         try {
-            $sql = "INSERT INTO ciudad (nombre, estado) VALUES (:nombre, 1)";
+            $sql = "INSERT INTO metodo (nombre_metodo, descripcion, icono, estado) VALUES (:nombre, :descripcion, :icono, 1)";
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([":nombre" => $data["nombre"]]);
+            $stmt->execute([
+                ":nombre" => $data["nombre_metodo"],
+                ":descripcion" => $data["descripcion"] ?? null,
+                ":icono" => $data["icono"] ?? null
+            ]);
 
             return [
                 'success' => true,
-                'message' => 'Ciudad creada correctamente',
+                'message' => 'Metodo de pago creado correctamente',
                 'id' => $this->conn->lastInsertId()
             ];
         } catch (PDOException $e) {
@@ -67,7 +59,7 @@ class CiudadModel {
     }
 
     // -------------------------------------------------
-    // OBTENER CIUDAD POR ID
+    // OBTENER METODO POR ID
     // -------------------------------------------------
     public function getById($id) {
         if (!is_numeric($id)) {
@@ -75,7 +67,7 @@ class CiudadModel {
         }
 
         try {
-            $sql = "SELECT id_ciudad, nombre, estado FROM ciudad WHERE id_ciudad = :id";
+            $sql = "SELECT id_metodo, nombre_metodo, descripcion, icono, estado FROM metodo WHERE id_metodo = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -85,15 +77,15 @@ class CiudadModel {
     }
 
     // -------------------------------------------------
-    // OBTENER TODAS LAS CIUDADES
+    // OBTENER TODOS LOS METODOS
     // -------------------------------------------------
     public function getAll($soloActivos = false) {
         try {
-            $sql = "SELECT id_ciudad, nombre, estado FROM ciudad";
+            $sql = "SELECT id_metodo, nombre_metodo, descripcion, icono, estado FROM metodo";
             if ($soloActivos) {
                 $sql .= " WHERE estado = 1";
             }
-            $sql .= " ORDER BY nombre ASC";
+            $sql .= " ORDER BY nombre_metodo ASC";
 
             $stmt = $this->conn->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -103,25 +95,34 @@ class CiudadModel {
     }
 
     // -------------------------------------------------
-    // ACTUALIZAR CIUDAD
+    // ACTUALIZAR METODO
     // -------------------------------------------------
     public function update($id, $data) {
         if (!is_numeric($id)) {
             return ['success' => false, 'message' => 'ID invalido'];
         }
 
-        // Verificar si existe otra ciudad con el mismo nombre
-        if (isset($data["nombre"]) && $this->existsByNombre($data["nombre"], $id)) {
-            return ['success' => false, 'message' => 'Ya existe otra ciudad con ese nombre'];
+        if (isset($data["nombre_metodo"]) && $this->existsByNombre($data["nombre_metodo"], $id)) {
+            return ['success' => false, 'message' => 'Ya existe otro metodo con ese nombre'];
         }
 
         try {
             $campos = [];
             $params = [":id" => $id];
 
-            if (isset($data["nombre"])) {
-                $campos[] = "nombre = :nombre";
-                $params[":nombre"] = $data["nombre"];
+            if (isset($data["nombre_metodo"])) {
+                $campos[] = "nombre_metodo = :nombre";
+                $params[":nombre"] = $data["nombre_metodo"];
+            }
+            
+            if (isset($data["descripcion"])) {
+                $campos[] = "descripcion = :descripcion";
+                $params[":descripcion"] = $data["descripcion"];
+            }
+            
+            if (isset($data["icono"])) {
+                $campos[] = "icono = :icono";
+                $params[":icono"] = $data["icono"];
             }
             
             if (isset($data["estado"])) {
@@ -133,14 +134,14 @@ class CiudadModel {
                 return ['success' => false, 'message' => 'No se proporcionaron campos para actualizar'];
             }
 
-            $sql = "UPDATE ciudad SET " . implode(", ", $campos) . " WHERE id_ciudad = :id";
+            $sql = "UPDATE metodo SET " . implode(", ", $campos) . " WHERE id_metodo = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute($params);
 
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => 'Ciudad actualizada correctamente'];
+                return ['success' => true, 'message' => 'Metodo actualizado correctamente'];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la ciudad o no hubo cambios'];
+                return ['success' => false, 'message' => 'No se encontro el metodo o no hubo cambios'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -148,7 +149,7 @@ class CiudadModel {
     }
 
     // -------------------------------------------------
-    // ELIMINAR CIUDAD (Soft Delete)
+    // ELIMINAR METODO (Soft Delete)
     // -------------------------------------------------
     public function delete($id) {
         if (!is_numeric($id)) {
@@ -156,24 +157,24 @@ class CiudadModel {
         }
 
         try {
-            // Verificar si hay sedes asociadas activas
-            $sqlCheck = "SELECT COUNT(*) FROM sede WHERE id_ciudad = :id AND estado = 1";
+            // Verificar si tiene compras asociadas
+            $sqlCheck = "SELECT COUNT(*) FROM compra WHERE id_metodo = :id";
             $stmtCheck = $this->conn->prepare($sqlCheck);
             $stmtCheck->execute([":id" => $id]);
             
             if ($stmtCheck->fetchColumn() > 0) {
-                return ['success' => false, 'message' => 'No se puede eliminar, tiene sedes asociadas'];
+                return ['success' => false, 'message' => 'No se puede eliminar, tiene compras asociadas'];
             }
 
             // Soft delete
-            $sql = "UPDATE ciudad SET estado = 0 WHERE id_ciudad = :id";
+            $sql = "UPDATE metodo SET estado = 0 WHERE id_metodo = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
 
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => 'Ciudad eliminada correctamente'];
+                return ['success' => true, 'message' => 'Metodo eliminado correctamente'];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la ciudad'];
+                return ['success' => false, 'message' => 'No se encontro el metodo'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -189,15 +190,15 @@ class CiudadModel {
         }
 
         try {
-            $sql = "UPDATE ciudad SET estado = :estado WHERE id_ciudad = :id";
+            $sql = "UPDATE metodo SET estado = :estado WHERE id_metodo = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id, ":estado" => $estado]);
 
-            $estadoTexto = $estado == 1 ? 'activada' : 'desactivada';
+            $estadoTexto = $estado == 1 ? 'activado' : 'desactivado';
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => "Ciudad {$estadoTexto} correctamente"];
+                return ['success' => true, 'message' => "Metodo {$estadoTexto} correctamente"];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la ciudad'];
+                return ['success' => false, 'message' => 'No se encontro el metodo'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -205,11 +206,11 @@ class CiudadModel {
     }
 
     // -------------------------------------------------
-    // CONTAR CIUDADES
+    // CONTAR METODOS
     // -------------------------------------------------
     public function count($soloActivos = false) {
         try {
-            $sql = "SELECT COUNT(*) as total FROM ciudad";
+            $sql = "SELECT COUNT(*) as total FROM metodo";
             if ($soloActivos) {
                 $sql .= " WHERE estado = 1";
             }

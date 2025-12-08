@@ -1,6 +1,6 @@
 <?php
 
-class SedeModel {
+class TipoSocioModel {
     private $conn;
 
     public function __construct($conn) {
@@ -11,9 +11,9 @@ class SedeModel {
     // VALIDACIONES
     // -------------------------------------------------
     private function existsByNombre($nombre, $excludeId = null) {
-        $sql = "SELECT COUNT(*) as count FROM sede WHERE LOWER(nombre) = LOWER(:nombre)";
+        $sql = "SELECT COUNT(*) as count FROM tipo_socio WHERE LOWER(nombre) = LOWER(:nombre)";
         if ($excludeId) {
-            $sql .= " AND id_sede != :excludeId";
+            $sql .= " AND id_socio != :excludeId";
         }
         
         $stmt = $this->conn->prepare($sql);
@@ -28,35 +28,31 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // CREAR SEDE
+    // CREAR TIPO DE SOCIO
     // -------------------------------------------------
     public function create($data) {
         if (!isset($data["nombre"]) || trim($data["nombre"]) === "") {
-            return ['success' => false, 'message' => 'El nombre de la sede es requerido'];
-        }
-
-        if (!isset($data["id_ciudad"]) || !is_numeric($data["id_ciudad"])) {
-            return ['success' => false, 'message' => 'La ciudad es requerida'];
+            return ['success' => false, 'message' => 'El nombre del tipo de socio es requerido'];
         }
 
         if ($this->existsByNombre($data["nombre"])) {
-            return ['success' => false, 'message' => 'Ya existe una sede con ese nombre'];
+            return ['success' => false, 'message' => 'Ya existe un tipo de socio con ese nombre'];
         }
 
         try {
-            $sql = "INSERT INTO sede (nombre, direccion, telefono, id_ciudad, estado) 
-                    VALUES (:nombre, :direccion, :telefono, :id_ciudad, 1)";
+            $sql = "INSERT INTO tipo_socio (nombre, desc_dulces, desc_boleto, puntos_por_sol, estado) 
+                    VALUES (:nombre, :desc_dulces, :desc_boleto, :puntos_por_sol, 1)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ":nombre" => $data["nombre"],
-                ":direccion" => $data["direccion"] ?? null,
-                ":telefono" => $data["telefono"] ?? null,
-                ":id_ciudad" => $data["id_ciudad"]
+                ":desc_dulces" => $data["desc_dulces"] ?? 0,
+                ":desc_boleto" => $data["desc_boleto"] ?? 0,
+                ":puntos_por_sol" => $data["puntos_por_sol"] ?? 1
             ]);
 
             return [
                 'success' => true,
-                'message' => 'Sede creada correctamente',
+                'message' => 'Tipo de socio creado correctamente',
                 'id' => $this->conn->lastInsertId()
             ];
         } catch (PDOException $e) {
@@ -65,7 +61,7 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // OBTENER SEDE POR ID
+    // OBTENER TIPO DE SOCIO POR ID
     // -------------------------------------------------
     public function getById($id) {
         if (!is_numeric($id)) {
@@ -73,11 +69,8 @@ class SedeModel {
         }
 
         try {
-            $sql = "SELECT s.id_sede, s.nombre, s.direccion, s.telefono, s.id_ciudad, s.estado,
-                           c.nombre as ciudad_nombre
-                    FROM sede s
-                    INNER JOIN ciudad c ON s.id_ciudad = c.id_ciudad
-                    WHERE s.id_sede = :id";
+            $sql = "SELECT id_socio, nombre, desc_dulces, desc_boleto, puntos_por_sol, estado 
+                    FROM tipo_socio WHERE id_socio = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -87,18 +80,16 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // OBTENER TODAS LAS SEDES
+    // OBTENER TODOS LOS TIPOS DE SOCIO
     // -------------------------------------------------
     public function getAll($soloActivos = false) {
         try {
-            $sql = "SELECT s.id_sede, s.nombre, s.direccion, s.telefono, s.id_ciudad, s.estado,
-                           c.nombre as ciudad_nombre
-                    FROM sede s
-                    INNER JOIN ciudad c ON s.id_ciudad = c.id_ciudad";
+            $sql = "SELECT id_socio, nombre, desc_dulces, desc_boleto, puntos_por_sol, estado 
+                    FROM tipo_socio";
             if ($soloActivos) {
-                $sql .= " WHERE s.estado = 1";
+                $sql .= " WHERE estado = 1";
             }
-            $sql .= " ORDER BY c.nombre ASC, s.nombre ASC";
+            $sql .= " ORDER BY nombre ASC";
 
             $stmt = $this->conn->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -108,7 +99,7 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // ACTUALIZAR SEDE
+    // ACTUALIZAR TIPO DE SOCIO
     // -------------------------------------------------
     public function update($id, $data) {
         if (!is_numeric($id)) {
@@ -116,7 +107,7 @@ class SedeModel {
         }
 
         if (isset($data["nombre"]) && $this->existsByNombre($data["nombre"], $id)) {
-            return ['success' => false, 'message' => 'Ya existe otra sede con ese nombre'];
+            return ['success' => false, 'message' => 'Ya existe otro tipo de socio con ese nombre'];
         }
 
         try {
@@ -128,19 +119,19 @@ class SedeModel {
                 $params[":nombre"] = $data["nombre"];
             }
             
-            if (isset($data["direccion"])) {
-                $campos[] = "direccion = :direccion";
-                $params[":direccion"] = $data["direccion"];
+            if (isset($data["desc_dulces"])) {
+                $campos[] = "desc_dulces = :desc_dulces";
+                $params[":desc_dulces"] = $data["desc_dulces"];
             }
             
-            if (isset($data["telefono"])) {
-                $campos[] = "telefono = :telefono";
-                $params[":telefono"] = $data["telefono"];
+            if (isset($data["desc_boleto"])) {
+                $campos[] = "desc_boleto = :desc_boleto";
+                $params[":desc_boleto"] = $data["desc_boleto"];
             }
             
-            if (isset($data["id_ciudad"])) {
-                $campos[] = "id_ciudad = :id_ciudad";
-                $params[":id_ciudad"] = $data["id_ciudad"];
+            if (isset($data["puntos_por_sol"])) {
+                $campos[] = "puntos_por_sol = :puntos_por_sol";
+                $params[":puntos_por_sol"] = $data["puntos_por_sol"];
             }
             
             if (isset($data["estado"])) {
@@ -152,14 +143,14 @@ class SedeModel {
                 return ['success' => false, 'message' => 'No se proporcionaron campos para actualizar'];
             }
 
-            $sql = "UPDATE sede SET " . implode(", ", $campos) . " WHERE id_sede = :id";
+            $sql = "UPDATE tipo_socio SET " . implode(", ", $campos) . " WHERE id_socio = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute($params);
 
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => 'Sede actualizada correctamente'];
+                return ['success' => true, 'message' => 'Tipo de socio actualizado correctamente'];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la sede o no hubo cambios'];
+                return ['success' => false, 'message' => 'No se encontro el tipo de socio o no hubo cambios'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -167,7 +158,7 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // ELIMINAR SEDE (Soft Delete)
+    // ELIMINAR TIPO DE SOCIO (Soft Delete)
     // -------------------------------------------------
     public function delete($id) {
         if (!is_numeric($id)) {
@@ -175,42 +166,24 @@ class SedeModel {
         }
 
         try {
-            // Verificar si tiene salas asociadas
-            $sqlCheck = "SELECT COUNT(*) FROM sala WHERE id_sede = :id";
+            // Verificar si tiene socios asociados
+            $sqlCheck = "SELECT COUNT(*) FROM socio WHERE id_tipo_socio = :id";
             $stmtCheck = $this->conn->prepare($sqlCheck);
             $stmtCheck->execute([":id" => $id]);
             
             if ($stmtCheck->fetchColumn() > 0) {
-                return ['success' => false, 'message' => 'No se puede eliminar, tiene salas asociadas'];
-            }
-
-            // Verificar si tiene productos en producto_sede
-            $sqlCheck2 = "SELECT COUNT(*) FROM producto_sede WHERE id_sede = :id";
-            $stmtCheck2 = $this->conn->prepare($sqlCheck2);
-            $stmtCheck2->execute([":id" => $id]);
-            
-            if ($stmtCheck2->fetchColumn() > 0) {
-                return ['success' => false, 'message' => 'No se puede eliminar, tiene productos asociados'];
-            }
-
-            // Verificar si tiene trabajadores asociados
-            $sqlCheck3 = "SELECT COUNT(*) FROM trabajador WHERE id_sede = :id";
-            $stmtCheck3 = $this->conn->prepare($sqlCheck3);
-            $stmtCheck3->execute([":id" => $id]);
-            
-            if ($stmtCheck3->fetchColumn() > 0) {
-                return ['success' => false, 'message' => 'No se puede eliminar, tiene trabajadores asociados'];
+                return ['success' => false, 'message' => 'No se puede eliminar, tiene socios asociados'];
             }
 
             // Soft delete
-            $sql = "UPDATE sede SET estado = 0 WHERE id_sede = :id";
+            $sql = "UPDATE tipo_socio SET estado = 0 WHERE id_socio = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
 
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => 'Sede eliminada correctamente'];
+                return ['success' => true, 'message' => 'Tipo de socio eliminado correctamente'];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la sede'];
+                return ['success' => false, 'message' => 'No se encontro el tipo de socio'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -226,15 +199,15 @@ class SedeModel {
         }
 
         try {
-            $sql = "UPDATE sede SET estado = :estado WHERE id_sede = :id";
+            $sql = "UPDATE tipo_socio SET estado = :estado WHERE id_socio = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id, ":estado" => $estado]);
 
-            $estadoTexto = $estado == 1 ? 'activada' : 'desactivada';
+            $estadoTexto = $estado == 1 ? 'activado' : 'desactivado';
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => "Sede {$estadoTexto} correctamente"];
+                return ['success' => true, 'message' => "Tipo de socio {$estadoTexto} correctamente"];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la sede'];
+                return ['success' => false, 'message' => 'No se encontro el tipo de socio'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -242,11 +215,11 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // CONTAR SEDES
+    // CONTAR TIPOS DE SOCIO
     // -------------------------------------------------
     public function count($soloActivos = false) {
         try {
-            $sql = "SELECT COUNT(*) as total FROM sede";
+            $sql = "SELECT COUNT(*) as total FROM tipo_socio";
             if ($soloActivos) {
                 $sql .= " WHERE estado = 1";
             }
@@ -257,21 +230,5 @@ class SedeModel {
             return 0;
         }
     }
-
-    // -------------------------------------------------
-    // OBTENER SEDES POR CIUDAD
-    // -------------------------------------------------
-    public function getByCiudad($idCiudad) {
-        try {
-            $sql = "SELECT id_sede, nombre, direccion, telefono, estado 
-                    FROM sede 
-                    WHERE id_ciudad = :id_ciudad AND estado = 1
-                    ORDER BY nombre ASC";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([":id_ciudad" => $idCiudad]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return [];
-        }
-    }
 }
+?>

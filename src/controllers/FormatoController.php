@@ -1,16 +1,16 @@
 <?php
-require_once __DIR__ . "/../models/PeliculaModel.php";
+require_once __DIR__ . "/../models/FormatoModel.php";
 
-class PeliculaController {
-    private $peliculaModel;
+class FormatoController {
+    private $formatoModel;
 
     public function __construct($conn) {
-        $this->peliculaModel = new PeliculaModel($conn);
+        $this->formatoModel = new FormatoModel($conn);
     }
 
     public function create($data) {
         try {
-            return $this->peliculaModel->create($data);
+            return $this->formatoModel->create($data);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -18,13 +18,13 @@ class PeliculaController {
 
     public function getById($id) {
         try {
-            $pelicula = $this->peliculaModel->getById($id);
+            $formato = $this->formatoModel->getById($id);
             
-            if (!$pelicula) {
-                return ["success" => false, "message" => "Pelicula no encontrada"];
+            if (!$formato) {
+                return ["success" => false, "message" => "Formato no encontrado"];
             }
 
-            return ["success" => true, "data" => $pelicula];
+            return ["success" => true, "data" => $formato];
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -32,17 +32,8 @@ class PeliculaController {
 
     public function getAll($soloActivos = false) {
         try {
-            $peliculas = $this->peliculaModel->getAll($soloActivos);
-            return ["success" => true, "data" => $peliculas, "total" => count($peliculas)];
-        } catch (Exception $e) {
-            return ["success" => false, "message" => $e->getMessage()];
-        }
-    }
-
-    public function search($query) {
-        try {
-            $peliculas = $this->peliculaModel->getByName($query);
-            return ["success" => true, "data" => $peliculas, "total" => count($peliculas)];
+            $formatos = $this->formatoModel->getAll($soloActivos);
+            return ["success" => true, "data" => $formatos, "total" => count($formatos)];
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -50,7 +41,7 @@ class PeliculaController {
 
     public function update($id, $data) {
         try {
-            return $this->peliculaModel->update($id, $data);
+            return $this->formatoModel->update($id, $data);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -58,7 +49,7 @@ class PeliculaController {
 
     public function delete($id) {
         try {
-            return $this->peliculaModel->delete($id);
+            return $this->formatoModel->delete($id);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
@@ -66,13 +57,14 @@ class PeliculaController {
 
     public function toggleEstado($id, $estado) {
         try {
-            return $this->peliculaModel->toggleEstado($id, $estado);
+            return $this->formatoModel->toggleEstado($id, $estado);
         } catch (Exception $e) {
             return ["success" => false, "message" => $e->getMessage()];
         }
     }
 
     public function count($soloActivos = false) {
-        return $this->peliculaModel->count($soloActivos);
+        return $this->formatoModel->count($soloActivos);
     }
 }
+?>

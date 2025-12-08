@@ -13,13 +13,8 @@ class CiudadController {
     // -------------------------------------------------
     public function create($data) {
         try {
-            $id = $this->ciudadModel->create($data);
-            
-            return [
-                "success" => true,
-                "message" => "Ciudad creada exitosamente",
-                "id_ciudad" => $id
-            ];
+            $result = $this->ciudadModel->create($data);
+            return $result;
         } catch (Exception $e) {
             return [
                 "success" => false,
@@ -57,9 +52,9 @@ class CiudadController {
     // -------------------------------------------------
     // OBTENER TODAS LAS CIUDADES
     // -------------------------------------------------
-    public function getAll() {
+    public function getAll($soloActivos = false) {
         try {
-            $ciudades = $this->ciudadModel->getAll();
+            $ciudades = $this->ciudadModel->getAll($soloActivos);
 
             return [
                 "success" => true,
@@ -79,19 +74,8 @@ class CiudadController {
     // -------------------------------------------------
     public function update($id, $data) {
         try {
-            $resultado = $this->ciudadModel->update($id, $data);
-
-            if ($resultado) {
-                return [
-                    "success" => true,
-                    "message" => "Ciudad actualizada exitosamente"
-                ];
-            } else {
-                return [
-                    "success" => false,
-                    "message" => "No se pudo actualizar la ciudad o no se encontró"
-                ];
-            }
+            $result = $this->ciudadModel->update($id, $data);
+            return $result;
         } catch (Exception $e) {
             return [
                 "success" => false,
@@ -101,29 +85,40 @@ class CiudadController {
     }
 
     // -------------------------------------------------
-    // ELIMINAR CIUDAD
+    // ELIMINAR CIUDAD (Soft Delete)
     // -------------------------------------------------
     public function delete($id) {
         try {
-            $resultado = $this->ciudadModel->delete($id);
-
-            if ($resultado) {
-                return [
-                    "success" => true,
-                    "message" => "Ciudad eliminada exitosamente"
-                ];
-            } else {
-                return [
-                    "success" => false,
-                    "message" => "No se pudo eliminar la ciudad o no se encontró"
-                ];
-            }
+            $result = $this->ciudadModel->delete($id);
+            return $result;
         } catch (Exception $e) {
             return [
                 "success" => false,
                 "message" => $e->getMessage()
             ];
         }
+    }
+
+    // -------------------------------------------------
+    // CAMBIAR ESTADO
+    // -------------------------------------------------
+    public function toggleEstado($id, $estado) {
+        try {
+            $result = $this->ciudadModel->toggleEstado($id, $estado);
+            return $result;
+        } catch (Exception $e) {
+            return [
+                "success" => false,
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    // -------------------------------------------------
+    // CONTAR CIUDADES
+    // -------------------------------------------------
+    public function count($soloActivos = false) {
+        return $this->ciudadModel->count($soloActivos);
     }
 }
 ?>

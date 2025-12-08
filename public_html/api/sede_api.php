@@ -1,17 +1,19 @@
 <?php
 /**
- * API REST para Pelicula
+ * API REST para Sede
  * 
  * Endpoints:
- * GET    /api/pelicula_api.php                  - Listar todas las peliculas
- * GET    /api/pelicula_api.php?id=1             - Obtener pelicula por ID
- * GET    /api/pelicula_api.php?search=matrix    - Buscar peliculas por nombre
- * GET    /api/pelicula_api.php?activos=1        - Solo peliculas activas
- * POST   /api/pelicula_api.php                  - Crear nueva pelicula
- * PUT    /api/pelicula_api.php                  - Actualizar pelicula
- * PATCH  /api/pelicula_api.php                  - Cambiar estado (toggle)
- * DELETE /api/pelicula_api.php?id=1             - Eliminar pelicula
+ * GET    /api/sede_api.php                  - Listar todas las sedes
+ * GET    /api/sede_api.php?id=1             - Obtener sede por ID
+ * GET    /api/sede_api.php?ciudad=1         - Obtener sedes por ciudad
+ * POST   /api/sede_api.php                  - Crear nueva sede
+ * PUT    /api/sede_api.php                  - Actualizar sede
+ * PATCH  /api/sede_api.php                  - Cambiar estado (toggle)
+ * DELETE /api/sede_api.php?id=1             - Eliminar sede (soft delete)
  */
+
+// Limpiar cualquier salida previa
+ob_clean();
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
@@ -25,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../src/services/conexion.php';
-require_once __DIR__ . '/../../src/controllers/PeliculaController.php';
+require_once __DIR__ . '/../../src/controllers/SedeController.php';
 
-$controller = new PeliculaController($conn);
+$controller = new SedeController($conn);
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {
@@ -35,8 +37,8 @@ try {
         case 'GET':
             if (isset($_GET['id'])) {
                 $response = $controller->getById(intval($_GET['id']));
-            } else if (isset($_GET['search'])) {
-                $response = $controller->search($_GET['search']);
+            } else if (isset($_GET['ciudad'])) {
+                $response = $controller->getByCiudad(intval($_GET['ciudad']));
             } else {
                 $soloActivos = isset($_GET['activos']) && $_GET['activos'] == '1';
                 $response = $controller->getAll($soloActivos);
@@ -47,13 +49,9 @@ try {
             $data = json_decode(file_get_contents('php://input'), true);
             
             if (!$data || !isset($data['nombre']) || trim($data['nombre']) === '') {
-                $response = ['success' => false, 'message' => 'El nombre de la pelicula es requerido'];
-            } else if (!isset($data['duracion']) || !is_numeric($data['duracion'])) {
-                $response = ['success' => false, 'message' => 'La duracion es requerida'];
-            } else if (!isset($data['url_imagen']) || trim($data['url_imagen']) === '') {
-                $response = ['success' => false, 'message' => 'La URL de imagen es requerida'];
-            } else if (!isset($data['sinopsis']) || trim($data['sinopsis']) === '') {
-                $response = ['success' => false, 'message' => 'La sinopsis es requerida'];
+                $response = ['success' => false, 'message' => 'El nombre de la sede es requerido'];
+            } else if (!isset($data['id_ciudad']) || !is_numeric($data['id_ciudad'])) {
+                $response = ['success' => false, 'message' => 'La ciudad es requerida'];
             } else {
                 $response = $controller->create($data);
             }

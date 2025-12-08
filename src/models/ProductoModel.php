@@ -1,6 +1,6 @@
 <?php
 
-class SedeModel {
+class ProductoModel {
     private $conn;
 
     public function __construct($conn) {
@@ -11,9 +11,9 @@ class SedeModel {
     // VALIDACIONES
     // -------------------------------------------------
     private function existsByNombre($nombre, $excludeId = null) {
-        $sql = "SELECT COUNT(*) as count FROM sede WHERE LOWER(nombre) = LOWER(:nombre)";
+        $sql = "SELECT COUNT(*) as count FROM producto WHERE LOWER(nombre) = LOWER(:nombre)";
         if ($excludeId) {
-            $sql .= " AND id_sede != :excludeId";
+            $sql .= " AND id_producto != :excludeId";
         }
         
         $stmt = $this->conn->prepare($sql);
@@ -28,35 +28,32 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // CREAR SEDE
+    // CREAR PRODUCTO
     // -------------------------------------------------
     public function create($data) {
         if (!isset($data["nombre"]) || trim($data["nombre"]) === "") {
-            return ['success' => false, 'message' => 'El nombre de la sede es requerido'];
+            return ['success' => false, 'message' => 'El nombre del producto es requerido'];
         }
 
-        if (!isset($data["id_ciudad"]) || !is_numeric($data["id_ciudad"])) {
-            return ['success' => false, 'message' => 'La ciudad es requerida'];
+        if (!isset($data["precio_unitario"]) || !is_numeric($data["precio_unitario"]) || $data["precio_unitario"] <= 0) {
+            return ['success' => false, 'message' => 'El precio unitario debe ser un numero mayor a 0'];
         }
 
         if ($this->existsByNombre($data["nombre"])) {
-            return ['success' => false, 'message' => 'Ya existe una sede con ese nombre'];
+            return ['success' => false, 'message' => 'Ya existe un producto con ese nombre'];
         }
 
         try {
-            $sql = "INSERT INTO sede (nombre, direccion, telefono, id_ciudad, estado) 
-                    VALUES (:nombre, :direccion, :telefono, :id_ciudad, 1)";
+            $sql = "INSERT INTO producto (nombre, precio_unitario, estado) VALUES (:nombre, :precio_unitario, 1)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ":nombre" => $data["nombre"],
-                ":direccion" => $data["direccion"] ?? null,
-                ":telefono" => $data["telefono"] ?? null,
-                ":id_ciudad" => $data["id_ciudad"]
+                ":precio_unitario" => $data["precio_unitario"]
             ]);
 
             return [
                 'success' => true,
-                'message' => 'Sede creada correctamente',
+                'message' => 'Producto creado correctamente',
                 'id' => $this->conn->lastInsertId()
             ];
         } catch (PDOException $e) {
@@ -65,7 +62,7 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // OBTENER SEDE POR ID
+    // OBTENER PRODUCTO POR ID
     // -------------------------------------------------
     public function getById($id) {
         if (!is_numeric($id)) {
@@ -73,11 +70,7 @@ class SedeModel {
         }
 
         try {
-            $sql = "SELECT s.id_sede, s.nombre, s.direccion, s.telefono, s.id_ciudad, s.estado,
-                           c.nombre as ciudad_nombre
-                    FROM sede s
-                    INNER JOIN ciudad c ON s.id_ciudad = c.id_ciudad
-                    WHERE s.id_sede = :id";
+            $sql = "SELECT id_producto, nombre, precio_unitario, estado FROM producto WHERE id_producto = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -87,18 +80,15 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // OBTENER TODAS LAS SEDES
+    // OBTENER TODOS LOS PRODUCTOS
     // -------------------------------------------------
     public function getAll($soloActivos = false) {
         try {
-            $sql = "SELECT s.id_sede, s.nombre, s.direccion, s.telefono, s.id_ciudad, s.estado,
-                           c.nombre as ciudad_nombre
-                    FROM sede s
-                    INNER JOIN ciudad c ON s.id_ciudad = c.id_ciudad";
+            $sql = "SELECT id_producto, nombre, precio_unitario, estado FROM producto";
             if ($soloActivos) {
-                $sql .= " WHERE s.estado = 1";
+                $sql .= " WHERE estado = 1";
             }
-            $sql .= " ORDER BY c.nombre ASC, s.nombre ASC";
+            $sql .= " ORDER BY nombre ASC";
 
             $stmt = $this->conn->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -108,7 +98,7 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // ACTUALIZAR SEDE
+    // ACTUALIZAR PRODUCTO
     // -------------------------------------------------
     public function update($id, $data) {
         if (!is_numeric($id)) {
@@ -116,7 +106,11 @@ class SedeModel {
         }
 
         if (isset($data["nombre"]) && $this->existsByNombre($data["nombre"], $id)) {
-            return ['success' => false, 'message' => 'Ya existe otra sede con ese nombre'];
+            return ['success' => false, 'message' => 'Ya existe otro producto con ese nombre'];
+        }
+
+        if (isset($data["precio_unitario"]) && (!is_numeric($data["precio_unitario"]) || $data["precio_unitario"] <= 0)) {
+            return ['success' => false, 'message' => 'El precio unitario debe ser un numero mayor a 0'];
         }
 
         try {
@@ -128,19 +122,9 @@ class SedeModel {
                 $params[":nombre"] = $data["nombre"];
             }
             
-            if (isset($data["direccion"])) {
-                $campos[] = "direccion = :direccion";
-                $params[":direccion"] = $data["direccion"];
-            }
-            
-            if (isset($data["telefono"])) {
-                $campos[] = "telefono = :telefono";
-                $params[":telefono"] = $data["telefono"];
-            }
-            
-            if (isset($data["id_ciudad"])) {
-                $campos[] = "id_ciudad = :id_ciudad";
-                $params[":id_ciudad"] = $data["id_ciudad"];
+            if (isset($data["precio_unitario"])) {
+                $campos[] = "precio_unitario = :precio_unitario";
+                $params[":precio_unitario"] = $data["precio_unitario"];
             }
             
             if (isset($data["estado"])) {
@@ -152,14 +136,14 @@ class SedeModel {
                 return ['success' => false, 'message' => 'No se proporcionaron campos para actualizar'];
             }
 
-            $sql = "UPDATE sede SET " . implode(", ", $campos) . " WHERE id_sede = :id";
+            $sql = "UPDATE producto SET " . implode(", ", $campos) . " WHERE id_producto = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute($params);
 
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => 'Sede actualizada correctamente'];
+                return ['success' => true, 'message' => 'Producto actualizado correctamente'];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la sede o no hubo cambios'];
+                return ['success' => false, 'message' => 'No se encontro el producto o no hubo cambios'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -167,7 +151,7 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // ELIMINAR SEDE (Soft Delete)
+    // ELIMINAR PRODUCTO (Soft Delete)
     // -------------------------------------------------
     public function delete($id) {
         if (!is_numeric($id)) {
@@ -175,42 +159,24 @@ class SedeModel {
         }
 
         try {
-            // Verificar si tiene salas asociadas
-            $sqlCheck = "SELECT COUNT(*) FROM sala WHERE id_sede = :id";
+            // Verificar si tiene sedes asociadas en producto_sede
+            $sqlCheck = "SELECT COUNT(*) FROM producto_sede WHERE id_producto = :id";
             $stmtCheck = $this->conn->prepare($sqlCheck);
             $stmtCheck->execute([":id" => $id]);
             
             if ($stmtCheck->fetchColumn() > 0) {
-                return ['success' => false, 'message' => 'No se puede eliminar, tiene salas asociadas'];
-            }
-
-            // Verificar si tiene productos en producto_sede
-            $sqlCheck2 = "SELECT COUNT(*) FROM producto_sede WHERE id_sede = :id";
-            $stmtCheck2 = $this->conn->prepare($sqlCheck2);
-            $stmtCheck2->execute([":id" => $id]);
-            
-            if ($stmtCheck2->fetchColumn() > 0) {
-                return ['success' => false, 'message' => 'No se puede eliminar, tiene productos asociados'];
-            }
-
-            // Verificar si tiene trabajadores asociados
-            $sqlCheck3 = "SELECT COUNT(*) FROM trabajador WHERE id_sede = :id";
-            $stmtCheck3 = $this->conn->prepare($sqlCheck3);
-            $stmtCheck3->execute([":id" => $id]);
-            
-            if ($stmtCheck3->fetchColumn() > 0) {
-                return ['success' => false, 'message' => 'No se puede eliminar, tiene trabajadores asociados'];
+                return ['success' => false, 'message' => 'No se puede eliminar, tiene registros en sedes asociadas'];
             }
 
             // Soft delete
-            $sql = "UPDATE sede SET estado = 0 WHERE id_sede = :id";
+            $sql = "UPDATE producto SET estado = 0 WHERE id_producto = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
 
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => 'Sede eliminada correctamente'];
+                return ['success' => true, 'message' => 'Producto eliminado correctamente'];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la sede'];
+                return ['success' => false, 'message' => 'No se encontro el producto'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -226,15 +192,15 @@ class SedeModel {
         }
 
         try {
-            $sql = "UPDATE sede SET estado = :estado WHERE id_sede = :id";
+            $sql = "UPDATE producto SET estado = :estado WHERE id_producto = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id, ":estado" => $estado]);
 
-            $estadoTexto = $estado == 1 ? 'activada' : 'desactivada';
+            $estadoTexto = $estado == 1 ? 'activado' : 'desactivado';
             if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => "Sede {$estadoTexto} correctamente"];
+                return ['success' => true, 'message' => "Producto {$estadoTexto} correctamente"];
             } else {
-                return ['success' => false, 'message' => 'No se encontro la sede'];
+                return ['success' => false, 'message' => 'No se encontro el producto'];
             }
         } catch (PDOException $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
@@ -242,11 +208,11 @@ class SedeModel {
     }
 
     // -------------------------------------------------
-    // CONTAR SEDES
+    // CONTAR PRODUCTOS
     // -------------------------------------------------
     public function count($soloActivos = false) {
         try {
-            $sql = "SELECT COUNT(*) as total FROM sede";
+            $sql = "SELECT COUNT(*) as total FROM producto";
             if ($soloActivos) {
                 $sql .= " WHERE estado = 1";
             }
@@ -257,21 +223,5 @@ class SedeModel {
             return 0;
         }
     }
-
-    // -------------------------------------------------
-    // OBTENER SEDES POR CIUDAD
-    // -------------------------------------------------
-    public function getByCiudad($idCiudad) {
-        try {
-            $sql = "SELECT id_sede, nombre, direccion, telefono, estado 
-                    FROM sede 
-                    WHERE id_ciudad = :id_ciudad AND estado = 1
-                    ORDER BY nombre ASC";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([":id_ciudad" => $idCiudad]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return [];
-        }
-    }
 }
+?>
