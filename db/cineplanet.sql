@@ -52,6 +52,11 @@ CREATE TABLE idioma(
     idioma VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE genero(
+    id_genero INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE formato(
     id_formato INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50)
@@ -235,6 +240,18 @@ CREATE TABLE idiomas_pelicula(
     ON UPDATE CASCADE 
     ON DELETE CASCADE,
     FOREIGN KEY (id_idioma) REFERENCES idioma(id_idioma) 
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE
+);
+
+CREATE TABLE genero_pelicula(
+    id_genero_pelicula INT PRIMARY KEY AUTO_INCREMENT,
+    id_pelicula INT NOT NULL,
+    id_genero INT NOT NULL,
+    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id_pelicula) 
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE,
+    FOREIGN KEY (id_genero) REFERENCES genero(id_genero) 
     ON UPDATE CASCADE 
     ON DELETE CASCADE
 );
