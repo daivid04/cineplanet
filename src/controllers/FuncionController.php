@@ -13,13 +13,8 @@ class FuncionController {
     // -------------------------------------------------
     public function create($data) {
         try {
-            $id = $this->funcionModel->create($data);
-            
-            return [
-                "success" => true,
-                "message" => "Función creada exitosamente",
-                "id_funcion" => $id
-            ];
+            $resultado = $this->funcionModel->create($data);
+            return $resultado; // El modelo ya retorna el formato correcto
         } catch (Exception $e) {
             return [
                 "success" => false,
@@ -57,9 +52,9 @@ class FuncionController {
     // -------------------------------------------------
     // OBTENER TODAS LAS FUNCIONES
     // -------------------------------------------------
-    public function getAll() {
+    public function getAll($soloActivos = false, $soloFuturas = false) {
         try {
-            $funciones = $this->funcionModel->getAll();
+            $funciones = $this->funcionModel->getAll($soloActivos, $soloFuturas);
 
             return [
                 "success" => true,
@@ -161,18 +156,7 @@ class FuncionController {
     public function update($id, $data) {
         try {
             $resultado = $this->funcionModel->update($id, $data);
-
-            if ($resultado) {
-                return [
-                    "success" => true,
-                    "message" => "Función actualizada exitosamente"
-                ];
-            } else {
-                return [
-                    "success" => false,
-                    "message" => "No se pudo actualizar la función o no se encontró"
-                ];
-            }
+            return $resultado; // El modelo ya retorna el formato correcto
         } catch (Exception $e) {
             return [
                 "success" => false,
@@ -187,24 +171,34 @@ class FuncionController {
     public function delete($id) {
         try {
             $resultado = $this->funcionModel->delete($id);
-
-            if ($resultado) {
-                return [
-                    "success" => true,
-                    "message" => "Función eliminada exitosamente"
-                ];
-            } else {
-                return [
-                    "success" => false,
-                    "message" => "No se pudo eliminar la función o no se encontró"
-                ];
-            }
+            return $resultado; // El modelo ya retorna el formato correcto
         } catch (Exception $e) {
             return [
                 "success" => false,
                 "message" => $e->getMessage()
             ];
         }
+    }
+
+    // -------------------------------------------------
+    // CAMBIAR ESTADO (TOGGLE)
+    // -------------------------------------------------
+    public function toggleEstado($id, $estado) {
+        try {
+            return $this->funcionModel->toggleEstado($id, $estado);
+        } catch (Exception $e) {
+            return [
+                "success" => false,
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    // -------------------------------------------------
+    // CONTAR FUNCIONES
+    // -------------------------------------------------
+    public function count($soloActivos = false, $soloFuturas = false) {
+        return $this->funcionModel->count($soloActivos, $soloFuturas);
     }
 
     // -------------------------------------------------

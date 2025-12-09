@@ -1,4 +1,14 @@
 <?php
+/**
+ * Modelo para la tabla funcion
+ * 
+ * Tabla: funcion
+ * Campos: id_funcion, fecha, hora, id_pelicula, id_sala, estado
+ * 
+ * Relaciones:
+ * - Pertenece a: pelicula, sala
+ * - Referenciada por: compra_boleto (no eliminar si hay boletos vendidos)
+ */
 
 class FuncionModel {
     private $conn;
@@ -10,6 +20,94 @@ class FuncionModel {
     // -------------------------------------------------
     // VALIDACIONES
     // -------------------------------------------------
+    
+    /**
+     * Verifica si una película existe
+     */
+    public function peliculaExiste($idPelicula) {
+        $sql = "SELECT id_pelicula, nombre, duracion, estado FROM pelicula WHERE id_pelicula = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $idPelicula]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Verifica si una sala existe
+     */
+    public function salaExiste($idSala) {
+        $sql = "SELECT s.id_sala, s.num_sala, s.estado, se.nombre as sede_nombre, se.id_sede
+                FROM sala s
+                INNER JOIN sede se ON s.id_sede = se.id_sede
+                WHERE s.id_sala = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $idSala]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Cuenta los boletos vendidos para una función
+     */
+    public function contarBoletosVendidos($idFuncion) {
+        $sql = "SELECT COUNT(*) as total FROM compra_boleto WHERE id_funcion = :id_funcion";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id_funcion' => $idFuncion]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return intval($result['total']);
+    }
+
+    /**
+     * Verifica si la función ya pasó
+     */
+    public function funcionPasada($fecha, $hora) {
+        $fechaHoraFuncion = strtotime("$fecha $hora");
+        return $fechaHoraFuncion < time();
+    }
+
+    /**
+     * Verifica conflicto de horarios en la misma sala
+     */
+    public function tieneConflictoHorario($idSala, $fecha, $hora, $duracionPelicula, $excludeId = null) {
+        $horaFin = date('H:i:s', strtotime($hora) + ($duracionPelicula * 60));
+
+        $sql = "SELECT f.id_funcion, f.hora, p.duracion, p.nombre as pelicula_nombre,
+                       TIME_FORMAT(ADDTIME(f.hora, SEC_TO_TIME(p.duracion * 60)), '%H:%i') AS hora_fin
+                FROM funcion f
+                INNER JOIN pelicula p ON f.id_pelicula = p.id_pelicula
+                WHERE f.id_sala = :id_sala AND f.fecha = :fecha AND f.estado = 1";
+
+        if ($excludeId) {
+            $sql .= " AND f.id_funcion != :exclude_id";
+        }
+
+        $stmt = $this->conn->prepare($sql);
+        $params = [':id_sala' => $idSala, ':fecha' => $fecha];
+        if ($excludeId) {
+            $params[':exclude_id'] = $excludeId;
+        }
+        $stmt->execute($params);
+        $funcionesExistentes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($funcionesExistentes as $funcion) {
+            $horaInicioExistente = $funcion['hora'];
+            $horaFinExistente = date('H:i:s', strtotime($funcion['hora']) + ($funcion['duracion'] * 60));
+
+            // Verificar solapamiento
+            if (
+                ($hora >= $horaInicioExistente && $hora < $horaFinExistente) ||
+                ($horaFin > $horaInicioExistente && $horaFin <= $horaFinExistente) ||
+                ($hora <= $horaInicioExistente && $horaFin >= $horaFinExistente)
+            ) {
+                return [
+                    'conflicto' => true,
+                    'mensaje' => 'Conflicto con "' . $funcion['pelicula_nombre'] . '" de ' . 
+                                 date('H:i', strtotime($horaInicioExistente)) . ' a ' . $funcion['hora_fin']
+                ];
+            }
+        }
+
+        return ['conflicto' => false];
+    }
+
     private function validarFuncion($data, $modo = "insertar") {
         // Campos obligatorios para insertar
         $requeridos = ["fecha", "hora", "id_pelicula", "id_sala"];
@@ -56,9 +154,38 @@ class FuncionModel {
     public function create($data) {
         $this->validarFuncion($data, "insertar");
 
+        // Validar película
+        $pelicula = $this->peliculaExiste($data['id_pelicula']);
+        if (!$pelicula) {
+            return ['success' => false, 'message' => 'La película seleccionada no existe'];
+        }
+        if ($pelicula['estado'] == 0) {
+            return ['success' => false, 'message' => 'La película seleccionada está inactiva'];
+        }
+
+        // Validar sala
+        $sala = $this->salaExiste($data['id_sala']);
+        if (!$sala) {
+            return ['success' => false, 'message' => 'La sala seleccionada no existe'];
+        }
+        if ($sala['estado'] == 0) {
+            return ['success' => false, 'message' => 'La sala seleccionada está inactiva'];
+        }
+
+        // Validar conflicto de horarios
+        $conflicto = $this->tieneConflictoHorario(
+            $data['id_sala'], 
+            $data['fecha'], 
+            $data['hora'], 
+            $pelicula['duracion']
+        );
+        if ($conflicto['conflicto']) {
+            return ['success' => false, 'message' => $conflicto['mensaje']];
+        }
+
         try {
-            $sql = "INSERT INTO funcion (fecha, hora, id_pelicula, id_sala) 
-                    VALUES (:fecha, :hora, :id_pelicula, :id_sala)";
+            $sql = "INSERT INTO funcion (fecha, hora, id_pelicula, id_sala, estado) 
+                    VALUES (:fecha, :hora, :id_pelicula, :id_sala, 1)";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
@@ -68,9 +195,13 @@ class FuncionModel {
                 ":id_sala" => $data["id_sala"]
             ]);
 
-            return $this->conn->lastInsertId();
+            return [
+                'success' => true,
+                'message' => 'Función creada exitosamente',
+                'id' => $this->conn->lastInsertId()
+            ];
         } catch (PDOException $e) {
-            throw new Exception("Error al crear la función: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al crear la función: ' . $e->getMessage()];
         }
     }
 
@@ -79,7 +210,7 @@ class FuncionModel {
     // -------------------------------------------------
     public function getById($id) {
         if (!is_numeric($id)) {
-            throw new Exception("ID inválido.");
+            return null;
         }
 
         try {
@@ -87,6 +218,7 @@ class FuncionModel {
                         f.id_funcion,
                         f.fecha,
                         f.hora,
+                        f.estado,
                         f.id_pelicula,
                         f.id_sala,
                         p.nombre AS pelicula_nombre,
@@ -95,7 +227,8 @@ class FuncionModel {
                         s.num_sala AS numero_sala,
                         se.nombre AS sede_nombre,
                         se.id_sede,
-                        c.nombre AS ciudad_nombre
+                        c.nombre AS ciudad_nombre,
+                        (SELECT COUNT(*) FROM compra_boleto cb WHERE cb.id_funcion = f.id_funcion) as boletos_vendidos
                     FROM funcion f
                     INNER JOIN pelicula p ON f.id_pelicula = p.id_pelicula
                     INNER JOIN sala s ON f.id_sala = s.id_sala
@@ -108,19 +241,20 @@ class FuncionModel {
 
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            throw new Exception("Error al obtener la función: " . $e->getMessage());
+            return null;
         }
     }
 
     // -------------------------------------------------
     // OBTENER TODAS LAS FUNCIONES
     // -------------------------------------------------
-    public function getAll() {
+    public function getAll($soloActivos = false, $soloFuturas = false) {
         try {
             $sql = "SELECT 
                         f.id_funcion,
                         f.fecha,
                         f.hora,
+                        f.estado,
                         f.id_pelicula,
                         f.id_sala,
                         p.nombre AS pelicula_nombre,
@@ -129,18 +263,29 @@ class FuncionModel {
                         s.num_sala AS numero_sala,
                         se.nombre AS sede_nombre,
                         se.id_sede,
-                        c.nombre AS ciudad_nombre
+                        c.nombre AS ciudad_nombre,
+                        (SELECT COUNT(*) FROM compra_boleto cb WHERE cb.id_funcion = f.id_funcion) as boletos_vendidos
                     FROM funcion f
                     INNER JOIN pelicula p ON f.id_pelicula = p.id_pelicula
                     INNER JOIN sala s ON f.id_sala = s.id_sala
                     INNER JOIN sede se ON s.id_sede = se.id_sede
                     INNER JOIN ciudad c ON se.id_ciudad = c.id_ciudad
-                    ORDER BY f.fecha ASC, f.hora ASC";
+                    WHERE 1=1";
+            
+            if ($soloActivos) {
+                $sql .= " AND f.estado = 1";
+            }
+            
+            if ($soloFuturas) {
+                $sql .= " AND CONCAT(f.fecha, ' ', f.hora) >= NOW()";
+            }
+            
+            $sql .= " ORDER BY f.fecha DESC, f.hora DESC";
 
             $stmt = $this->conn->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            throw new Exception("Error al obtener las funciones: " . $e->getMessage());
+            return [];
         }
     }
 
@@ -333,13 +478,51 @@ class FuncionModel {
     // -------------------------------------------------
     public function update($id, $data) {
         if (!is_numeric($id)) {
-            throw new Exception("ID inválido.");
+            return ['success' => false, 'message' => 'ID inválido'];
+        }
+
+        $funcion = $this->getById($id);
+        if (!$funcion) {
+            return ['success' => false, 'message' => 'Función no encontrada'];
+        }
+
+        // Verificar si tiene boletos vendidos
+        $boletos = $this->contarBoletosVendidos($id);
+        if ($boletos > 0) {
+            // Campos restringidos si hay boletos
+            $camposRestringidos = ['fecha', 'hora', 'id_sala'];
+            foreach ($camposRestringidos as $campo) {
+                if (isset($data[$campo]) && $data[$campo] != $funcion[$campo]) {
+                    return [
+                        'success' => false, 
+                        'message' => "No se puede modificar $campo porque ya hay $boletos boletos vendidos"
+                    ];
+                }
+            }
         }
 
         $this->validarFuncion($data, "actualizar");
 
+        // Validar película si se cambia
+        $idPelicula = isset($data['id_pelicula']) ? $data['id_pelicula'] : $funcion['id_pelicula'];
+        $pelicula = $this->peliculaExiste($idPelicula);
+        if (!$pelicula) {
+            return ['success' => false, 'message' => 'La película no existe'];
+        }
+
+        // Validar conflicto si cambia fecha, hora o sala
+        $fecha = isset($data['fecha']) ? $data['fecha'] : $funcion['fecha'];
+        $hora = isset($data['hora']) ? $data['hora'] : $funcion['hora'];
+        $idSala = isset($data['id_sala']) ? $data['id_sala'] : $funcion['id_sala'];
+
+        if (isset($data['fecha']) || isset($data['hora']) || isset($data['id_sala'])) {
+            $conflicto = $this->tieneConflictoHorario($idSala, $fecha, $hora, $pelicula['duracion'], $id);
+            if ($conflicto['conflicto']) {
+                return ['success' => false, 'message' => $conflicto['mensaje']];
+            }
+        }
+
         try {
-            // Construir la consulta dinámicamente según los campos proporcionados
             $campos = [];
             $params = [":id" => $id];
 
@@ -364,7 +547,7 @@ class FuncionModel {
             }
 
             if (empty($campos)) {
-                throw new Exception("No se proporcionaron campos para actualizar.");
+                return ['success' => false, 'message' => 'No hay campos para actualizar'];
             }
 
             $sql = "UPDATE funcion SET " . implode(", ", $campos) . " WHERE id_funcion = :id";
@@ -372,9 +555,9 @@ class FuncionModel {
             $stmt = $this->conn->prepare($sql);
             $stmt->execute($params);
 
-            return $stmt->rowCount() > 0;
+            return ['success' => true, 'message' => 'Función actualizada exitosamente'];
         } catch (PDOException $e) {
-            throw new Exception("Error al actualizar la función: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al actualizar: ' . $e->getMessage()];
         }
     }
 
@@ -383,7 +566,21 @@ class FuncionModel {
     // -------------------------------------------------
     public function delete($id) {
         if (!is_numeric($id)) {
-            throw new Exception("ID inválido.");
+            return ['success' => false, 'message' => 'ID inválido'];
+        }
+
+        $funcion = $this->getById($id);
+        if (!$funcion) {
+            return ['success' => false, 'message' => 'Función no encontrada'];
+        }
+
+        // Verificar boletos vendidos
+        $boletos = $this->contarBoletosVendidos($id);
+        if ($boletos > 0) {
+            return [
+                'success' => false, 
+                'message' => "No se puede eliminar la función porque tiene $boletos boletos vendidos"
+            ];
         }
 
         try {
@@ -391,10 +588,90 @@ class FuncionModel {
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
 
-            return $stmt->rowCount() > 0;
+            return ['success' => true, 'message' => 'Función eliminada exitosamente'];
         } catch (PDOException $e) {
-            throw new Exception("Error al eliminar la función: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al eliminar: ' . $e->getMessage()];
         }
+    }
+
+    // -------------------------------------------------
+    // CAMBIAR ESTADO (TOGGLE)
+    // -------------------------------------------------
+    public function toggleEstado($id, $estado) {
+        $funcion = $this->getById($id);
+        if (!$funcion) {
+            return ['success' => false, 'message' => 'Función no encontrada'];
+        }
+
+        // No desactivar si tiene boletos vendidos y es futura
+        if ($estado == 0) {
+            $boletos = $this->contarBoletosVendidos($id);
+            if ($boletos > 0 && !$this->funcionPasada($funcion['fecha'], $funcion['hora'])) {
+                return [
+                    'success' => false, 
+                    'message' => "No se puede desactivar porque tiene $boletos boletos vendidos"
+                ];
+            }
+        }
+
+        try {
+            $sql = "UPDATE funcion SET estado = :estado WHERE id_funcion = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':estado' => $estado, ':id' => $id]);
+
+            $mensaje = $estado == 1 ? 'Función activada' : 'Función desactivada';
+            return ['success' => true, 'message' => $mensaje];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error al cambiar estado: ' . $e->getMessage()];
+        }
+    }
+
+    // -------------------------------------------------
+    // CONTAR FUNCIONES
+    // -------------------------------------------------
+    public function count($soloActivos = false, $soloFuturas = false) {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM funcion WHERE 1=1";
+            
+            if ($soloActivos) {
+                $sql .= " AND estado = 1";
+            }
+            
+            if ($soloFuturas) {
+                $sql .= " AND CONCAT(fecha, ' ', hora) >= NOW()";
+            }
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return intval($result['total']);
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    // -------------------------------------------------
+    // HELPER: Formatear duración
+    // -------------------------------------------------
+    public static function formatDuration($minutos) {
+        $horas = floor($minutos / 60);
+        $mins = $minutos % 60;
+        
+        if ($horas > 0 && $mins > 0) {
+            return "{$horas}h {$mins}min";
+        } else if ($horas > 0) {
+            return "{$horas}h";
+        } else {
+            return "{$mins}min";
+        }
+    }
+
+    // -------------------------------------------------
+    // HELPER: Calcular hora fin
+    // -------------------------------------------------
+    public static function calcularHoraFin($hora, $duracionMinutos) {
+        $timestamp = strtotime($hora) + ($duracionMinutos * 60);
+        return date('H:i', $timestamp);
     }
 
     // -------------------------------------------------
@@ -453,4 +730,3 @@ class FuncionModel {
         }
     }
 }
-?>

@@ -71,10 +71,22 @@
                     Salas
                 </a>
                 
+                <a href="<?php echo $basePath; ?>/admin/views/asiento/index.php" 
+                   class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'asiento') ? 'active' : ''; ?>">
+                    <i class="fas fa-couch w-5"></i>
+                    Asientos
+                </a>
+                
                 <a href="<?php echo $basePath; ?>/admin/views/pelicula/index.php" 
                    class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'pelicula') ? 'active' : ''; ?>">
                     <i class="fas fa-video w-5"></i>
                     Peliculas
+                </a>
+                
+                <a href="<?php echo $basePath; ?>/admin/views/funcion/index.php" 
+                   class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'funcion') ? 'active' : ''; ?>">
+                    <i class="fas fa-calendar-alt w-5"></i>
+                    Funciones
                 </a>
                 
                 <p class="text-gray-400 text-xs uppercase mt-4 mb-2">Dulceria</p>
@@ -90,12 +102,26 @@
                     <i class="fas fa-gifts w-5"></i>
                     Combos
                 </a>
-            </nav>
-            
-            <div class="absolute bottom-0 w-64 p-4 border-t border-gray-700">
-                <a href="<?php echo $basePath; ?>/views/login.html" class="flex items-center gap-3 px-3 py-2 text-gray-300 hover:text-white">
-                    <i class="fas fa-sign-out-alt w-5"></i>
-                    Salir
+                
+                <a href="<?php echo $basePath; ?>/admin/views/producto_sede/index.php" 
+                   class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'producto_sede') ? 'active' : ''; ?>">
+                    <i class="fas fa-warehouse w-5"></i>
+                    Inventario
                 </a>
-            </div>
+                
+                <p class="text-gray-400 text-xs uppercase mt-4 mb-2">Usuarios</p>
+                
+                <a href="<?php echo $basePath; ?>/admin/views/usuario/index.php" 
+                   class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'usuario') ? 'active' : ''; ?>">
+                    <i class="fas fa-users w-5"></i>
+                    Usuarios
+                </a>
+                
+                <div class="mt-6 pt-4 border-t border-gray-700">
+                    <a href="<?php echo $basePath; ?>/views/login.html" class="flex items-center gap-3 px-3 py-2 text-gray-300 hover:text-white">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        Salir
+                    </a>
+                </div>
+            </nav>
         </aside>
