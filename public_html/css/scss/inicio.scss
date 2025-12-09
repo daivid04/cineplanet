@@ -1,0 +1,765 @@
+/* ===== VARIABLES SCSS ===== */
+$color-azul-principal: #004aad;
+$color-azul-hover: #003a8c;
+$color-blanco: #ffffff;
+$color-gris-claro: #f5f5f5;
+$color-gris-medio: #e0e0e0;
+$color-gris-texto: #333333;
+$color-gris-oscuro: #555555;
+$color-verde-decorativo: #00a651;
+
+/* Espaciado */
+$espaciado-pequeno: 0.5rem;
+$espaciado-medio: 1rem;
+$espaciado-grande: 2rem;
+$espaciado-extra-grande: 3rem;
+
+/* Tamaños de fuente */
+$tamano-fuente-pequeno: 0.875rem;
+$tamano-fuente-normal: 1rem;
+$tamano-fuente-mediano: 1.125rem;
+$tamano-fuente-grande: 1.5rem;
+$tamano-fuente-titulo: 3rem;
+
+/* Sombras */
+$sombra-suave: 0 2px 4px rgba(0, 0, 0, 0.1);
+$sombra-media: 0 4px 8px rgba(0, 0, 0, 0.15);
+$sombra-fuerte: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+/* Transiciones */
+$transicion-rapida: 0.2s ease;
+$transicion-normal: 0.3s ease;
+
+/* ===== MIXINS Y FUNCIONES ===== */
+@mixin tablet {
+    @media (max-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin tablet-pequena {
+    @media (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: 480px) {
+        @content;
+    }
+}
+
+/* ===== VARIABLES CSS ===== */
+:root {
+    /* Colores principales */
+    --color-azul-principal: #{$color-azul-principal};
+    --color-azul-hover: #{$color-azul-hover};
+    --color-blanco: #{$color-blanco};
+    --color-gris-claro: #{$color-gris-claro};
+    --color-gris-medio: #{$color-gris-medio};
+    --color-gris-texto: #{$color-gris-texto};
+    --color-gris-oscuro: #{$color-gris-oscuro};
+    --color-verde-decorativo: #{$color-verde-decorativo};
+
+    /* Espaciado */
+    --espaciado-pequeno: #{$espaciado-pequeno};
+    --espaciado-medio: #{$espaciado-medio};
+    --espaciado-grande: #{$espaciado-grande};
+    --espaciado-extra-grande: #{$espaciado-extra-grande};
+
+    /* Tamaños de fuente */
+    --tamano-fuente-pequeno: #{$tamano-fuente-pequeno};
+    --tamano-fuente-normal: #{$tamano-fuente-normal};
+    --tamano-fuente-mediano: #{$tamano-fuente-mediano};
+    --tamano-fuente-grande: #{$tamano-fuente-grande};
+    --tamano-fuente-titulo: #{$tamano-fuente-titulo};
+
+    /* Sombras */
+    --sombra-suave: #{$sombra-suave};
+    --sombra-media: #{$sombra-media};
+    --sombra-fuerte: #{$sombra-fuerte};
+
+    /* Transiciones */
+    --transicion-rapida: #{$transicion-rapida};
+    --transicion-normal: #{$transicion-normal};
+}
+
+/* ===== RESET Y ESTILOS BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: var(--tamano-fuente-normal);
+    color: var(--color-gris-texto);
+    background-color: var(--color-gris-claro);
+    line-height: 1.6;
+}
+
+/* ===== BARRA DE NAVEGACIÓN ===== */
+.barra-navegacion {
+    background-color: var(--color-blanco);
+    box-shadow: var(--sombra-suave);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    .contenedor-navegacion {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: var(--espaciado-medio) var(--espaciado-grande);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--espaciado-grande);
+
+        /* Logo */
+        .logo-cineplanet {
+            display: flex;
+            align-items: center;
+            gap: var(--espaciado-pequeno);
+
+            .imagen-logo {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            .texto-logo {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: var(--color-gris-texto);
+                letter-spacing: 0.02rem;
+            }
+        }
+
+        /* Menú de navegación */
+        .menu-navegacion {
+            display: flex;
+            list-style: none;
+            gap: var(--espaciado-grande);
+            margin: 0;
+            padding: 0;
+
+            .enlace-navegacion {
+                color: var(--color-gris-oscuro);
+                text-decoration: none;
+                font-size: 1.0625rem;
+                font-weight: 600;
+                padding: var(--espaciado-pequeno) var(--espaciado-medio);
+                border-radius: 0.25rem;
+                transition: all var(--transicion-rapida);
+                letter-spacing: 0.01rem;
+
+                &:hover {
+                    color: var(--color-azul-principal);
+                    background-color: var(--color-gris-claro);
+                }
+            }
+        }
+
+        /* Acciones de navegación */
+        .acciones-navegacion {
+            display: flex;
+            gap: var(--espaciado-medio);
+
+            .boton-icono {
+                background-color: transparent;
+                border: 0;
+                cursor: pointer;
+                padding: var(--espaciado-pequeno);
+                border-radius: 50%;
+                transition: background-color var(--transicion-rapida);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &:hover {
+                    background-color: var(--color-gris-claro);
+                }
+
+                .icono {
+                    width: 1.75rem;
+                    height: 1.75rem;
+                    color: var(--color-gris-oscuro);
+                }
+            }
+        }
+    }
+}
+
+/* ===== CONTENIDO PRINCIPAL ===== */
+.contenido-principal {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: var(--espaciado-grande) var(--espaciado-extra-grande);
+
+    /* Barra decorativa */
+    .barra-decorativa {
+        height: 1.25rem;
+        background: repeating-linear-gradient(45deg,
+                var(--color-verde-decorativo),
+                var(--color-verde-decorativo) 1.5rem,
+                var(--color-blanco) 1.5rem,
+                var(--color-blanco) 3rem);
+        margin-bottom: var(--espaciado-grande);
+        border-radius: 0.375rem;
+        box-shadow: 0 2px 4px rgba(0, 166, 81, 0.2);
+    }
+}
+
+/* ===== SECCIÓN DE FILTROS ===== */
+.seccion-filtros {
+    margin-bottom: var(--espaciado-grande);
+
+    .contenedor-filtros {
+        background-color: var(--color-blanco);
+        padding: var(--espaciado-medio) var(--espaciado-grande);
+        border-radius: 0.5rem;
+        box-shadow: var(--sombra-suave);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--espaciado-grande);
+        flex-wrap: wrap;
+
+        .grupo-filtros {
+            display: flex;
+            gap: 0;
+            flex: 1;
+            width: 100%;
+
+            /* Cada item de filtro con su descripción */
+            .filtro-item {
+                flex: 1;
+                min-width: 160px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 0.25rem;
+                position: relative;
+                padding: 0 var(--espaciado-medio);
+                cursor: pointer;
+
+                &:not(:last-child) {
+                    border-right: 1px solid var(--color-gris-medio);
+                }
+                
+                &:first-child {
+                    padding-left: 0;
+                }
+
+                .filtro-titulo {
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: var(--color-azul-principal);
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    pointer-events: none; /* Clicks pass through to select */
+
+                    span {
+                        width: 0.5rem;
+                        height: 0.5rem;
+                        border-right: 2px solid var(--color-azul-principal);
+                        border-bottom: 2px solid var(--color-azul-principal);
+                        transform: rotate(45deg);
+                        margin-left: 0.5rem;
+                        margin-bottom: 0.2rem;
+                        transition: transform var(--transicion-rapida);
+                    }
+                }
+
+                .filtro-descripcion {
+                    font-size: 0.875rem;
+                    color: var(--color-gris-oscuro);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 100%;
+                    pointer-events: none; /* Clicks pass through to select */
+                    
+                    &.active {
+                        color: var(--color-gris-texto);
+                        font-weight: 500;
+                    }
+                }
+
+                /* Select invisible superpuesto */
+                .dropdown-item {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    opacity: 0;
+                    cursor: pointer;
+                    appearance: none;
+                    z-index: 10;
+
+                    &:focus + .filtro-titulo span,
+                    &:active + .filtro-titulo span {
+                        transform: rotate(-135deg);
+                    }
+                }
+                
+                &:hover {
+                    .filtro-titulo {
+                        color: var(--color-azul-hover);
+                    }
+                }
+            }
+        }
+
+        .boton-filtrar {
+            background-color: var(--color-azul-principal);
+            color: var(--color-blanco);
+            border: 0;
+            padding: 0.75rem 2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--espaciado-pequeno);
+            font-size: var(--tamano-fuente-normal);
+            font-weight: 600;
+            transition: all var(--transicion-rapida);
+            box-shadow: var(--sombra-suave);
+
+            &:hover {
+                background-color: var(--color-azul-hover);
+                box-shadow: var(--sombra-media);
+                transform: translateY(-1px);
+            }
+
+            .icono-filtrar {
+                width: 1.25rem;
+                height: 1.25rem;
+            }
+        }
+    }
+}
+
+/* ===== TÍTULO DE PELÍCULAS ===== */
+.titulo-peliculas {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #d0d0d0;
+    margin-bottom: var(--espaciado-medio);
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+}
+
+/* ===== PESTAÑAS DE NAVEGACIÓN ===== */
+.seccion-pestanas {
+    margin-bottom: var(--espaciado-grande);
+
+    .pestanas-navegacion {
+        display: flex;
+        gap: var(--espaciado-grande);
+        border-bottom: 2px solid var(--color-gris-medio);
+        overflow-x: auto;
+
+        .pestana {
+            background-color: transparent;
+            border: 0;
+            padding: var(--espaciado-medio) var(--espaciado-pequeno);
+            font-size: var(--tamano-fuente-normal);
+            font-weight: 600;
+            color: var(--color-gris-oscuro);
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            transition: color var(--transicion-rapida);
+
+            &:hover {
+                color: var(--color-gris-texto);
+            }
+
+            &.activa {
+                color: var(--color-gris-texto);
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    bottom: -2px;
+                    left: 0;
+                    right: 0;
+                    height: 3px;
+                    background-color: #e50914;
+                }
+            }
+        }
+    }
+}
+
+/* ===== GALERÍA DE PELÍCULAS ===== */
+.galeria-peliculas {
+    max-height: 700px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 10px;
+    #movie-1{
+      grid-column: span 5 ;
+      grid-row: span 8 ;
+    }
+    #movie-2{
+      grid-column: span 3 ;
+      grid-row: span 4 ;
+    }
+    #movie-3{
+      grid-column: span 4 ;
+      grid-row: span 6 ;
+    }
+    #movie-4{
+      grid-column: span 3 ;
+      grid-row: span 4 ;
+    }
+    #movie-5{
+      grid-column: span 2 ;
+      grid-row: span 2 ;
+    }
+    #movie-6{
+      display: flex;
+      flex-direction: column;
+      grid-column: span 2 ;
+      grid-row: span 2 ;
+      background-color: #ff3a44;
+      padding: 20px;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      span{
+        display: block;
+        height: 80px;
+        font-size: 20px;
+        font-weight: 800;
+        color: white;
+      }
+    }
+
+    .movie-card{
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+
+        .movie-poster img {
+          transform: scale(1.05);
+        }
+
+        .movie-actions {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+
+      .movie-poster{
+        width: 100%;
+        height: 100%;
+
+        img{
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+        }
+      }
+
+      .movie-actions{
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 15px;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+
+        button {
+          width: 90%;
+          max-width: 180px;
+          min-height: 45px;
+          height: auto;
+          background-color: #004aad;
+          color: white;
+          border: none;
+          border-radius: 25px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 10px 15px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: #003a8c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+          }
+
+          &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          }
+
+          span {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            display: inline-block;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: brightness(0) invert(1);
+          }
+        }
+
+        .btn-buy {
+          background-color: #e50914;
+
+          &:hover {
+            background-color: #c40812;
+          }
+
+          span {
+            background-image: url(/assets/icons/ticket.png);
+          }
+        }
+
+        .btn-details {
+          background-color: #004aad;
+
+          &:hover {
+            background-color: #003a8c;
+          }
+
+          span {
+            background-image: url(/assets/icons/addition.png);
+          }
+        }
+      }
+
+      /* Adaptación para tarjetas pequeñas (movie-5) */
+      &#movie-5 {
+        .movie-actions {
+          gap: 8px;
+          padding: 10px;
+
+          button {
+            width: 95%;
+            min-height: 35px;
+            font-size: 11px;
+            padding: 6px 10px;
+            gap: 5px;
+
+            span {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+      }
+    }
+}
+
+/* ===== ESTADO DE CARGA ===== */
+.mensaje-cargando {
+    text-align: center;
+    padding: var(--espaciado-extra-grande);
+    font-size: var(--tamano-fuente-mediano);
+    color: var(--color-gris-oscuro);
+}
+
+/* ===== BOTÓN VER MÁS ===== */
+.contenedor-ver-mas {
+    text-align: center;
+    margin-top: var(--espaciado-grande);
+
+    .boton-ver-mas {
+        background-color: #e50914;
+        color: var(--color-blanco);
+        border: 0;
+        padding: var(--espaciado-medio) var(--espaciado-extra-grande);
+        border-radius: 0.5rem;
+        font-size: var(--tamano-fuente-normal);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--transicion-rapida);
+        box-shadow: var(--sombra-media);
+
+        &:hover {
+            background-color: #c40812;
+            box-shadow: var(--sombra-fuerte);
+            transform: translateY(-2px);
+        }
+    }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablets */
+@include tablet {
+    .galeria-peliculas {
+        grid-template-columns: repeat(3, 1fr);
+
+        .tarjeta-pelicula.grande {
+            grid-column: span 2;
+        }
+    }
+}
+
+@include tablet-pequena {
+    .contenedor-navegacion {
+        flex-wrap: wrap;
+        padding: var(--espaciado-medio);
+
+        .menu-navegacion {
+            flex-wrap: wrap;
+            gap: var(--espaciado-medio);
+        }
+    }
+
+    .titulo-peliculas {
+        font-size: var(--tamano-fuente-grande);
+    }
+
+    /* Contenido principal en tablets */
+    .contenido-principal {
+        padding: var(--espaciado-medio) var(--espaciado-grande);
+    }
+
+    /* Filtros en tablets */
+    .contenedor-filtros {
+        padding: var(--espaciado-medio);
+        gap: var(--espaciado-medio);
+
+        .grupo-filtros {
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .filtro-item {
+            flex: 1 1 45%;
+            min-width: 150px;
+
+            &:nth-child(2n) {
+                border-right: 0;
+                padding-right: 0;
+                margin-right: 0;
+            }
+        }
+
+        .boton-filtrar {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .galeria-peliculas {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--espaciado-pequeno);
+
+        .tarjeta-pelicula.grande,
+        .tarjeta-pelicula.mediana {
+            grid-column: span 1;
+            grid-row: span 1;
+        }
+    }
+
+    .pestanas-navegacion {
+        gap: var(--espaciado-medio);
+
+        .pestana {
+            font-size: var(--tamano-fuente-pequeno);
+        }
+    }
+}
+
+/* Móviles */
+@include mobile {
+    .contenedor-navegacion {
+        gap: var(--espaciado-pequeno);
+
+        .menu-navegacion {
+            display: none;
+        }
+    }
+
+    .contenido-principal {
+        padding: var(--espaciado-medio) var(--espaciado-pequeno);
+    }
+
+    .titulo-peliculas {
+        font-size: var(--tamano-fuente-mediano);
+    }
+
+    /* Barra decorativa más delgada en móviles */
+    .barra-decorativa {
+        height: 1rem;
+    }
+
+    /* Filtros en móviles */
+    .contenedor-filtros {
+        flex-direction: column;
+        align-items: stretch;
+        padding: var(--espaciado-medio);
+
+        .grupo-filtros {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .filtro-item {
+            width: 100%;
+            border-right: 0;
+            border-bottom: 1px solid var(--color-gris-medio);
+            padding-right: 0;
+            padding-bottom: var(--espaciado-medio);
+            margin-right: 0;
+            margin-bottom: var(--espaciado-medio);
+
+            &:last-child {
+                border-bottom: 0;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+        }
+
+        .boton-filtrar {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .galeria-peliculas {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .etiqueta-estreno {
+        font-size: 0.625rem;
+        padding: 0.25rem 2rem;
+    }
+}

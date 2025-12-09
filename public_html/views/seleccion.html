@@ -52,11 +52,11 @@
                 <!-- Encabezado con título y botón -->
                 <div class="header-pelicula">
                     <div class="info-titulo">
-                        <h1 class="titulo-pelicula" id="titulo-pelicula">Tron Ares</h1>
+                        <h1 class="titulo-pelicula" id="titulo-pelicula"></h1>
                         <p class="metadata-pelicula">
                             <span id="genero-pelicula">Ciencia Ficción</span> |
-                            <span id="duracion-pelicula">2hrs 0min</span> |
-                            <span class="clasificacion" id="clasificacion-pelicula">+14</span>
+                            <span id="duracion-pelicula"></span> |
+                            <span class="clasificacion" id="clasificacion-pelicula"></span>
                         </p>
                     </div>
                     <button class="boton-comprar" id="boton-comprar">
@@ -74,28 +74,25 @@
                 <div class="contenedor-media">
                     <!-- Imagen de la película -->
                     <div class="contenedor-poster">
-                        <img src="../assets/images/tron.jpg" alt="Tron Ares" class="poster-pelicula"
+                        <img src="" alt="" class="poster-pelicula"
                             id="poster-pelicula" />
                     </div>
 
                     <!-- Sinopsis y detalles -->
                     <div class="contenedor-info">
                         <h2 class="titulo-seccion">Sinopsis.</h2>
-                        <p class="sinopsis" id="sinopsis-pelicula">
-                            Ares, un programa altamente sofisticado, es enviado al mundo real en una misión peligrosa.
-                            Este será el primer encuentro de la humanidad con un ser de la IA.
-                        </p>
+                        <p class="sinopsis" id="sinopsis-pelicula"></p>
 
                         <div class="seccion-idioma">
                             <h3 class="subtitulo-seccion">Idioma</h3>
                             <div class="opciones-idioma">
-                                <button class="opcion-idioma activa" data-idioma="doblada">DOBLADA</button>
+                                <button class="opcion-idioma activa" id="opcion-idioma" data-idioma="doblada"></button>
                             </div>
                         </div>
 
                         <div class="seccion-disponible">
                             <h3 class="subtitulo-seccion">Disponible</h3>
-                            <p class="formatos-disponibles" id="formatos-disponibles">REGULAR, 2D</p>
+                            <p class="formatos-disponibles" id="formatos-disponibles"></p>
                         </div>
                     </div>
                 </div>
@@ -166,7 +163,7 @@
         </section>
     </main>
 
-    <script src="../js/seleccion.js"></script>
+    <script type="module" src="../js/seleccion.js"></script>
 </body>
 
 </html>
