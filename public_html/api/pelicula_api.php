@@ -13,6 +13,11 @@ $method = $_SERVER["REQUEST_METHOD"];
 try {
     switch ($method) {
         case 'GET':
+
+            if(isset($_GET["all"])){
+              echo json_encode($controller->getAll());
+              break;
+            }
             // Obtener película por ID
             if (isset($_GET["id"])) {
                 echo json_encode($controller->getById($_GET["id"]));
@@ -22,6 +27,11 @@ try {
             // Buscar películas por nombre
             if (isset($_GET["name"])) {
                 echo json_encode($controller->searchByName($_GET["name"]));
+                break;
+            }
+          
+            if (isset($_GET["billBoard"])) {
+                echo json_encode($controller->getCartelera($_GET["billBoard"]));
                 break;
             }
 

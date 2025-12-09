@@ -4,12 +4,15 @@ USE u914095763_g1;
 
 CREATE TABLE ciudad(
     id_ciudad INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL
+    nombre VARCHAR(50) NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE sede(
     id_sede INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
+    direccion VARCHAR(150),
+    telefono VARCHAR(15),
     id_ciudad INT NOT NULL,
     estado BOOL NOT NULL DEFAULT 1,
     FOREIGN KEY (id_ciudad) REFERENCES ciudad(id_ciudad) 
@@ -49,17 +52,15 @@ CREATE TABLE pelicula(
 
 CREATE TABLE idioma(
     id_idioma INT PRIMARY KEY AUTO_INCREMENT,
-    idioma VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE genero(
-    id_genero INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL
+    idioma VARCHAR(50) NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE formato(
     id_formato INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50)
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100),
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE funcion(
@@ -114,14 +115,19 @@ CREATE TABLE usuario(
 
 CREATE TABLE metodo(
 	id_metodo INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_metodo VARCHAR(50) NOT NULL
+    nombre_metodo VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100),
+    icono VARCHAR(50),
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE tipo_socio(
     id_socio INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
-    desc_dulces VARCHAR(10) NOT NULL,
-    desc_boleto VARCHAR(10) NOT NULL
+    desc_dulces DECIMAL(5,2) NOT NULL DEFAULT 0,
+    desc_boleto DECIMAL(5,2) NOT NULL DEFAULT 0,
+    puntos_por_sol DECIMAL(5,2) NOT NULL DEFAULT 1,
+    estado BOOL NOT NULL DEFAULT 1
 );
 
 CREATE TABLE socio(
@@ -244,18 +250,6 @@ CREATE TABLE idiomas_pelicula(
     ON DELETE CASCADE
 );
 
-CREATE TABLE genero_pelicula(
-    id_genero_pelicula INT PRIMARY KEY AUTO_INCREMENT,
-    id_pelicula INT NOT NULL,
-    id_genero INT NOT NULL,
-    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id_pelicula) 
-    ON UPDATE CASCADE 
-    ON DELETE CASCADE,
-    FOREIGN KEY (id_genero) REFERENCES genero(id_genero) 
-    ON UPDATE CASCADE 
-    ON DELETE CASCADE
-);
-
 CREATE TABLE formato_pelicula(
     id_formato_pelicula INT PRIMARY KEY AUTO_INCREMENT,
     id_pelicula INT NOT NULL,
@@ -264,6 +258,24 @@ CREATE TABLE formato_pelicula(
     ON UPDATE CASCADE 
     ON DELETE CASCADE,
     FOREIGN KEY (id_formato) REFERENCES formato(id_formato) 
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE
+);
+
+CREATE TABLE genero(
+    id_genero INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
+);
+
+CREATE TABLE genero_pelicula(
+    id_genero_pelicula INT PRIMARY KEY AUTO_INCREMENT,
+    id_pelicula INT NOT NULL,
+    id_genero INT NOT NULL,
+    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id_pelicula) 
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE,
+    FOREIGN KEY (id_genero) REFERENCES genero(id_genero) 
     ON UPDATE CASCADE 
     ON DELETE CASCADE
 );

@@ -56,46 +56,37 @@
                 <div class="grupo-filtros">
                     <!-- Filtro por película -->
                     <div class="filtro-item">
-                        <button class="boton-filtro" data-filtro="pelicula">
-                            <span class="filtro-titulo">Por película</span>
-                            <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
-                        </button>
-                        <p class="filtro-descripcion">Qué quieres ver</p>
+                      <h3 class="filtro-titulo">Por película
+                        <span></span>
+                      </h3>
+                      <div class="filtro-descripcion" id="filtro-description-movie">Qué quieres ver</div>
+                      <select name="" class="dropdown-item" id="dropdown-movie"></select>
                     </div>
-
                     <!-- Filtro por ciudad -->
                     <div class="filtro-item">
-                        <button class="boton-filtro" data-filtro="ciudad">
-                            <span class="filtro-titulo">Por ciudad</span>
-                            <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
-                        </button>
-                        <p class="filtro-descripcion">Dónde estás</p>
+                      <h3 class="filtro-titulo">Por ciudad
+                        <span></span>
+                      </h3>
+                      <div class="filtro-descripcion" id="filtro-description-city">Dónde estás</div>
+                      <select name="" class="dropdown-item" id="dropdown-city"></select>
                     </div>
 
                     <!-- Filtro por cine -->
                     <div class="filtro-item">
-                        <button class="boton-filtro" data-filtro="cine">
-                            <span class="filtro-titulo">Por cine</span>
-                            <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
-                        </button>
-                        <p class="filtro-descripcion">Elige tu Cineplanet</p>
+                      <h3 class="filtro-titulo">Por cine
+                        <span></span>
+                      </h3>
+                      <div class="filtro-descripcion" id="filtro-description-cinema">Elige tu Cineplanet</div>
+                      <select name="" class="dropdown-item" id="dropdown-cinema"></select>
                     </div>
 
                     <!-- Filtro por fecha -->
-                    <div class="filtro-item">
-                        <button class="boton-filtro" data-filtro="fecha">
-                            <span class="filtro-titulo">Por fecha</span>
-                            <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
-                        </button>
-                        <p class="filtro-descripcion">Elige un día</p>
+                    <div class="filtro-item" id="filter-day">
+                      <h3 class="filtro-titulo">Por fecha
+                        <span></span>
+                      </h3>
+                      <div class="filtro-descripcion" id="filtro-description-day">Elige un día</div>
+                      <select name="" class="dropdown-item" id="dropdown-date"></select>
                     </div>
                 </div>
 
@@ -146,7 +137,7 @@
         </div>
     </main>
 
-    <script src="public_html/js/inicio.js"></script>
+    <script type="module" src="public_html/js/inicio.js"></script>
 </body>
 
 </html>';
