@@ -109,12 +109,30 @@
                     Inventario
                 </a>
                 
+                <a href="<?php echo $basePath; ?>/admin/views/producto_combo/index.php" 
+                   class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'producto_combo') ? 'active' : ''; ?>">
+                    <i class="fas fa-box-open w-5"></i>
+                    Composición Combos
+                </a>
+                
                 <p class="text-gray-400 text-xs uppercase mt-4 mb-2">Usuarios</p>
                 
                 <a href="<?php echo $basePath; ?>/admin/views/usuario/index.php" 
                    class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'usuario') ? 'active' : ''; ?>">
                     <i class="fas fa-users w-5"></i>
                     Usuarios
+                </a>
+                
+                <a href="<?php echo $basePath; ?>/admin/views/socio/index.php" 
+                   class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'socio') ? 'active' : ''; ?>">
+                    <i class="fas fa-id-card w-5"></i>
+                    Socios
+                </a>
+                
+                <a href="<?php echo $basePath; ?>/admin/views/invitado/index.php" 
+                   class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg mb-1 text-gray-300 <?php echo ($currentDir == 'invitado') ? 'active' : ''; ?>">
+                    <i class="fas fa-user-tag w-5"></i>
+                    Invitados
                 </a>
                 
                 <div class="mt-6 pt-4 border-t border-gray-700">
