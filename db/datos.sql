@@ -1,421 +1,730 @@
--- Usar la base de datos
-USE u914095763_g1;
+  -- Usar la base de datos
+  USE u914095763_g1;
 
--- Primero poblar la tabla metodo
-INSERT INTO `metodo` (`id_metodo`, `nombre_metodo`, `descripcion`, `icono`, `estado`) VALUES
-(1, 'Tarjeta de Credito', 'Pago con tarjeta de credito Visa/Mastercard', 'credit-card', 1),
-(2, 'Tarjeta de Debito', 'Pago con tarjeta de debito', 'debit-card', 1),
-(3, 'Efectivo', 'Pago en efectivo en caja', 'cash', 1),
-(4, 'Yape', 'Pago movil con Yape BCP', 'yape', 1),
-(5, 'Plin', 'Pago movil con Plin', 'plin', 1),
-(6, 'Transferencia Bancaria', 'Transferencia desde cuenta bancaria', 'bank-transfer', 1);
+  -- Primero poblar la tabla metodo
+  INSERT INTO `metodo` (`id_metodo`, `nombre_metodo`, `descripcion`, `icono`, `estado`) VALUES
+  (1, 'Tarjeta de Credito', 'Pago con tarjeta de credito Visa/Mastercard', 'credit-card', 1),
+  (2, 'Tarjeta de Debito', 'Pago con tarjeta de debito', 'debit-card', 1),
+  (3, 'Efectivo', 'Pago en efectivo en caja', 'cash', 1),
+  (4, 'Yape', 'Pago movil con Yape BCP', 'yape', 1),
+  (5, 'Plin', 'Pago movil con Plin', 'plin', 1),
+  (6, 'Transferencia Bancaria', 'Transferencia desde cuenta bancaria', 'bank-transfer', 1);
 
---
--- Poblando la tabla `ciudad`
---
-INSERT INTO `ciudad` (`id_ciudad`, `nombre`, `estado`) VALUES
-(1, 'Lima', 1),
-(2, 'Arequipa', 1),
-(3, 'Trujillo', 1),
-(4, 'Chiclayo', 1),
-(5, 'Piura', 1),
-(6, 'Cusco', 1),
-(7, 'Huancayo', 1),
-(8, 'Tacna', 1),
-(9, 'Ica', 1),
-(10, 'Chimbote', 1);
+  --
+  -- Poblando la tabla `ciudad`
+  --
+  INSERT INTO `ciudad` (`id_ciudad`, `nombre`, `estado`) VALUES
+  (1, 'Lima', 1),
+  (2, 'Arequipa', 1),
+  (3, 'Trujillo', 1),
+  (4, 'Chiclayo', 1),
+  (5, 'Piura', 1),
+  (6, 'Cusco', 1),
+  (7, 'Huancayo', 1),
+  (8, 'Tacna', 1),
+  (9, 'Ica', 1),
+  (10, 'Chimbote', 1);
 
---
--- Poblando la tabla `sede`
+  --
+  -- Poblando la tabla `sede`
 
-INSERT INTO `sede` (`id_sede`, `nombre`, `id_ciudad`, `estado`) VALUES
-(1, 'Cineplanet Real Plaza Tacna', 8, 1),
-(2, 'Cineplanet Mall Aventura Chiclayo', 4, 1),
-(3, 'Cineplanet Jockey Plaza', 1, 1),
-(4, 'Cineplanet Mall del Sur', 1, 1),
-(5, 'Cineplanet Real Plaza Arequipa', 2, 1),
-(6, 'Cineplanet Mall Plaza Trujillo', 3, 1),
-(7, 'Cineplanet Real Plaza Cusco', 6, 1),
-(8, 'Cineplanet Real Plaza Piura', 5, 1),
-(9, 'Cineplanet Real Plaza Huancayo', 7, 1),
-(10, 'Cineplanet El Quinde Ica', 9, 1);
+  INSERT INTO `sede` (`id_sede`, `nombre`, `id_ciudad`, `estado`) VALUES
+  (1, 'Cineplanet Real Plaza Tacna', 8, 1),
+  (2, 'Cineplanet Mall Aventura Chiclayo', 4, 1),
+  (3, 'Cineplanet Jockey Plaza', 1, 1),
+  (4, 'Cineplanet Mall del Sur', 1, 1),
+  (5, 'Cineplanet Real Plaza Arequipa', 2, 1),
+  (6, 'Cineplanet Mall Plaza Trujillo', 3, 1),
+  (7, 'Cineplanet Real Plaza Cusco', 6, 1),
+  (8, 'Cineplanet Real Plaza Piura', 5, 1),
+  (9, 'Cineplanet Real Plaza Huancayo', 7, 1),
+  (10, 'Cineplanet El Quinde Ica', 9, 1);
 
---
--- Poblando la tabla `sala`
---
-INSERT INTO `sala` (`id_sala`, `num_sala`, `id_sede`, `estado`) VALUES
-(1, 1, 1, 1),
-(2, 2, 1, 1),
-(3, 1, 2, 1),
-(4, 2, 2, 1),
-(5, 1, 3, 1),
-(6, 2, 3, 1),
-(7, 3, 3, 1),
-(8, 1, 4, 1),
-(9, 1, 5, 1),
-(10, 1, 6, 1),
-(11, 4, 3, 1); -- Sala adicional para mas funciones
+  --
+  -- Poblando la tabla `sala`
+  --
+  INSERT INTO `sala` (`id_sala`, `num_sala`, `id_sede`, `estado`) VALUES
+  (1, 1, 1, 1),
+  (2, 2, 1, 1),
+  (3, 1, 2, 1),
+  (4, 2, 2, 1),
+  (5, 1, 3, 1),
+  (6, 2, 3, 1),
+  (7, 3, 3, 1),
+  (8, 1, 4, 1),
+  (9, 1, 5, 1),
+  (10, 1, 6, 1),
+  (11, 4, 3, 1); -- Sala adicional para mas funciones
 
---
--- Poblando la tabla `asiento` (20 asientos para 2 salas)
---
-INSERT INTO `asiento` (`id_asiento`, `estado`, `fila_asiento`, `columna_asiento`, `id_sala`) VALUES
-(1, 1, 'A', '1', 1),
-(2, 1, 'A', '2', 1),
-(3, 1, 'A', '3', 1),
-(4, 1, 'A', '4', 1),
-(5, 1, 'A', '5', 1),
-(6, 1, 'B', '1', 1),
-(7, 1, 'B', '2', 1),
-(8, 1, 'B', '3', 1),
-(9, 1, 'B', '4', 1),
-(10, 1, 'B', '5', 1),
-(11, 1, 'C', '1', 2),
-(12, 1, 'C', '2', 2),
-(13, 1, 'C', '3', 2),
-(14, 1, 'C', '4', 2),
-(15, 1, 'C', '5', 2),
-(16, 1, 'D', '1', 2),
-(17, 1, 'D', '2', 2),
-(18, 1, 'D', '3', 2),
-(19, 1, 'D', '4', 2),
-(20, 1, 'D', '5', 2);
+  --
+  -- Poblando la tabla `asiento` 
+  -- 80 asientos por sala (8 filas x 10 columnas) = 880 asientos total para 11 salas
+  --
+  INSERT INTO `asiento` (`id_asiento`, `estado`, `fila_asiento`, `columna_asiento`, `id_sala`) VALUES
+  -- SALA 1 (id_asiento 1-80)
+  (1,1,'A','1',1),(2,1,'A','2',1),(3,1,'A','3',1),(4,1,'A','4',1),(5,1,'A','5',1),(6,1,'A','6',1),(7,1,'A','7',1),(8,1,'A','8',1),(9,1,'A','9',1),(10,1,'A','10',1),
+  (11,1,'B','1',1),(12,1,'B','2',1),(13,1,'B','3',1),(14,1,'B','4',1),(15,1,'B','5',1),(16,1,'B','6',1),(17,1,'B','7',1),(18,1,'B','8',1),(19,1,'B','9',1),(20,1,'B','10',1),
+  (21,1,'C','1',1),(22,1,'C','2',1),(23,1,'C','3',1),(24,1,'C','4',1),(25,1,'C','5',1),(26,1,'C','6',1),(27,1,'C','7',1),(28,1,'C','8',1),(29,1,'C','9',1),(30,1,'C','10',1),
+  (31,1,'D','1',1),(32,1,'D','2',1),(33,1,'D','3',1),(34,1,'D','4',1),(35,1,'D','5',1),(36,1,'D','6',1),(37,1,'D','7',1),(38,1,'D','8',1),(39,1,'D','9',1),(40,1,'D','10',1),
+  (41,1,'E','1',1),(42,1,'E','2',1),(43,1,'E','3',1),(44,1,'E','4',1),(45,1,'E','5',1),(46,1,'E','6',1),(47,1,'E','7',1),(48,1,'E','8',1),(49,1,'E','9',1),(50,1,'E','10',1),
+  (51,1,'F','1',1),(52,1,'F','2',1),(53,1,'F','3',1),(54,1,'F','4',1),(55,1,'F','5',1),(56,1,'F','6',1),(57,1,'F','7',1),(58,1,'F','8',1),(59,1,'F','9',1),(60,1,'F','10',1),
+  (61,1,'G','1',1),(62,1,'G','2',1),(63,1,'G','3',1),(64,1,'G','4',1),(65,1,'G','5',1),(66,1,'G','6',1),(67,1,'G','7',1),(68,1,'G','8',1),(69,1,'G','9',1),(70,1,'G','10',1),
+  (71,1,'H','1',1),(72,1,'H','2',1),(73,1,'H','3',1),(74,1,'H','4',1),(75,1,'H','5',1),(76,1,'H','6',1),(77,1,'H','7',1),(78,1,'H','8',1),(79,1,'H','9',1),(80,1,'H','10',1),
+  -- SALA 2 (id_asiento 81-160)
+  (81,1,'A','1',2),(82,1,'A','2',2),(83,1,'A','3',2),(84,1,'A','4',2),(85,1,'A','5',2),(86,1,'A','6',2),(87,1,'A','7',2),(88,1,'A','8',2),(89,1,'A','9',2),(90,1,'A','10',2),
+  (91,1,'B','1',2),(92,1,'B','2',2),(93,1,'B','3',2),(94,1,'B','4',2),(95,1,'B','5',2),(96,1,'B','6',2),(97,1,'B','7',2),(98,1,'B','8',2),(99,1,'B','9',2),(100,1,'B','10',2),
+  (101,1,'C','1',2),(102,1,'C','2',2),(103,1,'C','3',2),(104,1,'C','4',2),(105,1,'C','5',2),(106,1,'C','6',2),(107,1,'C','7',2),(108,1,'C','8',2),(109,1,'C','9',2),(110,1,'C','10',2),
+  (111,1,'D','1',2),(112,1,'D','2',2),(113,1,'D','3',2),(114,1,'D','4',2),(115,1,'D','5',2),(116,1,'D','6',2),(117,1,'D','7',2),(118,1,'D','8',2),(119,1,'D','9',2),(120,1,'D','10',2),
+  (121,1,'E','1',2),(122,1,'E','2',2),(123,1,'E','3',2),(124,1,'E','4',2),(125,1,'E','5',2),(126,1,'E','6',2),(127,1,'E','7',2),(128,1,'E','8',2),(129,1,'E','9',2),(130,1,'E','10',2),
+  (131,1,'F','1',2),(132,1,'F','2',2),(133,1,'F','3',2),(134,1,'F','4',2),(135,1,'F','5',2),(136,1,'F','6',2),(137,1,'F','7',2),(138,1,'F','8',2),(139,1,'F','9',2),(140,1,'F','10',2),
+  (141,1,'G','1',2),(142,1,'G','2',2),(143,1,'G','3',2),(144,1,'G','4',2),(145,1,'G','5',2),(146,1,'G','6',2),(147,1,'G','7',2),(148,1,'G','8',2),(149,1,'G','9',2),(150,1,'G','10',2),
+  (151,1,'H','1',2),(152,1,'H','2',2),(153,1,'H','3',2),(154,1,'H','4',2),(155,1,'H','5',2),(156,1,'H','6',2),(157,1,'H','7',2),(158,1,'H','8',2),(159,1,'H','9',2),(160,1,'H','10',2),
+  -- SALA 3 (id_asiento 161-240)
+  (161,1,'A','1',3),(162,1,'A','2',3),(163,1,'A','3',3),(164,1,'A','4',3),(165,1,'A','5',3),(166,1,'A','6',3),(167,1,'A','7',3),(168,1,'A','8',3),(169,1,'A','9',3),(170,1,'A','10',3),
+  (171,1,'B','1',3),(172,1,'B','2',3),(173,1,'B','3',3),(174,1,'B','4',3),(175,1,'B','5',3),(176,1,'B','6',3),(177,1,'B','7',3),(178,1,'B','8',3),(179,1,'B','9',3),(180,1,'B','10',3),
+  (181,1,'C','1',3),(182,1,'C','2',3),(183,1,'C','3',3),(184,1,'C','4',3),(185,1,'C','5',3),(186,1,'C','6',3),(187,1,'C','7',3),(188,1,'C','8',3),(189,1,'C','9',3),(190,1,'C','10',3),
+  (191,1,'D','1',3),(192,1,'D','2',3),(193,1,'D','3',3),(194,1,'D','4',3),(195,1,'D','5',3),(196,1,'D','6',3),(197,1,'D','7',3),(198,1,'D','8',3),(199,1,'D','9',3),(200,1,'D','10',3),
+  (201,1,'E','1',3),(202,1,'E','2',3),(203,1,'E','3',3),(204,1,'E','4',3),(205,1,'E','5',3),(206,1,'E','6',3),(207,1,'E','7',3),(208,1,'E','8',3),(209,1,'E','9',3),(210,1,'E','10',3),
+  (211,1,'F','1',3),(212,1,'F','2',3),(213,1,'F','3',3),(214,1,'F','4',3),(215,1,'F','5',3),(216,1,'F','6',3),(217,1,'F','7',3),(218,1,'F','8',3),(219,1,'F','9',3),(220,1,'F','10',3),
+  (221,1,'G','1',3),(222,1,'G','2',3),(223,1,'G','3',3),(224,1,'G','4',3),(225,1,'G','5',3),(226,1,'G','6',3),(227,1,'G','7',3),(228,1,'G','8',3),(229,1,'G','9',3),(230,1,'G','10',3),
+  (231,1,'H','1',3),(232,1,'H','2',3),(233,1,'H','3',3),(234,1,'H','4',3),(235,1,'H','5',3),(236,1,'H','6',3),(237,1,'H','7',3),(238,1,'H','8',3),(239,1,'H','9',3),(240,1,'H','10',3),
+  -- SALA 4 (id_asiento 241-320)
+  (241,1,'A','1',4),(242,1,'A','2',4),(243,1,'A','3',4),(244,1,'A','4',4),(245,1,'A','5',4),(246,1,'A','6',4),(247,1,'A','7',4),(248,1,'A','8',4),(249,1,'A','9',4),(250,1,'A','10',4),
+  (251,1,'B','1',4),(252,1,'B','2',4),(253,1,'B','3',4),(254,1,'B','4',4),(255,1,'B','5',4),(256,1,'B','6',4),(257,1,'B','7',4),(258,1,'B','8',4),(259,1,'B','9',4),(260,1,'B','10',4),
+  (261,1,'C','1',4),(262,1,'C','2',4),(263,1,'C','3',4),(264,1,'C','4',4),(265,1,'C','5',4),(266,1,'C','6',4),(267,1,'C','7',4),(268,1,'C','8',4),(269,1,'C','9',4),(270,1,'C','10',4),
+  (271,1,'D','1',4),(272,1,'D','2',4),(273,1,'D','3',4),(274,1,'D','4',4),(275,1,'D','5',4),(276,1,'D','6',4),(277,1,'D','7',4),(278,1,'D','8',4),(279,1,'D','9',4),(280,1,'D','10',4),
+  (281,1,'E','1',4),(282,1,'E','2',4),(283,1,'E','3',4),(284,1,'E','4',4),(285,1,'E','5',4),(286,1,'E','6',4),(287,1,'E','7',4),(288,1,'E','8',4),(289,1,'E','9',4),(290,1,'E','10',4),
+  (291,1,'F','1',4),(292,1,'F','2',4),(293,1,'F','3',4),(294,1,'F','4',4),(295,1,'F','5',4),(296,1,'F','6',4),(297,1,'F','7',4),(298,1,'F','8',4),(299,1,'F','9',4),(300,1,'F','10',4),
+  (301,1,'G','1',4),(302,1,'G','2',4),(303,1,'G','3',4),(304,1,'G','4',4),(305,1,'G','5',4),(306,1,'G','6',4),(307,1,'G','7',4),(308,1,'G','8',4),(309,1,'G','9',4),(310,1,'G','10',4),
+  (311,1,'H','1',4),(312,1,'H','2',4),(313,1,'H','3',4),(314,1,'H','4',4),(315,1,'H','5',4),(316,1,'H','6',4),(317,1,'H','7',4),(318,1,'H','8',4),(319,1,'H','9',4),(320,1,'H','10',4),
+  -- SALA 5 (id_asiento 321-400)
+  (321,1,'A','1',5),(322,1,'A','2',5),(323,1,'A','3',5),(324,1,'A','4',5),(325,1,'A','5',5),(326,1,'A','6',5),(327,1,'A','7',5),(328,1,'A','8',5),(329,1,'A','9',5),(330,1,'A','10',5),
+  (331,1,'B','1',5),(332,1,'B','2',5),(333,1,'B','3',5),(334,1,'B','4',5),(335,1,'B','5',5),(336,1,'B','6',5),(337,1,'B','7',5),(338,1,'B','8',5),(339,1,'B','9',5),(340,1,'B','10',5),
+  (341,1,'C','1',5),(342,1,'C','2',5),(343,1,'C','3',5),(344,1,'C','4',5),(345,1,'C','5',5),(346,1,'C','6',5),(347,1,'C','7',5),(348,1,'C','8',5),(349,1,'C','9',5),(350,1,'C','10',5),
+  (351,1,'D','1',5),(352,1,'D','2',5),(353,1,'D','3',5),(354,1,'D','4',5),(355,1,'D','5',5),(356,1,'D','6',5),(357,1,'D','7',5),(358,1,'D','8',5),(359,1,'D','9',5),(360,1,'D','10',5),
+  (361,1,'E','1',5),(362,1,'E','2',5),(363,1,'E','3',5),(364,1,'E','4',5),(365,1,'E','5',5),(366,1,'E','6',5),(367,1,'E','7',5),(368,1,'E','8',5),(369,1,'E','9',5),(370,1,'E','10',5),
+  (371,1,'F','1',5),(372,1,'F','2',5),(373,1,'F','3',5),(374,1,'F','4',5),(375,1,'F','5',5),(376,1,'F','6',5),(377,1,'F','7',5),(378,1,'F','8',5),(379,1,'F','9',5),(380,1,'F','10',5),
+  (381,1,'G','1',5),(382,1,'G','2',5),(383,1,'G','3',5),(384,1,'G','4',5),(385,1,'G','5',5),(386,1,'G','6',5),(387,1,'G','7',5),(388,1,'G','8',5),(389,1,'G','9',5),(390,1,'G','10',5),
+  (391,1,'H','1',5),(392,1,'H','2',5),(393,1,'H','3',5),(394,1,'H','4',5),(395,1,'H','5',5),(396,1,'H','6',5),(397,1,'H','7',5),(398,1,'H','8',5),(399,1,'H','9',5),(400,1,'H','10',5),
+  -- SALA 6 (id_asiento 401-480)
+  (401,1,'A','1',6),(402,1,'A','2',6),(403,1,'A','3',6),(404,1,'A','4',6),(405,1,'A','5',6),(406,1,'A','6',6),(407,1,'A','7',6),(408,1,'A','8',6),(409,1,'A','9',6),(410,1,'A','10',6),
+  (411,1,'B','1',6),(412,1,'B','2',6),(413,1,'B','3',6),(414,1,'B','4',6),(415,1,'B','5',6),(416,1,'B','6',6),(417,1,'B','7',6),(418,1,'B','8',6),(419,1,'B','9',6),(420,1,'B','10',6),
+  (421,1,'C','1',6),(422,1,'C','2',6),(423,1,'C','3',6),(424,1,'C','4',6),(425,1,'C','5',6),(426,1,'C','6',6),(427,1,'C','7',6),(428,1,'C','8',6),(429,1,'C','9',6),(430,1,'C','10',6),
+  (431,1,'D','1',6),(432,1,'D','2',6),(433,1,'D','3',6),(434,1,'D','4',6),(435,1,'D','5',6),(436,1,'D','6',6),(437,1,'D','7',6),(438,1,'D','8',6),(439,1,'D','9',6),(440,1,'D','10',6),
+  (441,1,'E','1',6),(442,1,'E','2',6),(443,1,'E','3',6),(444,1,'E','4',6),(445,1,'E','5',6),(446,1,'E','6',6),(447,1,'E','7',6),(448,1,'E','8',6),(449,1,'E','9',6),(450,1,'E','10',6),
+  (451,1,'F','1',6),(452,1,'F','2',6),(453,1,'F','3',6),(454,1,'F','4',6),(455,1,'F','5',6),(456,1,'F','6',6),(457,1,'F','7',6),(458,1,'F','8',6),(459,1,'F','9',6),(460,1,'F','10',6),
+  (461,1,'G','1',6),(462,1,'G','2',6),(463,1,'G','3',6),(464,1,'G','4',6),(465,1,'G','5',6),(466,1,'G','6',6),(467,1,'G','7',6),(468,1,'G','8',6),(469,1,'G','9',6),(470,1,'G','10',6),
+  (471,1,'H','1',6),(472,1,'H','2',6),(473,1,'H','3',6),(474,1,'H','4',6),(475,1,'H','5',6),(476,1,'H','6',6),(477,1,'H','7',6),(478,1,'H','8',6),(479,1,'H','9',6),(480,1,'H','10',6),
+  -- SALA 7 (id_asiento 481-560)
+  (481,1,'A','1',7),(482,1,'A','2',7),(483,1,'A','3',7),(484,1,'A','4',7),(485,1,'A','5',7),(486,1,'A','6',7),(487,1,'A','7',7),(488,1,'A','8',7),(489,1,'A','9',7),(490,1,'A','10',7),
+  (491,1,'B','1',7),(492,1,'B','2',7),(493,1,'B','3',7),(494,1,'B','4',7),(495,1,'B','5',7),(496,1,'B','6',7),(497,1,'B','7',7),(498,1,'B','8',7),(499,1,'B','9',7),(500,1,'B','10',7),
+  (501,1,'C','1',7),(502,1,'C','2',7),(503,1,'C','3',7),(504,1,'C','4',7),(505,1,'C','5',7),(506,1,'C','6',7),(507,1,'C','7',7),(508,1,'C','8',7),(509,1,'C','9',7),(510,1,'C','10',7),
+  (511,1,'D','1',7),(512,1,'D','2',7),(513,1,'D','3',7),(514,1,'D','4',7),(515,1,'D','5',7),(516,1,'D','6',7),(517,1,'D','7',7),(518,1,'D','8',7),(519,1,'D','9',7),(520,1,'D','10',7),
+  (521,1,'E','1',7),(522,1,'E','2',7),(523,1,'E','3',7),(524,1,'E','4',7),(525,1,'E','5',7),(526,1,'E','6',7),(527,1,'E','7',7),(528,1,'E','8',7),(529,1,'E','9',7),(530,1,'E','10',7),
+  (531,1,'F','1',7),(532,1,'F','2',7),(533,1,'F','3',7),(534,1,'F','4',7),(535,1,'F','5',7),(536,1,'F','6',7),(537,1,'F','7',7),(538,1,'F','8',7),(539,1,'F','9',7),(540,1,'F','10',7),
+  (541,1,'G','1',7),(542,1,'G','2',7),(543,1,'G','3',7),(544,1,'G','4',7),(545,1,'G','5',7),(546,1,'G','6',7),(547,1,'G','7',7),(548,1,'G','8',7),(549,1,'G','9',7),(550,1,'G','10',7),
+  (551,1,'H','1',7),(552,1,'H','2',7),(553,1,'H','3',7),(554,1,'H','4',7),(555,1,'H','5',7),(556,1,'H','6',7),(557,1,'H','7',7),(558,1,'H','8',7),(559,1,'H','9',7),(560,1,'H','10',7),
+  -- SALA 8 (id_asiento 561-640)
+  (561,1,'A','1',8),(562,1,'A','2',8),(563,1,'A','3',8),(564,1,'A','4',8),(565,1,'A','5',8),(566,1,'A','6',8),(567,1,'A','7',8),(568,1,'A','8',8),(569,1,'A','9',8),(570,1,'A','10',8),
+  (571,1,'B','1',8),(572,1,'B','2',8),(573,1,'B','3',8),(574,1,'B','4',8),(575,1,'B','5',8),(576,1,'B','6',8),(577,1,'B','7',8),(578,1,'B','8',8),(579,1,'B','9',8),(580,1,'B','10',8),
+  (581,1,'C','1',8),(582,1,'C','2',8),(583,1,'C','3',8),(584,1,'C','4',8),(585,1,'C','5',8),(586,1,'C','6',8),(587,1,'C','7',8),(588,1,'C','8',8),(589,1,'C','9',8),(590,1,'C','10',8),
+  (591,1,'D','1',8),(592,1,'D','2',8),(593,1,'D','3',8),(594,1,'D','4',8),(595,1,'D','5',8),(596,1,'D','6',8),(597,1,'D','7',8),(598,1,'D','8',8),(599,1,'D','9',8),(600,1,'D','10',8),
+  (601,1,'E','1',8),(602,1,'E','2',8),(603,1,'E','3',8),(604,1,'E','4',8),(605,1,'E','5',8),(606,1,'E','6',8),(607,1,'E','7',8),(608,1,'E','8',8),(609,1,'E','9',8),(610,1,'E','10',8),
+  (611,1,'F','1',8),(612,1,'F','2',8),(613,1,'F','3',8),(614,1,'F','4',8),(615,1,'F','5',8),(616,1,'F','6',8),(617,1,'F','7',8),(618,1,'F','8',8),(619,1,'F','9',8),(620,1,'F','10',8),
+  (621,1,'G','1',8),(622,1,'G','2',8),(623,1,'G','3',8),(624,1,'G','4',8),(625,1,'G','5',8),(626,1,'G','6',8),(627,1,'G','7',8),(628,1,'G','8',8),(629,1,'G','9',8),(630,1,'G','10',8),
+  (631,1,'H','1',8),(632,1,'H','2',8),(633,1,'H','3',8),(634,1,'H','4',8),(635,1,'H','5',8),(636,1,'H','6',8),(637,1,'H','7',8),(638,1,'H','8',8),(639,1,'H','9',8),(640,1,'H','10',8),
+  -- SALA 9 (id_asiento 641-720)
+  (641,1,'A','1',9),(642,1,'A','2',9),(643,1,'A','3',9),(644,1,'A','4',9),(645,1,'A','5',9),(646,1,'A','6',9),(647,1,'A','7',9),(648,1,'A','8',9),(649,1,'A','9',9),(650,1,'A','10',9),
+  (651,1,'B','1',9),(652,1,'B','2',9),(653,1,'B','3',9),(654,1,'B','4',9),(655,1,'B','5',9),(656,1,'B','6',9),(657,1,'B','7',9),(658,1,'B','8',9),(659,1,'B','9',9),(660,1,'B','10',9),
+  (661,1,'C','1',9),(662,1,'C','2',9),(663,1,'C','3',9),(664,1,'C','4',9),(665,1,'C','5',9),(666,1,'C','6',9),(667,1,'C','7',9),(668,1,'C','8',9),(669,1,'C','9',9),(670,1,'C','10',9),
+  (671,1,'D','1',9),(672,1,'D','2',9),(673,1,'D','3',9),(674,1,'D','4',9),(675,1,'D','5',9),(676,1,'D','6',9),(677,1,'D','7',9),(678,1,'D','8',9),(679,1,'D','9',9),(680,1,'D','10',9),
+  (681,1,'E','1',9),(682,1,'E','2',9),(683,1,'E','3',9),(684,1,'E','4',9),(685,1,'E','5',9),(686,1,'E','6',9),(687,1,'E','7',9),(688,1,'E','8',9),(689,1,'E','9',9),(690,1,'E','10',9),
+  (691,1,'F','1',9),(692,1,'F','2',9),(693,1,'F','3',9),(694,1,'F','4',9),(695,1,'F','5',9),(696,1,'F','6',9),(697,1,'F','7',9),(698,1,'F','8',9),(699,1,'F','9',9),(700,1,'F','10',9),
+  (701,1,'G','1',9),(702,1,'G','2',9),(703,1,'G','3',9),(704,1,'G','4',9),(705,1,'G','5',9),(706,1,'G','6',9),(707,1,'G','7',9),(708,1,'G','8',9),(709,1,'G','9',9),(710,1,'G','10',9),
+  (711,1,'H','1',9),(712,1,'H','2',9),(713,1,'H','3',9),(714,1,'H','4',9),(715,1,'H','5',9),(716,1,'H','6',9),(717,1,'H','7',9),(718,1,'H','8',9),(719,1,'H','9',9),(720,1,'H','10',9),
+  -- SALA 10 (id_asiento 721-800)
+  (721,1,'A','1',10),(722,1,'A','2',10),(723,1,'A','3',10),(724,1,'A','4',10),(725,1,'A','5',10),(726,1,'A','6',10),(727,1,'A','7',10),(728,1,'A','8',10),(729,1,'A','9',10),(730,1,'A','10',10),
+  (731,1,'B','1',10),(732,1,'B','2',10),(733,1,'B','3',10),(734,1,'B','4',10),(735,1,'B','5',10),(736,1,'B','6',10),(737,1,'B','7',10),(738,1,'B','8',10),(739,1,'B','9',10),(740,1,'B','10',10),
+  (741,1,'C','1',10),(742,1,'C','2',10),(743,1,'C','3',10),(744,1,'C','4',10),(745,1,'C','5',10),(746,1,'C','6',10),(747,1,'C','7',10),(748,1,'C','8',10),(749,1,'C','9',10),(750,1,'C','10',10),
+  (751,1,'D','1',10),(752,1,'D','2',10),(753,1,'D','3',10),(754,1,'D','4',10),(755,1,'D','5',10),(756,1,'D','6',10),(757,1,'D','7',10),(758,1,'D','8',10),(759,1,'D','9',10),(760,1,'D','10',10),
+  (761,1,'E','1',10),(762,1,'E','2',10),(763,1,'E','3',10),(764,1,'E','4',10),(765,1,'E','5',10),(766,1,'E','6',10),(767,1,'E','7',10),(768,1,'E','8',10),(769,1,'E','9',10),(770,1,'E','10',10),
+  (771,1,'F','1',10),(772,1,'F','2',10),(773,1,'F','3',10),(774,1,'F','4',10),(775,1,'F','5',10),(776,1,'F','6',10),(777,1,'F','7',10),(778,1,'F','8',10),(779,1,'F','9',10),(780,1,'F','10',10),
+  (781,1,'G','1',10),(782,1,'G','2',10),(783,1,'G','3',10),(784,1,'G','4',10),(785,1,'G','5',10),(786,1,'G','6',10),(787,1,'G','7',10),(788,1,'G','8',10),(789,1,'G','9',10),(790,1,'G','10',10),
+  (791,1,'H','1',10),(792,1,'H','2',10),(793,1,'H','3',10),(794,1,'H','4',10),(795,1,'H','5',10),(796,1,'H','6',10),(797,1,'H','7',10),(798,1,'H','8',10),(799,1,'H','9',10),(800,1,'H','10',10),
+  -- SALA 11 (id_asiento 801-880)
+  (801,1,'A','1',11),(802,1,'A','2',11),(803,1,'A','3',11),(804,1,'A','4',11),(805,1,'A','5',11),(806,1,'A','6',11),(807,1,'A','7',11),(808,1,'A','8',11),(809,1,'A','9',11),(810,1,'A','10',11),
+  (811,1,'B','1',11),(812,1,'B','2',11),(813,1,'B','3',11),(814,1,'B','4',11),(815,1,'B','5',11),(816,1,'B','6',11),(817,1,'B','7',11),(818,1,'B','8',11),(819,1,'B','9',11),(820,1,'B','10',11),
+  (821,1,'C','1',11),(822,1,'C','2',11),(823,1,'C','3',11),(824,1,'C','4',11),(825,1,'C','5',11),(826,1,'C','6',11),(827,1,'C','7',11),(828,1,'C','8',11),(829,1,'C','9',11),(830,1,'C','10',11),
+  (831,1,'D','1',11),(832,1,'D','2',11),(833,1,'D','3',11),(834,1,'D','4',11),(835,1,'D','5',11),(836,1,'D','6',11),(837,1,'D','7',11),(838,1,'D','8',11),(839,1,'D','9',11),(840,1,'D','10',11),
+  (841,1,'E','1',11),(842,1,'E','2',11),(843,1,'E','3',11),(844,1,'E','4',11),(845,1,'E','5',11),(846,1,'E','6',11),(847,1,'E','7',11),(848,1,'E','8',11),(849,1,'E','9',11),(850,1,'E','10',11),
+  (851,1,'F','1',11),(852,1,'F','2',11),(853,1,'F','3',11),(854,1,'F','4',11),(855,1,'F','5',11),(856,1,'F','6',11),(857,1,'F','7',11),(858,1,'F','8',11),(859,1,'F','9',11),(860,1,'F','10',11),
+  (861,1,'G','1',11),(862,1,'G','2',11),(863,1,'G','3',11),(864,1,'G','4',11),(865,1,'G','5',11),(866,1,'G','6',11),(867,1,'G','7',11),(868,1,'G','8',11),(869,1,'G','9',11),(870,1,'G','10',11),
+  (871,1,'H','1',11),(872,1,'H','2',11),(873,1,'H','3',11),(874,1,'H','4',11),(875,1,'H','5',11),(876,1,'H','6',11),(877,1,'H','7',11),(878,1,'H','8',11),(879,1,'H','9',11),(880,1,'H','10',11);
 
---
--- Poblando la tabla `pelicula`
---
-INSERT INTO `pelicula` (`id_pelicula`, `duracion`, `url_imagen`, `nombre`, `sinopsis`, `estado`) VALUES
-(1, 155, 'https://es.web.img3.acsta.net/pictures/24/02/20/17/42/2385575.jpg', 'Dune: Parte Dos', 'Paul Atreides se une a los Fremen y comienza un viaje espiritual y marcial para convertirse en Muad''dib.', 1),
-(2, 180, 'https://m.media-amazon.com/images/M/MV5BNTFlZDI1YWQtMTVjNy00YWU1LTg2YjktMTlhYmRiYzQ3NTVhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg', 'Oppenheimer', 'La historia del fisico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atomica.', 1),
-(3, 114, 'https://images.justwatch.com/poster/306421131/s718/barbie-2023.jpg', 'Barbie', 'Barbie sufre una crisis que la lleva a cuestionar su mundo y su existencia.', 1),
-(4, 140, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQttE0dKwLuMVnfkcEplhr6Hf-0lnBDsx6NSg&s', 'Spider-Man: A traves del Spider-Verso', 'Miles Morales es catapultado a traves del Multiverso, donde se encuentra con un equipo de Spider-People.', 1),
-(5, 150, 'https://lumiere-a.akamaihd.net/v1/images/lat_2ae5e247.jpeg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa mision para proteger a uno de los suyos.', 1),
-(6, 141, 'https://images.justwatch.com/poster/304471076/s718/john-wick-4.jpg', 'John Wick: Capitulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.', 1),
-(7, 124, 'https://m.media-amazon.com/images/M/MV5BZDkyMDBiN2EtYTM2Ni00ZjRjLWFmZWQtZDdkZDBhNTQzYTU4XkEyXkFqcGc@._V1_.jpg', 'Super Mario Bros. La Pelicula', 'Un fontanero llamado Mario viaja por un laberinto subterraneo con su hermano, Luigi, tratando de salvar a una princesa capturada.', 1),
-(8, 169, 'https://lumiere-a.akamaihd.net/v1/images/b162385cffbbe656f1e654b80098ac57_3276x4096_380354b0.jpeg?region=0,0,3276,4096', 'Avatar: El Camino del Agua', 'Jake Sully y Ney''tiri han formado una familia y hacen todo lo posible por permanecer juntos. Sin embargo, deben abandonar su hogar y explorar las regiones de Pandora.', 1),
-(9, 102, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK_1c9FZFFRQoSq61ZjCqg15wFmNgX99rSFA&s', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en comun.', 1),
-(10, 146, 'https://pics.filmaffinity.com/Flash-570628784-large.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superheroes.', 0);
+  --
+  -- Poblando la tabla `pelicula`
+  --
+  INSERT INTO `pelicula` (`id_pelicula`, `duracion`, `url_imagen`, `nombre`, `sinopsis`, `estado`) VALUES
+  (1, 155, 'https://es.web.img3.acsta.net/pictures/24/02/20/17/42/2385575.jpg', 'Dune: Parte Dos', 'Paul Atreides se une a los Fremen y comienza un viaje espiritual y marcial para convertirse en Muad''dib.', 1),
+  (2, 180, 'https://m.media-amazon.com/images/M/MV5BNTFlZDI1YWQtMTVjNy00YWU1LTg2YjktMTlhYmRiYzQ3NTVhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg', 'Oppenheimer', 'La historia del fisico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atomica.', 1),
+  (3, 114, 'https://images.justwatch.com/poster/306421131/s718/barbie-2023.jpg', 'Barbie', 'Barbie sufre una crisis que la lleva a cuestionar su mundo y su existencia.', 1),
+  (4, 140, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQttE0dKwLuMVnfkcEplhr6Hf-0lnBDsx6NSg&s', 'Spider-Man: A traves del Spider-Verso', 'Miles Morales es catapultado a traves del Multiverso, donde se encuentra con un equipo de Spider-People.', 1),
+  (5, 150, 'https://lumiere-a.akamaihd.net/v1/images/lat_2ae5e247.jpeg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa mision para proteger a uno de los suyos.', 1),
+  (6, 141, 'https://images.justwatch.com/poster/304471076/s718/john-wick-4.jpg', 'John Wick: Capitulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.', 1),
+  (7, 124, 'https://m.media-amazon.com/images/M/MV5BZDkyMDBiN2EtYTM2Ni00ZjRjLWFmZWQtZDdkZDBhNTQzYTU4XkEyXkFqcGc@._V1_.jpg', 'Super Mario Bros. La Pelicula', 'Un fontanero llamado Mario viaja por un laberinto subterraneo con su hermano, Luigi, tratando de salvar a una princesa capturada.', 1),
+  (8, 169, 'https://lumiere-a.akamaihd.net/v1/images/b162385cffbbe656f1e654b80098ac57_3276x4096_380354b0.jpeg?region=0,0,3276,4096', 'Avatar: El Camino del Agua', 'Jake Sully y Ney''tiri han formado una familia y hacen todo lo posible por permanecer juntos. Sin embargo, deben abandonar su hogar y explorar las regiones de Pandora.', 1),
+  (9, 102, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK_1c9FZFFRQoSq61ZjCqg15wFmNgX99rSFA&s', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en comun.', 1),
+  (10, 146, 'https://m.media-amazon.com/images/I/81I79Fh-q6L._AC_UF894,1000_QL80_.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superheroes.', 0);
 
---
--- Poblando la tabla `idioma`
---
-INSERT INTO `idioma` (`id_idioma`, `idioma`, `estado`) VALUES
-(1, 'Espanol (Doblada)', 1),
-(2, 'Ingles (Subtitulada)', 1),
-(3, 'Espanol (Subtitulada)', 1),
-(4, 'Japones (Subtitulada)', 1),
-(5, 'Portugues (Subtitulada)', 1),
-(6, 'Frances (Subtitulada)', 1),
-(7, 'Coreano (Subtitulada)', 1),
-(8, 'Italiano (Subtitulada)', 1),
-(9, 'Aleman (Subtitulada)', 1),
-(10, 'Chino (Subtitulada)', 1);
+  --
+  -- Poblando la tabla `idioma`
+  --
+  INSERT INTO `idioma` (`id_idioma`, `idioma`, `estado`) VALUES
+  (1, 'Espanol (Doblada)', 1),
+  (2, 'Ingles (Subtitulada)', 1),
+  (3, 'Espanol (Subtitulada)', 1),
+  (4, 'Japones (Subtitulada)', 1),
+  (5, 'Portugues (Subtitulada)', 1),
+  (6, 'Frances (Subtitulada)', 1),
+  (7, 'Coreano (Subtitulada)', 1),
+  (8, 'Italiano (Subtitulada)', 1),
+  (9, 'Aleman (Subtitulada)', 1),
+  (10, 'Chino (Subtitulada)', 1);
 
---
--- Poblando la tabla `formato`
---
-INSERT INTO `formato` (`id_formato`, `nombre`, `estado`) VALUES
-(1, '2D', 1),
-(2, '3D', 1),
-(3, 'IMAX', 1),
-(4, '4DX', 1),
-(5, 'XD', 1),
-(6, 'D-BOX', 1),
-(7, 'VIP', 1),
-(8, 'Regular', 1),
-(9, 'Premium', 1),
-(10, 'Gold', 1);
+  --
+  -- Poblando la tabla `formato`
+  --
+  INSERT INTO `formato` (`id_formato`, `nombre`, `estado`) VALUES
+  (1, '2D', 1),
+  (2, '3D', 1),
+  (3, 'IMAX', 1),
+  (4, '4DX', 1),
+  (5, 'XD', 1),
+  (6, 'D-BOX', 1),
+  (7, 'VIP', 1),
+  (8, 'Regular', 1),
+  (9, 'Premium', 1),
+  (10, 'Gold', 1);
 
---
--- Poblando la tabla `funcion`
---
-INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`, `estado`) VALUES
-(1, '2025-12-15', '18:00:00', 1, 1, 1),
-(2, '2025-12-15', '21:00:00', 1, 1, 1),
-(3, '2025-12-15', '19:00:00', 2, 2, 1),
-(4, '2025-12-16', '20:00:00', 3, 3, 1),
-(5, '2025-12-16', '22:00:00', 4, 4, 1),
-(6, '2025-12-17', '17:00:00', 5, 5, 1),
-(7, '2025-12-17', '19:30:00', 6, 6, 1),
-(8, '2025-12-18', '16:00:00', 7, 7, 1),
-(9, '2025-12-18', '18:30:00', 8, 8, 1),
-(10, '2025-12-19', '20:30:00', 9, 9, 1),
-(11, '2025-12-20', '14:00:00', 1, 3, 1),
-(12, '2025-12-20', '16:30:00', 2, 4, 1),
-(13, '2025-12-21', '19:00:00', 3, 5, 1),
-(14, '2025-12-21', '21:30:00', 4, 6, 1),
-(15, '2025-12-22', '15:00:00', 5, 7, 1),
-(16, '2025-12-22', '18:00:00', 6, 8, 1),
-(17, '2025-12-23', '20:00:00', 7, 9, 1),
-(18, '2025-12-23', '22:30:00', 8, 10, 1),
-(19, '2025-12-24', '17:00:00', 9, 1, 1),
-(20, '2025-12-24', '20:00:00', 1, 2, 1),
-(21, '2025-12-25', '16:00:00', 2, 3, 1),
-(22, '2025-12-25', '19:00:00', 3, 4, 1),
-(23, '2025-12-26', '18:30:00', 4, 5, 1),
-(24, '2025-12-26', '21:00:00', 5, 6, 1),
-(25, '2025-12-27', '15:30:00', 6, 7, 1),
-(26, '2025-12-27', '18:00:00', 7, 8, 1),
-(27, '2025-12-28', '20:30:00', 8, 9, 1),
-(28, '2025-12-28', '22:00:00', 9, 10, 1),
-(29, '2025-12-29', '14:00:00', 1, 1, 1),
-(30, '2025-12-29', '17:00:00', 2, 2, 1),
-(31, '2025-12-30', '19:30:00', 3, 3, 1),
-(32, '2025-12-30', '21:30:00', 4, 4, 1),
-(33, '2025-12-31', '16:00:00', 5, 5, 1),
-(34, '2025-12-31', '20:00:00', 6, 6, 1),
-(35, '2026-01-01', '15:00:00', 7, 7, 1),
-(36, '2026-01-01', '18:00:00', 8, 8, 1),
-(37, '2026-01-02', '17:00:00', 9, 9, 1),
-(38, '2026-01-02', '20:30:00', 1, 10, 1),
-(39, '2026-01-03', '16:30:00', 2, 1, 1),
-(40, '2026-01-03', '19:00:00', 3, 2, 1);
+  --
+  -- Poblando la tabla `funcion`
+  --
+  INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`, `estado`) VALUES
+  (1, '2025-12-15', '18:00:00', 1, 1, 1),
+  (2, '2025-12-15', '21:00:00', 1, 1, 1),
+  (3, '2025-12-15', '19:00:00', 2, 2, 1),
+  (4, '2025-12-16', '20:00:00', 3, 3, 1),
+  (5, '2025-12-16', '22:00:00', 4, 4, 1),
+  (6, '2025-12-17', '17:00:00', 5, 5, 1),
+  (7, '2025-12-17', '19:30:00', 6, 6, 1),
+  (8, '2025-12-18', '16:00:00', 7, 7, 1),
+  (9, '2025-12-18', '18:30:00', 8, 8, 1),
+  (10, '2025-12-19', '20:30:00', 9, 9, 1),
+  (11, '2025-12-20', '14:00:00', 1, 3, 1),
+  (12, '2025-12-20', '16:30:00', 2, 4, 1),
+  (13, '2025-12-21', '19:00:00', 3, 5, 1),
+  (14, '2025-12-21', '21:30:00', 4, 6, 1),
+  (15, '2025-12-22', '15:00:00', 5, 7, 1),
+  (16, '2025-12-22', '18:00:00', 6, 8, 1),
+  (17, '2025-12-23', '20:00:00', 7, 9, 1),
+  (18, '2025-12-23', '22:30:00', 8, 10, 1),
+  (19, '2025-12-24', '17:00:00', 9, 1, 1),
+  (20, '2025-12-24', '20:00:00', 1, 2, 1),
+  (21, '2025-12-25', '16:00:00', 2, 3, 1),
+  (22, '2025-12-25', '19:00:00', 3, 4, 1),
+  (23, '2025-12-26', '18:30:00', 4, 5, 1),
+  (24, '2025-12-26', '21:00:00', 5, 6, 1),
+  (25, '2025-12-27', '15:30:00', 6, 7, 1),
+  (26, '2025-12-27', '18:00:00', 7, 8, 1),
+  (27, '2025-12-28', '20:30:00', 8, 9, 1),
+  (28, '2025-12-28', '22:00:00', 9, 10, 1),
+  (29, '2025-12-29', '14:00:00', 1, 1, 1),
+  (30, '2025-12-29', '17:00:00', 2, 2, 1),
+  (31, '2025-12-30', '19:30:00', 3, 3, 1),
+  (32, '2025-12-30', '21:30:00', 4, 4, 1),
+  (33, '2025-12-31', '16:00:00', 5, 5, 1),
+  (34, '2025-12-31', '20:00:00', 6, 6, 1),
+  (35, '2026-01-01', '15:00:00', 7, 7, 1),
+  (36, '2026-01-01', '18:00:00', 8, 8, 1),
+  (37, '2026-01-02', '17:00:00', 9, 9, 1),
+  (38, '2026-01-02', '20:30:00', 1, 10, 1),
+  (39, '2026-01-03', '16:30:00', 2, 1, 1),
+  (40, '2026-01-03', '19:00:00', 3, 2, 1);
 
---
--- Poblando la tabla `trabajador`
---
-INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`, `fecha_ingreso`) VALUES
-(1, 'Gerente', 1, '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1, '2020-01-15'),
-(2, 'Boleteria', 1, '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1, '2021-03-20'),
-(3, 'Dulceria', 1, '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2, '2022-05-10'),
-(4, 'Limpieza', 1, '74567890', '987654324', 'ana.lopez@cineplanet.com', 'Ana', 'Lopez', 3, '2019-11-05'),
-(5, 'Proyeccionista', 1, '75678901', '987654325', 'luis.martinez@cineplanet.com', 'Luis', 'Martinez', 4, '2023-02-28'),
-(6, 'Boleteria', 1, '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5, '2021-07-15'),
-(7, 'Gerente', 1, '77890123', '987654327', 'pedro.sanchez@cineplanet.com', 'Pedro', 'Sanchez', 6, '2018-09-01'),
-(8, 'Dulceria', 0, '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7, '2022-12-10'),
-(9, 'Boleteria', 1, '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8, '2023-06-20'),
-(10, 'Dulceria', 1, '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9, '2021-10-30');
+  --
+  -- Poblando la tabla `trabajador`
+  --
+  INSERT INTO `trabajador` (`id_trabajador`, `tipo`, `estado`, `dni`, `numero`, `correo`, `nombre`, `apellido`, `id_sede`, `fecha_ingreso`) VALUES
+  (1, 'Gerente', 1, '71234567', '987654321', 'juan.perez@cineplanet.com', 'Juan', 'Perez', 1, '2020-01-15'),
+  (2, 'Boleteria', 1, '72345678', '987654322', 'maria.gomez@cineplanet.com', 'Maria', 'Gomez', 1, '2021-03-20'),
+  (3, 'Dulceria', 1, '73456789', '987654323', 'carlos.rodriguez@cineplanet.com', 'Carlos', 'Rodriguez', 2, '2022-05-10'),
+  (4, 'Limpieza', 1, '74567890', '987654324', 'ana.lopez@cineplanet.com', 'Ana', 'Lopez', 3, '2019-11-05'),
+  (5, 'Proyeccionista', 1, '75678901', '987654325', 'luis.martinez@cineplanet.com', 'Luis', 'Martinez', 4, '2023-02-28'),
+  (6, 'Boleteria', 1, '76789012', '987654326', 'elena.fernandez@cineplanet.com', 'Elena', 'Fernandez', 5, '2021-07-15'),
+  (7, 'Gerente', 1, '77890123', '987654327', 'pedro.sanchez@cineplanet.com', 'Pedro', 'Sanchez', 6, '2018-09-01'),
+  (8, 'Dulceria', 0, '78901234', '987654328', 'sofia.diaz@cineplanet.com', 'Sofia', 'Diaz', 7, '2022-12-10'),
+  (9, 'Boleteria', 1, '79012345', '987654329', 'javier.morales@cineplanet.com', 'Javier', 'Morales', 8, '2023-06-20'),
+  (10, 'Dulceria', 1, '70123456', '987654320', 'laura.castillo@cineplanet.com', 'Laura', 'Castillo', 9, '2021-10-30');
 
---
--- Poblando la tabla `producto`
---
-INSERT INTO `producto` (`id_producto`, `nombre`, `precio_unitario`, `estado`) VALUES
-(1, 'Canchita Gigante Salada', 25.50, 1),
-(2, 'Canchita Grande Salada', 20.00, 1),
-(3, 'Canchita Mediana Salada', 15.00, 1),
-(4, 'Gaseosa Grande', 12.00, 1),
-(5, 'Gaseosa Mediana', 10.00, 1),
-(6, 'Hot-Dog Clasico', 8.50, 1),
-(7, 'Nachos con Queso', 18.00, 1),
-(8, 'Agua Mineral', 6.00, 1),
-(9, 'Chocolate Sublime', 5.00, 1),
-(10, 'Tequenos', 14.00, 0);
+  --
+  -- Poblando la tabla `producto`
+  --
+  INSERT INTO `producto` (`id_producto`, `nombre`, `precio_unitario`, `estado`) VALUES
+  (1, 'Canchita Gigante Salada', 25.50, 1),
+  (2, 'Canchita Grande Salada', 20.00, 1),
+  (3, 'Canchita Mediana Salada', 15.00, 1),
+  (4, 'Gaseosa Grande', 12.00, 1),
+  (5, 'Gaseosa Mediana', 10.00, 1),
+  (6, 'Hot-Dog Clasico', 8.50, 1),
+  (7, 'Nachos con Queso', 18.00, 1),
+  (8, 'Agua Mineral', 6.00, 1),
+  (9, 'Chocolate Sublime', 5.00, 1),
+  (10, 'Tequenos', 14.00, 0);
 
---
--- Poblando la tabla `producto_sede`
---
-INSERT INTO `producto_sede` (`id_producto_sede`, `stock`, `id_producto`, `id_sede`) VALUES
-(1, 100, 1, 1),
-(2, 150, 2, 1),
-(3, 200, 4, 1),
-(4, 80, 7, 1),
-(5, 100, 1, 2),
-(6, 150, 2, 2),
-(7, 200, 4, 2),
-(8, 90, 6, 3),
-(9, 120, 8, 4),
-(10, 300, 9, 5);
+  --
+  -- Poblando la tabla `producto_sede`
+  --
+  INSERT INTO `producto_sede` (`id_producto_sede`, `stock`, `id_producto`, `id_sede`) VALUES
+  (1, 100, 1, 1),
+  (2, 150, 2, 1),
+  (3, 200, 4, 1),
+  (4, 80, 7, 1),
+  (5, 100, 1, 2),
+  (6, 150, 2, 2),
+  (7, 200, 4, 2),
+  (8, 90, 6, 3),
+  (9, 120, 8, 4),
+  (10, 300, 9, 5);
 
---
--- Poblando la tabla `combos`
---
-INSERT INTO `combos` (`id_combo`, `precio`, `nombre`, `estado`) VALUES
-(1, 35.00, 'Combo Clasico', 1),
-(2, 55.00, 'Combo Pareja', 1),
-(3, 28.00, 'Combo Nachos', 1),
-(4, 25.00, 'Combo Hot-Dog', 1),
-(5, 75.00, 'Combo Familiar', 1),
-(6, 30.00, 'Combo Mediano', 1),
-(7, 22.00, 'Combo Kids', 1),
-(8, 40.00, 'Combo Gigante', 1),
-(9, 60.00, 'Combo Amigos', 1),
-(10, 32.00, 'Combo Tequenos', 0);
+  --
+  -- Poblando la tabla `combos`
+  --
+  INSERT INTO `combos` (`id_combo`, `precio`, `nombre`, `estado`) VALUES
+  (1, 35.00, 'Combo Clasico', 1),
+  (2, 55.00, 'Combo Pareja', 1),
+  (3, 28.00, 'Combo Nachos', 1),
+  (4, 25.00, 'Combo Hot-Dog', 1),
+  (5, 75.00, 'Combo Familiar', 1),
+  (6, 30.00, 'Combo Mediano', 1),
+  (7, 22.00, 'Combo Kids', 1),
+  (8, 40.00, 'Combo Gigante', 1),
+  (9, 60.00, 'Combo Amigos', 1),
+  (10, 32.00, 'Combo Tequenos', 0);
 
---
--- Poblando la tabla `usuario`
---
-INSERT INTO `usuario` (`id_usuario`, `correo`, `estado`) VALUES
-(1, 'cliente1@example.com', 1),
-(2, 'cliente2@example.com', 1),
-(3, 'cliente3@example.com', 1),
-(4, 'cliente4@example.com', 1),
-(5, 'cliente5@example.com', 1),
-(6, 'cliente6@example.com', 1),
-(7, 'cliente7@example.com', 1),
-(8, 'cliente8@example.com', 1),
-(9, 'cliente9@example.com', 1),
-(10, 'cliente10@example.com', 1),
-(11, 'cliente10@example.com', 1),
-(12, 'cliente10@example.com', 1),
-(13, 'cliente10@example.com', 1),
-(14, 'cliente10@example.com', 1),
-(15, 'cliente10@example.com', 1),
-(16, 'cliente10@example.com', 1),
-(17, 'cliente10@example.com', 1),
-(18, 'cliente10@example.com', 1),
-(19, 'cliente10@example.com', 1),
-(20, 'cliente10@example.com', 1);
+  --
+  -- Poblando la tabla `usuario`
+  --
+  INSERT INTO `usuario` (`id_usuario`, `correo`, `estado`) VALUES
+  (1, 'cliente1@example.com', 1),
+  (2, 'cliente2@example.com', 1),
+  (3, 'cliente3@example.com', 1),
+  (4, 'cliente4@example.com', 1),
+  (5, 'cliente5@example.com', 1),
+  (6, 'cliente6@example.com', 1),
+  (7, 'cliente7@example.com', 1),
+  (8, 'cliente8@example.com', 1),
+  (9, 'cliente9@example.com', 1),
+  (10, 'cliente10@example.com', 1),
+  (11, 'cliente10@example.com', 1),
+  (12, 'cliente10@example.com', 1),
+  (13, 'cliente10@example.com', 1),
+  (14, 'cliente10@example.com', 1),
+  (15, 'cliente10@example.com', 1),
+  (16, 'cliente10@example.com', 1),
+  (17, 'cliente10@example.com', 1),
+  (18, 'cliente10@example.com', 1),
+  (19, 'cliente10@example.com', 1),
+  (20, 'cliente10@example.com', 1);
 
---
--- Poblando la tabla `tipo_socio` (3 tipos tradicionales)
---
-INSERT INTO `tipo_socio` (`id_socio`, `nombre`, `desc_dulces`, `desc_boleto`, `estado`) VALUES
-(1, 'Socio Clasico', 10.00, 15.00, 1),
-(2, 'Socio Oro', 15.00, 25.00, 1),
-(3, 'Socio Premium', 20.00, 35.00, 1);
-
-
-INSERT INTO `socio` (`id_usuario`, `nombre`, `apellido`, `genero`, `fecha_nacimiento`, `documento`, `id_tipo_socio`, `contrasena`) VALUES
-(11, 'Miguel', 'Grau', 'Masculino', '1990-07-27 10:00:00', '12345678', 1, '123'),
-(12, 'Francisco', 'Bolognesi', 'Masculino', '1985-11-04 15:30:00', '23456789', 2, '123'),
-(13, 'Andres', 'Caceres', 'Masculino', '2000-02-10 08:45:00', '34567890', 3, '123'),
-(14, 'Tupac', 'Amaru', 'Masculino', '1995-05-19 12:00:00', '45678901', 1, '123'),
-(15, 'Micaela', 'Bastidas', 'Femenino', '1998-09-23 18:20:00', '56789012', 2, '123'),
-(16, 'Jose', 'Olaya', 'Masculino', '1988-01-15 09:00:00', '67890123', 1, '123'),
-(17, 'Jorge', 'Basadre', 'Masculino', '1992-03-12 20:00:00', '78901234', 3, '123'),
-(18, 'Ricardo', 'Palma', 'Masculino', '1999-08-07 14:10:00', '89012345', 2, '123'),
-(19, 'Cesar', 'Vallejo', 'Masculino', '2001-04-16 11:35:00', '90123456', 1, '123'),
-(20, 'Mario', 'Vargas', 'Masculino', '1986-12-28 22:05:00', '01234567', 3, '123');
---
--- Poblando la tabla `invitado`
---
-INSERT INTO `invitado` (`id_usuario`, `nombre`) VALUES
-(1, 'Miguel Grau'),
-(2, 'Francisco Bolognesi'),
-(3, 'Andres Avelino Caceres'),
-(4, 'Tupac Amaru II'),
-(5, 'Micaela Bastidas'),
-(6, 'Jose Olaya'),
-(7, 'Jorge Basadre'),
-(8, 'Ricardo Palma'),
-(9, 'Cesar Vallejo'),
-(10, 'Mario Vargas Llosa');
-
-
-
---
--- Poblando la tabla `compra`
---
-INSERT INTO `compra` (`id_compra`, `fecha`, `id_usuario`, `id_metodo`) VALUES
-(1, '2025-10-16', 1, 1),
-(2, '2025-10-16', 2, 2),
-(3, '2025-10-16', 3, 3),
-(4, '2025-10-15', 4, 1),
-(5, '2025-10-15', 5, 4),
-(6, '2025-10-14', 6, 3),
-(7, '2025-10-14', 7, 2),
-(8, '2025-10-13', 8, 1),
-(9, '2025-10-13', 9, 5),
-(10, '2025-10-13', 10, 3);
-
-
-
--- Poblando la tabla `compra_boleto`
---
-INSERT INTO `compra_boleto` (`id_compra_boleto`, `precio_total_boleto`, `id_compra`, `id_funcion`, `id_sala`, `id_sede`) VALUES
-(1, 30.00, 1, 1, 1, 1),
-(2, 30.00, 1, 1, 1, 1),
-(3, 15.00, 2, 2, 1, 1),
-(4, 25.00, 3, 3, 2, 1),
-(5, 25.00, 3, 3, 2, 1),
-(6, 20.00, 4, 4, 1, 1),
-(7, 20.00, 5, 5, 1, 1),
-(8, 22.00, 6, 6, 2, 1),
-(9, 18.00, 7, 7, 2, 1),
-(10, 40.00, 8, 8, 2, 1);
-
---
-
---
--- Poblando la tabla `descripcion_asiento`
---
-INSERT INTO `descripcion_asiento` (`id_descripcion`, `id_asiento`, `id_compra_boleto`) VALUES
-(1, 1, 1),
-(2, 2, 2),
-(3, 3, 3),
-(4, 6, 4),
-(5, 7, 5),
-(6, 11, 6),
-(7, 12, 7),
-(8, 15, 8),
-(9, 16, 9),
-(10, 20, 10);
-
-
--- Poblando la tabla `compra_productos`
---
--- Poblando la tabla `compra_productos` (CORREGIDO - solo campos existentes)
-INSERT INTO `compra_productos` (`id_precio_productos`, `precio_compra`, `id_compra`) VALUES
-(1, 35.00, 1),
-(2, 55.00, 2),
-(3, 18.00, 3),
-(4, 12.00, 4),
-(5, 25.50, 5),
-(6, 25.00, 6),
-(7, 14.00, 7),
-(8, 75.00, 8),
-(9, 30.00, 9),
-(10, 6.00, 10);
+  --
+  -- Poblando la tabla `tipo_socio` (3 tipos tradicionales)
+  --
+  INSERT INTO `tipo_socio` (`id_socio`, `nombre`, `desc_dulces`, `desc_boleto`, `estado`) VALUES
+  (1, 'Socio Clasico', 10.00, 15.00, 1),
+  (2, 'Socio Oro', 15.00, 25.00, 1),
+  (3, 'Socio Premium', 20.00, 35.00, 1);
 
 
---
--- Poblando la tabla `compra_cliente`
---
-INSERT INTO `compra_cliente` (`id_descripcion_de_compra`, `tipo`, `id_combo`, `id_producto_sede`, `id_compra_productos`) VALUES
-(1, 'Combo', 1, 1, 1),
-(2, 'Combo', 2, 2, 2),
-(3, 'Combo', 3, 3, 3),
-(4, 'Combo', 4, 4, 4),
-(5, 'Individual', NULL, 5, 5),
-(6, 'Individual', NULL, 6, 6),
-(7, 'Individual', NULL, 7, 7),
-(8, 'Combo', 5, 8, 8),
-(9, 'Combo', 6, 9, 9),
-(10, 'Individual', NULL, 10, 10);
+  INSERT INTO `socio` (`id_usuario`, `nombre`, `apellido`, `genero`, `fecha_nacimiento`, `documento`, `id_tipo_socio`, `contrasena`) VALUES
+  (11, 'Miguel', 'Grau', 'Masculino', '1990-07-27 10:00:00', '12345678', 1, '123'),
+  (12, 'Francisco', 'Bolognesi', 'Masculino', '1985-11-04 15:30:00', '23456789', 2, '123'),
+  (13, 'Andres', 'Caceres', 'Masculino', '2000-02-10 08:45:00', '34567890', 3, '123'),
+  (14, 'Tupac', 'Amaru', 'Masculino', '1995-05-19 12:00:00', '45678901', 1, '123'),
+  (15, 'Micaela', 'Bastidas', 'Femenino', '1998-09-23 18:20:00', '56789012', 2, '123'),
+  (16, 'Jose', 'Olaya', 'Masculino', '1988-01-15 09:00:00', '67890123', 1, '123'),
+  (17, 'Jorge', 'Basadre', 'Masculino', '1992-03-12 20:00:00', '78901234', 3, '123'),
+  (18, 'Ricardo', 'Palma', 'Masculino', '1999-08-07 14:10:00', '89012345', 2, '123'),
+  (19, 'Cesar', 'Vallejo', 'Masculino', '2001-04-16 11:35:00', '90123456', 1, '123'),
+  (20, 'Mario', 'Vargas', 'Masculino', '1986-12-28 22:05:00', '01234567', 3, '123');
+  --
+  -- Poblando la tabla `invitado`
+  --
+  INSERT INTO `invitado` (`id_usuario`, `nombre`) VALUES
+  (1, 'Miguel Grau'),
+  (2, 'Francisco Bolognesi'),
+  (3, 'Andres Avelino Caceres'),
+  (4, 'Tupac Amaru II'),
+  (5, 'Micaela Bastidas'),
+  (6, 'Jose Olaya'),
+  (7, 'Jorge Basadre'),
+  (8, 'Ricardo Palma'),
+  (9, 'Cesar Vallejo'),
+  (10, 'Mario Vargas Llosa');
 
---
--- Poblando la tabla `idiomas_pelicula`
---
-INSERT INTO `idiomas_pelicula` (`id_idiomas_pelicula`, `id_pelicula`, `id_idioma`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 2, 1),
-(4, 2, 2),
-(5, 3, 1),
-(6, 4, 1),
-(7, 4, 2),
-(8, 5, 1),
-(9, 6, 2),
-(10, 7, 1);
 
---
--- Poblando la tabla `formato_pelicula`
---
-INSERT INTO `formato_pelicula` (`id_formato_pelicula`, `id_pelicula`, `id_formato`) VALUES
-(1, 1, 1),
-(2, 1, 3),
-(3, 2, 1),
-(4, 2, 5),
-(5, 3, 1),
-(6, 4, 1),
-(7, 4, 2),
-(8, 5, 1),
-(9, 7, 4),
-(10, 8, 3);
 
---
--- Poblando la tabla `producto_combo`
---
-INSERT INTO `producto_combo` (`id_productos_combos`, `id_combo`, `id_producto_sede`) VALUES
-(1, 1, 2), -- Combo Clasico: Canchita Grande
-(2, 1, 5), -- Combo Clasico: Gaseosa Mediana
-(3, 2, 1), -- Combo Pareja: Canchita Gigante
-(4, 2, 4), -- Combo Pareja: Gaseosa Grande
-(5, 2, 4), -- Combo Pareja: Gaseosa Grande
-(6, 3, 7), -- Combo Nachos: Nachos
-(7, 3, 5), -- Combo Nachos: Gaseosa Mediana
-(8, 4, 6), -- Combo Hot-Dog: Hot-Dog
-(9, 4, 5), -- Combo Hot-Dog: Gaseosa Mediana
-(10, 10, 10), -- Combo Tequenos: Tequenos
-(11, 10, 5); -- Combo Tequenos: Gaseosa Mediana
+  --
+  -- Poblando la tabla `compra` (50 compras)
+  --
+  INSERT INTO `compra` (`id_compra`, `fecha`, `id_usuario`, `id_metodo`) VALUES
+  (1, '2025-10-16', 1, 1),
+  (2, '2025-10-16', 2, 2),
+  (3, '2025-10-16', 3, 3),
+  (4, '2025-10-15', 4, 1),
+  (5, '2025-10-15', 5, 4),
+  (6, '2025-10-14', 6, 3),
+  (7, '2025-10-14', 7, 2),
+  (8, '2025-10-13', 8, 1),
+  (9, '2025-10-13', 9, 5),
+  (10, '2025-10-13', 10, 3),
+  (11, '2025-11-01', 11, 1),
+  (12, '2025-11-01', 12, 2),
+  (13, '2025-11-02', 13, 4),
+  (14, '2025-11-02', 14, 1),
+  (15, '2025-11-03', 15, 3),
+  (16, '2025-11-03', 16, 5),
+  (17, '2025-11-04', 17, 2),
+  (18, '2025-11-04', 18, 1),
+  (19, '2025-11-05', 19, 4),
+  (20, '2025-11-05', 20, 3),
+  (21, '2025-11-10', 1, 2),
+  (22, '2025-11-10', 2, 1),
+  (23, '2025-11-11', 3, 4),
+  (24, '2025-11-11', 4, 5),
+  (25, '2025-11-12', 5, 1),
+  (26, '2025-11-12', 6, 2),
+  (27, '2025-11-13', 7, 3),
+  (28, '2025-11-13', 8, 4),
+  (29, '2025-11-14', 9, 1),
+  (30, '2025-11-14', 10, 2),
+  (31, '2025-12-01', 11, 1),
+  (32, '2025-12-01', 12, 4),
+  (33, '2025-12-02', 13, 2),
+  (34, '2025-12-02', 14, 3),
+  (35, '2025-12-03', 15, 1),
+  (36, '2025-12-03', 16, 5),
+  (37, '2025-12-04', 17, 2),
+  (38, '2025-12-04', 18, 4),
+  (39, '2025-12-05', 19, 1),
+  (40, '2025-12-05', 20, 3),
+  (41, '2025-12-06', 1, 4),
+  (42, '2025-12-06', 2, 1),
+  (43, '2025-12-07', 3, 2),
+  (44, '2025-12-07', 4, 5),
+  (45, '2025-12-08', 5, 1),
+  (46, '2025-12-08', 6, 4),
+  (47, '2025-12-09', 7, 2),
+  (48, '2025-12-09', 8, 3),
+  (49, '2025-12-09', 9, 1),
+  (50, '2025-12-09', 10, 4);
+
+  -- Poblando la tabla `compra_boleto` (100 boletos para varias funciones y salas)
+  --
+  INSERT INTO `compra_boleto` (`id_compra_boleto`, `precio_total_boleto`, `id_compra`, `id_funcion`, `id_sala`, `id_sede`) VALUES
+  -- Compras originales (1-10)
+  (1, 30.00, 1, 1, 1, 1),
+  (2, 30.00, 1, 1, 1, 1),
+  (3, 15.00, 2, 2, 1, 1),
+  (4, 25.00, 3, 3, 2, 1),
+  (5, 25.00, 3, 3, 2, 1),
+  (6, 20.00, 4, 4, 3, 2),
+  (7, 20.00, 5, 5, 4, 2),
+  (8, 22.00, 6, 6, 5, 3),
+  (9, 18.00, 7, 7, 6, 3),
+  (10, 40.00, 8, 8, 7, 3),
+  -- Más boletos para diferentes funciones y sedes
+  (11, 25.00, 9, 9, 8, 4),
+  (12, 25.00, 9, 9, 8, 4),
+  (13, 30.00, 10, 10, 9, 5),
+  (14, 30.00, 10, 10, 9, 5),
+  (15, 28.00, 11, 11, 3, 2),
+  (16, 28.00, 11, 11, 3, 2),
+  (17, 28.00, 11, 11, 3, 2),
+  (18, 35.00, 12, 12, 4, 2),
+  (19, 35.00, 12, 12, 4, 2),
+  (20, 22.00, 13, 13, 5, 3),
+  (21, 22.00, 13, 13, 5, 3),
+  (22, 22.00, 13, 13, 5, 3),
+  (23, 22.00, 13, 13, 5, 3),
+  (24, 18.00, 14, 14, 6, 3),
+  (25, 18.00, 14, 14, 6, 3),
+  (26, 32.00, 15, 15, 7, 3),
+  (27, 32.00, 15, 15, 7, 3),
+  (28, 32.00, 15, 15, 7, 3),
+  (29, 28.00, 16, 16, 8, 4),
+  (30, 28.00, 16, 16, 8, 4),
+  (31, 25.00, 17, 17, 9, 5),
+  (32, 25.00, 17, 17, 9, 5),
+  (33, 25.00, 17, 17, 9, 5),
+  (34, 30.00, 18, 18, 10, 6),
+  (35, 30.00, 18, 18, 10, 6),
+  (36, 22.00, 19, 19, 1, 1),
+  (37, 22.00, 19, 19, 1, 1),
+  (38, 22.00, 19, 19, 1, 1),
+  (39, 22.00, 19, 19, 1, 1),
+  (40, 35.00, 20, 20, 2, 1),
+  (41, 35.00, 20, 20, 2, 1),
+  (42, 28.00, 21, 21, 3, 2),
+  (43, 28.00, 21, 21, 3, 2),
+  (44, 28.00, 22, 22, 4, 2),
+  (45, 28.00, 22, 22, 4, 2),
+  (46, 28.00, 22, 22, 4, 2),
+  (47, 30.00, 23, 23, 5, 3),
+  (48, 30.00, 23, 23, 5, 3),
+  (49, 25.00, 24, 24, 6, 3),
+  (50, 25.00, 24, 24, 6, 3),
+  (51, 25.00, 24, 24, 6, 3),
+  (52, 25.00, 24, 24, 6, 3),
+  (53, 32.00, 25, 25, 7, 3),
+  (54, 32.00, 25, 25, 7, 3),
+  (55, 28.00, 26, 26, 8, 4),
+  (56, 28.00, 26, 26, 8, 4),
+  (57, 28.00, 26, 26, 8, 4),
+  (58, 22.00, 27, 27, 9, 5),
+  (59, 22.00, 27, 27, 9, 5),
+  (60, 35.00, 28, 28, 10, 6),
+  (61, 35.00, 28, 28, 10, 6),
+  (62, 35.00, 28, 28, 10, 6),
+  (63, 30.00, 29, 29, 1, 1),
+  (64, 30.00, 29, 29, 1, 1),
+  (65, 30.00, 29, 29, 1, 1),
+  (66, 30.00, 29, 29, 1, 1),
+  (67, 30.00, 29, 29, 1, 1),
+  (68, 28.00, 30, 30, 2, 1),
+  (69, 28.00, 30, 30, 2, 1),
+  (70, 25.00, 31, 31, 3, 2),
+  (71, 25.00, 31, 31, 3, 2),
+  (72, 25.00, 32, 32, 4, 2),
+  (73, 25.00, 32, 32, 4, 2),
+  (74, 25.00, 32, 32, 4, 2),
+  (75, 32.00, 33, 33, 5, 3),
+  (76, 32.00, 33, 33, 5, 3),
+  (77, 28.00, 34, 34, 6, 3),
+  (78, 28.00, 34, 34, 6, 3),
+  (79, 28.00, 34, 34, 6, 3),
+  (80, 28.00, 34, 34, 6, 3),
+  (81, 22.00, 35, 35, 7, 3),
+  (82, 22.00, 35, 35, 7, 3),
+  (83, 35.00, 36, 36, 8, 4),
+  (84, 35.00, 36, 36, 8, 4),
+  (85, 35.00, 36, 36, 8, 4),
+  (86, 30.00, 37, 37, 9, 5),
+  (87, 30.00, 37, 37, 9, 5),
+  (88, 28.00, 38, 38, 10, 6),
+  (89, 28.00, 38, 38, 10, 6),
+  (90, 28.00, 38, 38, 10, 6),
+  (91, 25.00, 39, 39, 1, 1),
+  (92, 25.00, 39, 39, 1, 1),
+  (93, 32.00, 40, 40, 2, 1),
+  (94, 32.00, 40, 40, 2, 1),
+  (95, 32.00, 40, 40, 2, 1),
+  (96, 28.00, 41, 1, 1, 1),
+  (97, 28.00, 42, 2, 1, 1),
+  (98, 30.00, 43, 3, 2, 1),
+  (99, 30.00, 44, 4, 3, 2),
+  (100, 25.00, 45, 5, 4, 2);
+
+  --
+  -- Poblando la tabla `descripcion_asiento` (100 registros - uno por cada boleto)
+  --
+  INSERT INTO `descripcion_asiento` (`id_descripcion`, `id_asiento`, `id_compra_boleto`) VALUES
+  -- Sala 1 (asientos 1-80)
+  (1, 1, 1), (2, 2, 2), (3, 3, 3), (4, 11, 4), (5, 12, 5),
+  (6, 21, 36), (7, 22, 37), (8, 23, 38), (9, 24, 39),
+  (10, 31, 63), (11, 32, 64), (12, 33, 65), (13, 34, 66), (14, 35, 67),
+  (15, 41, 91), (16, 42, 92), (17, 43, 96), (18, 44, 97),
+  -- Sala 2 (asientos 81-160)
+  (19, 81, 6), (20, 82, 7), (21, 91, 40), (22, 92, 41),
+  (23, 101, 68), (24, 102, 69), (25, 111, 93), (26, 112, 94), (27, 113, 95),
+  (28, 121, 98),
+  -- Sala 3 (asientos 161-240)
+  (29, 161, 15), (30, 162, 16), (31, 163, 17), (32, 171, 42), (33, 172, 43),
+  (34, 181, 70), (35, 182, 71),
+  -- Sala 4 (asientos 241-320)
+  (36, 241, 18), (37, 242, 19), (38, 251, 44), (39, 252, 45), (40, 253, 46),
+  (41, 261, 72), (42, 262, 73), (43, 263, 74), (44, 271, 99),
+  -- Sala 5 (asientos 321-400)
+  (45, 321, 8), (46, 322, 20), (47, 323, 21), (48, 324, 22), (49, 325, 23),
+  (50, 331, 47), (51, 332, 48), (52, 341, 75), (53, 342, 76), (54, 351, 100),
+  -- Sala 6 (asientos 401-480)
+  (55, 401, 9), (56, 402, 24), (57, 403, 25),
+  (58, 411, 49), (59, 412, 50), (60, 413, 51), (61, 414, 52),
+  (62, 421, 77), (63, 422, 78), (64, 423, 79), (65, 424, 80),
+  -- Sala 7 (asientos 481-560)
+  (66, 481, 10), (67, 482, 26), (68, 483, 27), (69, 484, 28),
+  (70, 491, 53), (71, 492, 54), (72, 501, 81), (73, 502, 82),
+  -- Sala 8 (asientos 561-640)
+  (74, 561, 11), (75, 562, 12), (76, 571, 29), (77, 572, 30),
+  (78, 581, 55), (79, 582, 56), (80, 583, 57), (81, 591, 83), (82, 592, 84), (83, 593, 85),
+  -- Sala 9 (asientos 641-720)
+  (84, 641, 13), (85, 642, 14), (86, 651, 31), (87, 652, 32), (88, 653, 33),
+  (89, 661, 58), (90, 662, 59), (91, 671, 86), (92, 672, 87),
+  -- Sala 10 (asientos 721-800)
+  (93, 721, 34), (94, 722, 35), (95, 731, 60), (96, 732, 61), (97, 733, 62),
+  (98, 741, 88), (99, 742, 89), (100, 743, 90);
+
+
+  -- Poblando la tabla `compra_productos`
+  --
+  -- Poblando la tabla `compra_productos` (CORREGIDO - solo campos existentes)
+  INSERT INTO `compra_productos` (`id_precio_productos`, `precio_compra`, `id_compra`) VALUES
+  (1, 35.00, 1),
+  (2, 55.00, 2),
+  (3, 18.00, 3),
+  (4, 12.00, 4),
+  (5, 25.50, 5),
+  (6, 25.00, 6),
+  (7, 14.00, 7),
+  (8, 75.00, 8),
+  (9, 30.00, 9),
+  (10, 6.00, 10);
+
+
+  --
+  -- Poblando la tabla `compra_cliente`
+  --
+  INSERT INTO `compra_cliente` (`id_descripcion_de_compra`, `tipo`, `id_combo`, `id_producto_sede`, `id_compra_productos`) VALUES
+  (1, 'Combo', 1, 1, 1),
+  (2, 'Combo', 2, 2, 2),
+  (3, 'Combo', 3, 3, 3),
+  (4, 'Combo', 4, 4, 4),
+  (5, 'Individual', NULL, 5, 5),
+  (6, 'Individual', NULL, 6, 6),
+  (7, 'Individual', NULL, 7, 7),
+  (8, 'Combo', 5, 8, 8),
+  (9, 'Combo', 6, 9, 9),
+  (10, 'Individual', NULL, 10, 10);
+
+  --
+  -- Poblando la tabla `idiomas_pelicula`
+  --
+  INSERT INTO `idiomas_pelicula` (`id_idiomas_pelicula`, `id_pelicula`, `id_idioma`) VALUES
+  (1, 1, 1),   -- Dune: Espanol Doblada
+  (2, 1, 2),   -- Dune: Ingles Subtitulada
+  (3, 2, 1),   -- Oppenheimer: Espanol Doblada
+  (4, 2, 2),   -- Oppenheimer: Ingles Subtitulada
+  (5, 3, 1),   -- Barbie: Espanol Doblada
+  (6, 4, 1),   -- Spider-Man: Espanol Doblada
+  (7, 4, 2),   -- Spider-Man: Ingles Subtitulada
+  (8, 5, 1),   -- Guardianes: Espanol Doblada
+  (9, 6, 2),   -- John Wick: Ingles Subtitulada
+  (10, 7, 1),  -- Super Mario: Espanol Doblada
+  (11, 8, 1),  -- Avatar: Espanol Doblada
+  (12, 8, 2),  -- Avatar: Ingles Subtitulada
+  (13, 9, 1),  -- Elementos: Espanol Doblada
+  (14, 10, 1), -- Flash: Espanol Doblada
+  (15, 10, 2); -- Flash: Ingles Subtitulada
+
+  --
+  -- Poblando la tabla `formato_pelicula`
+  --
+  INSERT INTO `formato_pelicula` (`id_formato_pelicula`, `id_pelicula`, `id_formato`) VALUES
+  (1, 1, 1),   -- Dune: 2D
+  (2, 1, 3),   -- Dune: IMAX
+  (3, 2, 1),   -- Oppenheimer: 2D
+  (4, 2, 5),   -- Oppenheimer: XD
+  (5, 3, 1),   -- Barbie: 2D
+  (6, 4, 1),   -- Spider-Man: 2D
+  (7, 4, 2),   -- Spider-Man: 3D
+  (8, 5, 1),   -- Guardianes: 2D
+  (9, 6, 1),   -- John Wick: 2D
+  (10, 7, 4),  -- Super Mario: 4DX
+  (11, 8, 3),  -- Avatar: IMAX
+  (12, 8, 2),  -- Avatar: 3D
+  (13, 9, 1),  -- Elementos: 2D
+  (14, 10, 1), -- Flash: 2D
+  (15, 10, 3); -- Flash: IMAX
+
+  --
+  -- Poblando la tabla `genero`
+  --
+  INSERT INTO `genero` (`id_genero`, `nombre`, `estado`) VALUES
+  (1, 'Accion', 1),
+  (2, 'Aventura', 1),
+  (3, 'Ciencia Ficcion', 1),
+  (4, 'Comedia', 1),
+  (5, 'Drama', 1),
+  (6, 'Fantasia', 1),
+  (7, 'Terror', 1),
+  (8, 'Romance', 1),
+  (9, 'Animacion', 1),
+  (10, 'Suspenso', 1),
+  (11, 'Musical', 1),
+  (12, 'Documental', 1),
+  (13, 'Familiar', 1),
+  (14, 'Crimen', 1),
+  (15, 'Biografico', 1);
+
+  --
+  -- Poblando la tabla `genero_pelicula`
+  --
+  INSERT INTO `genero_pelicula` (`id_genero_pelicula`, `id_pelicula`, `id_genero`) VALUES
+  -- Dune: Parte Dos (Ciencia Ficcion, Aventura, Accion)
+  (1, 1, 3),
+  (2, 1, 2),
+  (3, 1, 1),
+  -- Oppenheimer (Drama, Biografico, Suspenso)
+  (4, 2, 5),
+  (5, 2, 15),
+  (6, 2, 10),
+  -- Barbie (Comedia, Fantasia, Aventura)
+  (7, 3, 4),
+  (8, 3, 6),
+  (9, 3, 2),
+  -- Spider-Man: A traves del Spider-Verso (Animacion, Accion, Aventura)
+  (10, 4, 9),
+  (11, 4, 1),
+  (12, 4, 2),
+  -- Guardianes de la Galaxia Vol. 3 (Accion, Aventura, Ciencia Ficcion)
+  (13, 5, 1),
+  (14, 5, 2),
+  (15, 5, 3),
+  -- John Wick: Capitulo 4 (Accion, Suspenso, Crimen)
+  (16, 6, 1),
+  (17, 6, 10),
+  (18, 6, 14),
+  -- Super Mario Bros. La Pelicula (Animacion, Aventura, Comedia, Familiar)
+  (19, 7, 9),
+  (20, 7, 2),
+  (21, 7, 4),
+  (22, 7, 13),
+  -- Avatar: El Camino del Agua (Ciencia Ficcion, Aventura, Accion)
+  (23, 8, 3),
+  (24, 8, 2),
+  (25, 8, 1),
+  -- Elementos (Animacion, Comedia, Romance, Familiar)
+  (26, 9, 9),
+  (27, 9, 4),
+  (28, 9, 8),
+  (29, 9, 13),
+  -- Flash (Accion, Aventura, Ciencia Ficcion)
+  (30, 10, 1),
+  (31, 10, 2),
+  (32, 10, 3);
+
+  --
+  -- Poblando la tabla `producto_combo`
+  --
+  INSERT INTO `producto_combo` (`id_productos_combos`, `id_combo`, `id_producto_sede`) VALUES
+  (1, 1, 2), -- Combo Clasico: Canchita Grande
+  (2, 1, 5), -- Combo Clasico: Gaseosa Mediana
+  (3, 2, 1), -- Combo Pareja: Canchita Gigante
+  (4, 2, 4), -- Combo Pareja: Gaseosa Grande
+  (5, 2, 4), -- Combo Pareja: Gaseosa Grande
+  (6, 3, 7), -- Combo Nachos: Nachos
+  (7, 3, 5), -- Combo Nachos: Gaseosa Mediana
+  (8, 4, 6), -- Combo Hot-Dog: Hot-Dog
+  (9, 4, 5), -- Combo Hot-Dog: Gaseosa Mediana
+  (10, 10, 10), -- Combo Tequenos: Tequenos
+  (11, 10, 5); -- Combo Tequenos: Gaseosa Mediana
 

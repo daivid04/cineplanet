@@ -85,5 +85,17 @@ class PeliculaController {
             throw new Exception("Error al eliminar película: " . $e->getMessage());
         }
     }
+
+    public function getCartelera($limite){
+      try{
+        $limit = (int)$limite; 
+        if(!is_int($limit) ){
+          throw new Exception("Limite inválido.");
+        }
+        return $this->peliculaModel->getCartelera($limit);
+      } catch(Exception $error) {
+        throw new Exception("Error en obtención de peliculas: " . $error->getMessage());
+      }
+    }
 }
 ?>

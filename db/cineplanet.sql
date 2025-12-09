@@ -262,6 +262,24 @@ CREATE TABLE formato_pelicula(
     ON DELETE CASCADE
 );
 
+CREATE TABLE genero(
+    id_genero INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    estado BOOL NOT NULL DEFAULT 1
+);
+
+CREATE TABLE genero_pelicula(
+    id_genero_pelicula INT PRIMARY KEY AUTO_INCREMENT,
+    id_pelicula INT NOT NULL,
+    id_genero INT NOT NULL,
+    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id_pelicula) 
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE,
+    FOREIGN KEY (id_genero) REFERENCES genero(id_genero) 
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE
+);
+
 CREATE TABLE producto_combo(
     id_productos_combos INT PRIMARY KEY AUTO_INCREMENT,
     id_combo INT NOT NULL,

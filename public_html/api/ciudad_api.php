@@ -96,11 +96,17 @@ try {
 
         default:
             http_response_code(405);
-            $response = ['success' => false, 'message' => 'Metodo no permitido'];
+            echo json_encode([
+                "success" => false,
+                "message" => "Método no permitido"
+            ]);
+            break;
     }
 } catch (Exception $e) {
-    http_response_code(500);
-    $response = ['success' => false, 'message' => 'Error del servidor: ' . $e->getMessage()];
+    http_response_code(400);
+    echo json_encode([
+        "success" => false,
+        "error" => $e->getMessage()
+    ]);
 }
-
-echo json_encode($response, JSON_UNESCAPED_UNICODE);
+?>

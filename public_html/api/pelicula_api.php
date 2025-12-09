@@ -33,6 +33,14 @@ $method = $_SERVER['REQUEST_METHOD'];
 try {
     switch ($method) {
         case 'GET':
+             if(isset($_GET["all"])){
+              echo json_encode($controller->getAll());
+              break;
+             }
+             if (isset($_GET["billBoard"])) {
+                echo json_encode($controller->getCartelera($_GET["billBoard"]));
+                break;
+            }
             if (isset($_GET['id'])) {
                 $response = $controller->getById(intval($_GET['id']));
             } else if (isset($_GET['search'])) {
@@ -79,7 +87,11 @@ try {
             } else {
                 $response = $controller->toggleEstado(intval($data['id']), intval($data['estado']));
             }
-            break;
+          
+            if (isset($_GET["billBoard"])) {
+                echo json_encode($controller->getCartelera($_GET["billBoard"]));
+                break;
+            }
 
         case 'DELETE':
             if (!isset($_GET['id'])) {
