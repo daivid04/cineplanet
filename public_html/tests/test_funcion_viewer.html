@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests de FuncionController - CinePlanet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .controls {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-card.success .value { color: #28a745; }
+        .stat-card.error .value { color: #dc3545; }
+        .stat-card.warning .value { color: #ffc107; }
+
+        .content {
+            padding: 30px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 1.2em;
+            color: #6c757d;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #667eea25 0%, #764ba225 100%);
+        }
+
+        .section-header h3 {
+            font-size: 1.3em;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .test-item {
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .test-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .test-header {
+            padding: 15px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .test-title {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .test-status.pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .test-status.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .test-status.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .test-body {
+            padding: 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            display: none;
+        }
+
+        .test-body.show {
+            display: block;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        .expand-all {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #6c757d;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats {
+                width: 100%;
+            }
+
+            .stat-card {
+                flex: 1;
+            }
+        }
+
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapse-icon.rotated {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 Tests de FuncionController</h1>
+            <p>Sistema de pruebas automatizadas para el controlador de funciones de CinePlanet</p>
+        </div>
+
+        <div class="controls">
+            <div>
+                <button class="btn btn-primary" onclick="runTests()" id="runBtn">
+                    <span>▶</span> Ejecutar Tests
+                </button>
+                <button class="btn btn-secondary" onclick="clearResults()" id="clearBtn" disabled>
+                    <span>🗑️</span> Limpiar
+                </button>
+            </div>
+
+            <div class="filter-buttons" id="filterButtons" style="display: none;">
+                <button class="filter-btn active" onclick="filterTests('all')">Todos</button>
+                <button class="filter-btn" onclick="filterTests('pass')">✓ Exitosos</button>
+                <button class="filter-btn" onclick="filterTests('fail')">✗ Fallidos</button>
+            </div>
+
+            <div class="stats" id="stats" style="display: none;">
+                <div class="stat-card">
+                    <div class="label">Total</div>
+                    <div class="value" id="totalTests">0</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="label">Exitosos</div>
+                    <div class="value" id="passTests">0</div>
+                </div>
+                <div class="stat-card error">
+                    <div class="label">Fallidos</div>
+                    <div class="value" id="failTests">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" id="content">
+            <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <h3>Listo para ejecutar las pruebas</h3>
+                <p>Haz clic en "Ejecutar Tests" para comenzar las pruebas del controlador de funciones</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFilter = 'all';
+        let testResults = [];
+
+        async function runTests() {
+            const runBtn = document.getElementById('runBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const content = document.getElementById('content');
+            const stats = document.getElementById('stats');
+            const filterButtons = document.getElementById('filterButtons');
+
+            runBtn.disabled = true;
+            runBtn.innerHTML = '<span class="spinner" style="width: 20px; height: 20px; border-width: 3px; margin: 0;"></span> Ejecutando...';
+
+            content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Ejecutando tests...</p></div>';
+
+            try {
+                const response = await fetch('test_funcion_controller_api.php');
+                const data = await response.json();
+
+                testResults = data;
+                displayResults(data);
+
+                stats.style.display = 'flex';
+                filterButtons.style.display = 'flex';
+                clearBtn.disabled = false;
+
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <h3 style="color: #dc3545;">❌ Error al ejecutar las pruebas</h3>
+                        <p>${error.message}</p>
+                        <p style="margin-top: 15px; font-size: 0.9em;">Asegúrate de que el archivo test_funcion_controller_api.php existe y el servidor está funcionando.</p>
+                    </div>
+                `;
+            }
+
+            runBtn.disabled = false;
+            runBtn.innerHTML = '<span>▶</span> Ejecutar Tests';
+        }
+
+        function displayResults(data) {
+            const content = document.getElementById('content');
+            let totalTests = 0;
+            let passTests = 0;
+            let failTests = 0;
+
+            let html = '<div class="expand-all" style="margin-bottom: 20px;"><button class="btn btn-secondary" onclick="expandAll()">Expandir Todo</button><button class="btn btn-secondary" onclick="collapseAll()">Contraer Todo</button></div>';
+
+            data.sections.forEach((section, sectionIndex) => {
+                html += `
+                    <div class="section" data-section="${sectionIndex}">
+                        <div class="section-header" onclick="toggleSection(${sectionIndex})">
+                            <h3>
+                                <span class="collapse-icon" id="sectionIcon${sectionIndex}">▼</span>
+                                ${section.title}
+                            </h3>
+                            <span class="section-badge">${section.tests.length} pruebas</span>
+                        </div>
+                        <div class="section-content" id="section${sectionIndex}" style="display: block;">
+                `;
+
+                section.tests.forEach((test, testIndex) => {
+                    totalTests++;
+                    const isPassed = test.passed;
+                    if (isPassed) passTests++; else failTests++;
+
+                    const statusClass = isPassed ? 'pass' : 'fail';
+                    const statusIcon = isPassed ? '✓' : '✗';
+                    const statusText = isPassed ? 'PASS' : 'FAIL';
+
+                    html += `
+                        <div class="test-item" data-status="${statusClass}">
+                            <div class="test-header" onclick="toggleTest(${sectionIndex}, ${testIndex})">
+                                <div class="test-title">
+                                    <span class="collapse-icon" id="testIcon${sectionIndex}_${testIndex}">▼</span>
+                                    ${test.name}
+                                </div>
+                                <div class="test-status ${statusClass}">
+                                    ${statusIcon} ${statusText}
+                                </div>
+                            </div>
+                            <div class="test-body show" id="test${sectionIndex}_${testIndex}">
+                                <div class="code-block">
+                                    <pre>${syntaxHighlight(JSON.stringify(test.result, null, 2))}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            content.innerHTML = html;
+
+            document.getElementById('totalTests').textContent = totalTests;
+            document.getElementById('passTests').textContent = passTests;
+            document.getElementById('failTests').textContent = failTests;
+        }
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                        return '<span style="color: #66d9ef;">' + match + '</span>';
+                    } else {
+                        cls = 'string';
+                        return '<span style="color: #a6e22e;">' + match + '</span>';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                    return '<span style="color: #ae81ff;">' + match + '</span>';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                    return '<span style="color: #f92672;">' + match + '</span>';
+                }
+                return '<span style="color: #fd971f;">' + match + '</span>';
+            });
+        }
+
+        function toggleSection(sectionIndex) {
+            const section = document.getElementById(`section${sectionIndex}`);
+            const icon = document.getElementById(`sectionIcon${sectionIndex}`);
+            
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                icon.classList.remove('rotated');
+            } else {
+                section.style.display = 'none';
+                icon.classList.add('rotated');
+            }
+        }
+
+        function toggleTest(sectionIndex, testIndex) {
+            const test = document.getElementById(`test${sectionIndex}_${testIndex}`);
+            const icon = document.getElementById(`testIcon${sectionIndex}_${testIndex}`);
+            
+            if (test.classList.contains('show')) {
+                test.classList.remove('show');
+                icon.classList.add('rotated');
+            } else {
+                test.classList.add('show');
+                icon.classList.remove('rotated');
+            }
+        }
+
+        function expandAll() {
+            document.querySelectorAll('.test-body').forEach(el => el.classList.add('show'));
+            document.querySelectorAll('.section-content').forEach(el => el.style.display = 'block');
+            document.querySelectorAll('.collapse-icon').forEach(el => el.classList.remove('rotated'));
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('.test-body').forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.collapse-icon').forEach(el => el.classList.add('rotated'));
+        }
+
+        function filterTests(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.test-item').forEach(item => {
+                const status = item.dataset.status;
+                if (filter === 'all' || status === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function clearResults() {
+            const content = document.getElementById('content');
+            const stats = document.getElementById('stats');
+            const filterButtons = document.getElementById('filterButtons');
+            const clearBtn = document.getElementById('clearBtn');
+
+            content.innerHTML = `
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    <h3>Listo para ejecutar las pruebas</h3>
+                    <p>Haz clic en "Ejecutar Tests" para comenzar las pruebas del controlador de funciones</p>
+                </div>
+            `;
+
+            stats.style.display = 'none';
+            filterButtons.style.display = 'none';
+            clearBtn.disabled = true;
+            testResults = [];
+        }
+    </script>
+</body>
+</html>

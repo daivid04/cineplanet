@@ -638,6 +638,32 @@ html {
     .grid-funciones {
         grid-template-columns: 1fr;
     }
+
+    .banner-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .contenedor-poster {
+        max-width: 200px;
+        margin: 0 auto;
+    }
+
+    .info-pelicula-banner {
+        align-items: center;
+    }
+
+    .detalles-extra-banner {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .grupo-formato {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -654,4 +680,279 @@ html {
     .titulo-compra {
         font-size: 1.25rem;
     }
+}
+
+/* ===== NUEVO DISEÑO SELECCION ===== */
+
+/* Banner Azul */
+.banner-pelicula {
+    background-color: var(--color-azul-principal);
+    color: var(--color-blanco);
+    padding: var(--espaciado-grande) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    gap: var(--espaciado-grande);
+    align-items: center;
+}
+
+.contenedor-poster {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--sombra-media);
+}
+
+.poster-pelicula {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.info-pelicula-banner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaciado-medio);
+}
+
+.info-pelicula-banner .titulo-pelicula {
+    color: var(--color-blanco);
+    margin: 0;
+}
+
+.info-pelicula-banner .metadata-pelicula {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.detalles-extra-banner {
+    display: flex;
+    gap: var(--espaciado-grande);
+    margin-top: var(--espaciado-medio);
+}
+
+.etiquetas-formato {
+    display: flex;
+    gap: var(--espaciado-pequeno);
+}
+
+.etiqueta {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.disponible-banner strong {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.disponible-banner p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Sección Horarios */
+.seccion-horarios {
+    padding: var(--espaciado-grande) 0;
+    background-color: var(--color-blanco);
+}
+
+.titulo-seccion-horarios {
+    color: var(--color-azul-principal);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--espaciado-grande);
+    text-align: center;
+}
+
+/* Filtros */
+.filtros-seleccion {
+    display: flex;
+    justify-content: center;
+    gap: var(--espaciado-grande);
+    margin-bottom: var(--espaciado-grande);
+    flex-wrap: wrap;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--sombra-suave);
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.filtro-item label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-azul-principal);
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-filtro {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--color-gris-texto);
+    appearance: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+.select-filtro:focus {
+    border-color: var(--color-azul-principal);
+    outline: none;
+}
+
+.icono-select {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-azul-principal);
+    pointer-events: none;
+}
+
+/* Lista Cines Acordeón */
+.cine-item {
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+}
+
+.cine-header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cine-header:hover {
+    background-color: #e9ecef;
+}
+
+.nombre-cine {
+    margin: 0;
+    font-size: 1.3rem;
+    color: var(--color-azul-principal);
+    font-weight: 700;
+}
+
+.btn-expandir {
+    background: none;
+    border: none;
+    color: var(--color-azul-principal);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.cine-item.activo .btn-expandir {
+    transform: rotate(45deg);
+}
+
+.cine-horarios {
+    padding: 0;
+    background-color: var(--color-blanco);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.cine-item.activo .cine-horarios {
+    max-height: 500px;
+    /* Altura suficiente */
+    padding: 20px;
+    border-top: 1px solid var(--color-borde);
+}
+
+.grupo-formato {
+    display: flex;
+    align-items: center;
+    gap: var(--espaciado-grande);
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.etiqueta-formato-horario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+}
+
+.badge-2d {
+    border: 1px solid var(--color-gris-texto);
+    background-color: transparent;
+    color: var(--color-gris-texto);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.texto-formato {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-azul-principal);
+    text-transform: uppercase;
+}
+
+.botones-horario {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-horario {
+    background-color: white;
+    border: 1px solid var(--color-azul-principal);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-azul-principal);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-horario:hover {
+    background-color: var(--color-azul-principal);
+    color: white;
+}
+
+.btn-horario i {
+    font-size: 0.9rem;
 }

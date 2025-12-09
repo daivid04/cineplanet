@@ -138,36 +138,55 @@ function manejarEnvioFormulario(e) {
 
 /**
  * Procesa el inicio de sesión
- * @param {string} numeroSocio - Número de socio
+ * @param {string} numeroSocio - Número de socio (Documento)
  * @param {string} contrasena - Contraseña
  */
-function procesarLogin(numeroSocio, contrasena) {
+async function procesarLogin(numeroSocio, contrasena) {
     console.log('Iniciando sesión...');
-    console.log('Número de socio:', numeroSocio);
 
-    // Simulación de inicio de sesión (aquí irá la llamada al backend)
-    // Por ahora, simplemente mostramos un mensaje y redirigimos
-
-    // Muestra un mensaje de carga
     const botonIngresar = formularioLogin.querySelector('.boton-ingresar');
     const textoOriginal = botonIngresar.textContent;
     botonIngresar.textContent = 'Ingresando...';
     botonIngresar.disabled = true;
 
-    // Simula una petición al servidor
-    setTimeout(() => {
-        // Aquí normalmente verificarías las credenciales con el backend
-        // Por ahora, aceptamos cualquier credencial válida
+    try {
+        const response = await fetch('../api/login_api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                documento: numeroSocio,
+                contrasena: contrasena
+            })
+        });
 
-        // Guarda el usuario en localStorage (temporal)
-        localStorage.setItem('usuario_cineplanet', JSON.stringify({
-            numeroSocio: numeroSocio,
-            fechaLogin: new Date().toISOString()
-        }));
+        const data = await response.json();
 
-        // Redirige a la página de inicio
-        window.location.href = '/index.html';
-    }, 1500);
+        if (response.ok && data.ok) {
+            // Login exitoso
+            console.log('Login exitoso:', data.usuario);
+
+            // Guardar sesión
+            localStorage.setItem('usuario_cineplanet', JSON.stringify({
+                ...data.usuario,
+                fechaLogin: new Date().toISOString()
+            }));
+
+            // Redirigir
+            window.location.href = '../../index.html';
+        } else {
+            throw new Error(data.error || 'Credenciales incorrectas');
+        }
+
+    } catch (error) {
+        console.error('Error de login:', error);
+        mostrarError(inputContrasena, error.message);
+
+        // Resetear botón
+        botonIngresar.textContent = textoOriginal;
+        botonIngresar.disabled = false;
+    }
 }
 
 // ===== LIMPIEZA DE ERRORES AL ESCRIBIR =====

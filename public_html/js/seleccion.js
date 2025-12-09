@@ -3,6 +3,11 @@ import { fetchFromApi } from "./data-manager.js";
 import { loadMovieSelect } from "./components/select/seleccion-template.js";
 
 // ===== ELEMENTOS DEL DOM =====
+const tituloPelicula = document.getElementById('titulo-pelicula');
+const generoPelicula = document.getElementById('genero-pelicula');
+const duracionPelicula = document.getElementById('duracion-pelicula');
+const clasificacionPelicula = document.getElementById('clasificacion-pelicula');
+const posterPelicula = document.getElementById('poster-pelicula');
 const botonComprar = document.getElementById('boton-comprar');
 const seccionCompra = document.getElementById('seccion-compra');
 const contenedorCines = document.getElementById('contenedor-cines');
@@ -182,7 +187,7 @@ function renderCines(ciudadId) {
         </div>
     `).join('');
 
-    dropdownCine.innerHTML = html;
+    const pelicula = peliculasData.find(p => p.id === peliculaId) || peliculasData[0];
 
     dropdownCine.querySelectorAll('.filtro-opcion').forEach(opcion => {
         opcion.addEventListener('click', () => {
@@ -198,7 +203,20 @@ function renderFechas() {
         </div>
     `).join('');
 
-    dropdownFecha.innerHTML = html;
+    cinesFiltrados.forEach(cine => {
+        const cineItem = document.createElement('div');
+        cineItem.className = 'cine-item'; // Por defecto cerrado
+
+        let gruposHtml = '';
+        cine.grupos.forEach(grupo => {
+            let botonesHtml = '';
+            grupo.horarios.forEach(hora => {
+                botonesHtml += `
+                    <button class="btn-horario" onclick="seleccionarHorario('${hora}', '${cine.nombre}', '${grupo.formato}', '${grupo.tipo}')">
+                        ${hora} <i class="fas fa-couch"></i>
+                    </button>
+                `;
+            });
 
     dropdownFecha.querySelectorAll('.filtro-opcion').forEach(opcion => {
         opcion.addEventListener('click', () => {
@@ -505,12 +523,13 @@ function inicializarEventos() {
         if (!btnFecha.disabled) toggleDropdown(dropdownFecha, btnFecha);
     });
 
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.filtro-item')) {
-            cerrarTodosDropdowns();
-        }
+function inicializarEventos() {
+    selectCiudad.addEventListener('change', () => {
+        selectCine.value = ""; // Resetear cine al cambiar ciudad
+        renderizarHorarios();
     });
-}
+    selectCine.addEventListener('change', renderizarHorarios);
+    selectFecha.addEventListener('change', renderizarHorarios);
 
 // Arrancar
 if (document.readyState === 'loading') {

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cines - Cineplanet</title>
+    <!-- Estilos globales reutilizados del proyecto -->
+    <link rel="stylesheet" href="../css/inicio.css">
+    <!-- Estilos específicos de la página de cines -->
+    <link rel="stylesheet" href="../css/cines.css">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <!-- ===== BARRA DE NAVEGACIÓN ===== -->
+    <nav class="barra-navegacion">
+        <div class="contenedor-navegacion">
+            <!-- Logo de Cineplanet -->
+            <div class="logo-cineplanet" onclick="window.location.href='../../index.html'" style="cursor: pointer;">
+                <img src="../assets/icons/cineplanet_logo.jpg" alt="Logo Cineplanet" class="imagen-logo" />
+                <span class="texto-logo">cineplanet</span>
+            </div>
+
+            <!-- Enlaces de navegación -->
+            <ul class="menu-navegacion">
+                <li><a href="peliculas.html" class="enlace-navegacion">Películas</a></li>
+                <li><a href="cines.html" class="enlace-navegacion activo">Cines</a></li>
+                <li><a href="dulceria.html" class="enlace-navegacion">Dulcería</a></li>
+                <li><a href="#dashboard" class="enlace-navegacion">Dashboard</a></li>
+            </ul>
+
+            <!-- Iconos de usuario, búsqueda y ayuda -->
+            <div class="acciones-navegacion">
+                <button class="boton-icono" aria-label="Perfil de usuario" onclick="window.location.href='login.html'">
+                    <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="10" stroke-width="2" />
+                        <circle cx="12" cy="10" r="3" stroke-width="2" />
+                        <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855" stroke-width="2" />
+                    </svg>
+                </button>
+                <button class="boton-icono" aria-label="Buscar">
+                    <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8" stroke-width="2" />
+                        <path d="m21 21-4.35-4.35" stroke-width="2" />
+                    </svg>
+                </button>
+                <button class="boton-icono boton-ayuda" aria-label="Ayuda">
+                    <span class="badge-ayuda">Ayuda</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <main class="contenido-principal-cines">
+        <div class="contenedor-cines">
+
+            <!-- ===== TÍTULO DE LA SECCIÓN ===== -->
+            <header class="header-cines">
+                <h1 class="titulo-cines">Cines</h1>
+                <div class="linea-decorativa"></div>
+            </header>
+
+            <!-- ===== BARRA DE FILTROS ===== -->
+            <section class="seccion-filtros-cines">
+                <div class="filtros-izquierda">
+                    <!-- Filtro por Ciudad -->
+                    <div class="filtro-dropdown">
+                        <label class="filtro-label">Por Ciudad</label>
+                        <div class="select-wrapper">
+                            <select id="filtro-ciudad" class="select-filtro">
+                                <option value="">Todas las ciudades</option>
+                                <!-- Opciones cargadas dinámicamente -->
+                            </select>
+                            <i class="fas fa-chevron-down icono-select"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filtro por Formato -->
+                    <div class="filtro-dropdown">
+                        <label class="filtro-label">Por Formato</label>
+                        <div class="select-wrapper">
+                            <select id="filtro-formato" class="select-filtro">
+                                <option value="">Todos los formatos</option>
+                                <option value="2D">2D</option>
+                                <option value="3D">3D</option>
+                                <option value="REGULAR">REGULAR</option>
+                                <option value="PRIME">PRIME</option>
+                            </select>
+                            <i class="fas fa-chevron-down icono-select"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de vista (Lista / Mapa) -->
+                <div class="filtros-derecha">
+                    <button class="btn-vista activo" data-vista="lista" id="btn-lista">
+                        <i class="fas fa-th"></i>
+                        <span>Lista</span>
+                    </button>
+                    <button class="btn-vista" data-vista="mapa" id="btn-mapa">
+                        <i class="fas fa-map"></i>
+                        <span>Mapa</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===== GRID DE CINES ===== -->
+            <section class="seccion-cines-grid">
+                <div class="grid-cines" id="grid-cines">
+                    <!-- Las tarjetas de cines se cargarán dinámicamente con JavaScript -->
+                </div>
+
+                <!-- Mensaje cuando no hay resultados -->
+                <div class="mensaje-sin-resultados" id="mensaje-sin-resultados" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <p>No se encontraron cines con los filtros seleccionados.</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer-cines">
+        <div class="contenedor-footer">
+            <p>&copy; 2025 Cineplanet. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Script de la página de cines -->
+    <script src="../js/cines.js"></script>
+</body>
+
+</html>
