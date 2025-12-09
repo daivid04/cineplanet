@@ -226,7 +226,7 @@ $productos = $productoModel->getAll(true);
         </main>
 
 <script>
-const API_URL = '../api/producto_sede_api.php';
+const API_URL = '../../api/producto_sede_api.php';
 
 function cambiarTab(tab) {
     const tabSimple = document.getElementById('tabSimple');

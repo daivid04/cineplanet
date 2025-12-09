@@ -85,16 +85,16 @@ INSERT INTO `asiento` (`id_asiento`, `estado`, `fila_asiento`, `columna_asiento`
 -- Poblando la tabla `pelicula`
 --
 INSERT INTO `pelicula` (`id_pelicula`, `duracion`, `url_imagen`, `nombre`, `sinopsis`, `estado`) VALUES
-(1, 155, 'https://example.com/images/dune2.jpg', 'Dune: Parte Dos', 'Paul Atreides se une a los Fremen y comienza un viaje espiritual y marcial para convertirse en Muad''dib.', 1),
-(2, 180, 'https://example.com/images/oppenheimer.jpg', 'Oppenheimer', 'La historia del fisico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atomica.', 1),
-(3, 114, 'https://example.com/images/barbie.jpg', 'Barbie', 'Barbie sufre una crisis que la lleva a cuestionar su mundo y su existencia.', 1),
-(4, 140, 'https://example.com/images/spiderverse.jpg', 'Spider-Man: A traves del Spider-Verso', 'Miles Morales es catapultado a traves del Multiverso, donde se encuentra con un equipo de Spider-People.', 1),
-(5, 150, 'https://example.com/images/gotg3.jpg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa mision para proteger a uno de los suyos.', 1),
-(6, 141, 'https://example.com/images/johnwick4.jpg', 'John Wick: Capitulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.', 1),
-(7, 124, 'https://example.com/images/mariobros.jpg', 'Super Mario Bros. La Pelicula', 'Un fontanero llamado Mario viaja por un laberinto subterraneo con su hermano, Luigi, tratando de salvar a una princesa capturada.', 1),
-(8, 169, 'https://example.com/images/avatar2.jpg', 'Avatar: El Camino del Agua', 'Jake Sully y Ney''tiri han formado una familia y hacen todo lo posible por permanecer juntos. Sin embargo, deben abandonar su hogar y explorar las regiones de Pandora.', 1),
-(9, 102, 'https://example.com/images/elemental.jpg', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en comun.', 1),
-(10, 146, 'https://example.com/images/theflash.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superheroes.', 0);
+(1, 155, 'https://es.web.img3.acsta.net/pictures/24/02/20/17/42/2385575.jpg', 'Dune: Parte Dos', 'Paul Atreides se une a los Fremen y comienza un viaje espiritual y marcial para convertirse en Muad''dib.', 1),
+(2, 180, 'https://m.media-amazon.com/images/M/MV5BNTFlZDI1YWQtMTVjNy00YWU1LTg2YjktMTlhYmRiYzQ3NTVhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg', 'Oppenheimer', 'La historia del fisico J. Robert Oppenheimer y su papel en el desarrollo de la bomba atomica.', 1),
+(3, 114, 'https://images.justwatch.com/poster/306421131/s718/barbie-2023.jpg', 'Barbie', 'Barbie sufre una crisis que la lleva a cuestionar su mundo y su existencia.', 1),
+(4, 140, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQttE0dKwLuMVnfkcEplhr6Hf-0lnBDsx6NSg&s', 'Spider-Man: A traves del Spider-Verso', 'Miles Morales es catapultado a traves del Multiverso, donde se encuentra con un equipo de Spider-People.', 1),
+(5, 150, 'https://lumiere-a.akamaihd.net/v1/images/lat_2ae5e247.jpeg', 'Guardianes de la Galaxia Vol. 3', 'Los Guardianes se embarcan en una peligrosa mision para proteger a uno de los suyos.', 1),
+(6, 141, 'https://images.justwatch.com/poster/304471076/s718/john-wick-4.jpg', 'John Wick: Capitulo 4', 'John Wick descubre un camino para derrotar a la Alta Mesa. Pero antes de poder ganar su libertad, Wick debe enfrentarse a un nuevo enemigo.', 1),
+(7, 124, 'https://m.media-amazon.com/images/M/MV5BZDkyMDBiN2EtYTM2Ni00ZjRjLWFmZWQtZDdkZDBhNTQzYTU4XkEyXkFqcGc@._V1_.jpg', 'Super Mario Bros. La Pelicula', 'Un fontanero llamado Mario viaja por un laberinto subterraneo con su hermano, Luigi, tratando de salvar a una princesa capturada.', 1),
+(8, 169, 'https://lumiere-a.akamaihd.net/v1/images/b162385cffbbe656f1e654b80098ac57_3276x4096_380354b0.jpeg?region=0,0,3276,4096', 'Avatar: El Camino del Agua', 'Jake Sully y Ney''tiri han formado una familia y hacen todo lo posible por permanecer juntos. Sin embargo, deben abandonar su hogar y explorar las regiones de Pandora.', 1),
+(9, 102, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK_1c9FZFFRQoSq61ZjCqg15wFmNgX99rSFA&s', 'Elementos', 'En una ciudad donde conviven residentes de fuego, agua, tierra y aire, una joven de fuego y un chico de agua descubren que tienen mucho en comun.', 1),
+(10, 146, 'https://pics.filmaffinity.com/Flash-570628784-large.jpg', 'Flash', 'Barry Allen usa su supervelocidad para cambiar el pasado, pero su intento de salvar a su familia crea un mundo sin superheroes.', 0);
 
 --
 -- Poblando la tabla `idioma`
@@ -130,16 +130,46 @@ INSERT INTO `formato` (`id_formato`, `nombre`, `estado`) VALUES
 -- Poblando la tabla `funcion`
 --
 INSERT INTO `funcion` (`id_funcion`, `fecha`, `hora`, `id_pelicula`, `id_sala`, `estado`) VALUES
-(1, '2025-10-17', '18:00:00', 1, 1, 1),
-(2, '2025-10-17', '21:00:00', 1, 1, 1),
-(3, '2025-10-17', '19:00:00', 2, 2, 1),
-(4, '2025-10-18', '20:00:00', 3, 3, 1),
-(5, '2025-10-18', '22:00:00', 4, 4, 1),
-(6, '2025-10-19', '17:00:00', 5, 5, 1),
-(7, '2025-10-19', '19:30:00', 6, 6, 1),
-(8, '2025-10-20', '16:00:00', 7, 7, 1),
-(9, '2025-10-20', '18:30:00', 8, 8, 1),
-(10, '2025-10-21', '20:30:00', 9, 9, 1);
+(1, '2025-12-15', '18:00:00', 1, 1, 1),
+(2, '2025-12-15', '21:00:00', 1, 1, 1),
+(3, '2025-12-15', '19:00:00', 2, 2, 1),
+(4, '2025-12-16', '20:00:00', 3, 3, 1),
+(5, '2025-12-16', '22:00:00', 4, 4, 1),
+(6, '2025-12-17', '17:00:00', 5, 5, 1),
+(7, '2025-12-17', '19:30:00', 6, 6, 1),
+(8, '2025-12-18', '16:00:00', 7, 7, 1),
+(9, '2025-12-18', '18:30:00', 8, 8, 1),
+(10, '2025-12-19', '20:30:00', 9, 9, 1),
+(11, '2025-12-20', '14:00:00', 1, 3, 1),
+(12, '2025-12-20', '16:30:00', 2, 4, 1),
+(13, '2025-12-21', '19:00:00', 3, 5, 1),
+(14, '2025-12-21', '21:30:00', 4, 6, 1),
+(15, '2025-12-22', '15:00:00', 5, 7, 1),
+(16, '2025-12-22', '18:00:00', 6, 8, 1),
+(17, '2025-12-23', '20:00:00', 7, 9, 1),
+(18, '2025-12-23', '22:30:00', 8, 10, 1),
+(19, '2025-12-24', '17:00:00', 9, 1, 1),
+(20, '2025-12-24', '20:00:00', 1, 2, 1),
+(21, '2025-12-25', '16:00:00', 2, 3, 1),
+(22, '2025-12-25', '19:00:00', 3, 4, 1),
+(23, '2025-12-26', '18:30:00', 4, 5, 1),
+(24, '2025-12-26', '21:00:00', 5, 6, 1),
+(25, '2025-12-27', '15:30:00', 6, 7, 1),
+(26, '2025-12-27', '18:00:00', 7, 8, 1),
+(27, '2025-12-28', '20:30:00', 8, 9, 1),
+(28, '2025-12-28', '22:00:00', 9, 10, 1),
+(29, '2025-12-29', '14:00:00', 1, 1, 1),
+(30, '2025-12-29', '17:00:00', 2, 2, 1),
+(31, '2025-12-30', '19:30:00', 3, 3, 1),
+(32, '2025-12-30', '21:30:00', 4, 4, 1),
+(33, '2025-12-31', '16:00:00', 5, 5, 1),
+(34, '2025-12-31', '20:00:00', 6, 6, 1),
+(35, '2026-01-01', '15:00:00', 7, 7, 1),
+(36, '2026-01-01', '18:00:00', 8, 8, 1),
+(37, '2026-01-02', '17:00:00', 9, 9, 1),
+(38, '2026-01-02', '20:30:00', 1, 10, 1),
+(39, '2026-01-03', '16:30:00', 2, 1, 1),
+(40, '2026-01-03', '19:00:00', 3, 2, 1);
 
 --
 -- Poblando la tabla `trabajador`

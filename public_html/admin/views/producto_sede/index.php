@@ -222,7 +222,7 @@ foreach ($inventario as $item) {
                                                 class="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200" title="Editar stock">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button onclick="confirmDelete(<?php echo $item['id_producto_sede']; ?>, '<?php echo htmlspecialchars($item['producto_nombre']); ?>')"
+                                        <button onclick="confirmDeleteInventario(<?php echo $item['id_producto_sede']; ?>, '<?php echo htmlspecialchars($item['producto_nombre']); ?>')"
                                                 class="p-2 bg-red-100 text-red-600 rounded hover:bg-red-200" title="Eliminar">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -295,7 +295,7 @@ foreach ($inventario as $item) {
 </div>
 
 <script>
-const API_URL = '../api/producto_sede_api.php';
+const API_URL = '../../api/producto_sede_api.php';
 
 function aplicarFiltros() {
     const sede = document.getElementById('filtroSede').value;
@@ -395,7 +395,7 @@ async function guardarCantidad(e) {
     }
 }
 
-async function confirmDelete(id, nombre) {
+async function confirmDeleteInventario(id, nombre) {
     if (!confirm(`¿Estás seguro de eliminar "${nombre}" de esta sede?\n\nEsta acción eliminará el registro de inventario.`)) {
         return;
     }
