@@ -34,11 +34,11 @@ try {
     switch ($method) {
         case 'GET':
              if(isset($_GET["all"])){
-              echo json_encode($controller->getAll());
+              $response = $controller->getAll();
               break;
              }
              if (isset($_GET["billBoard"])) {
-                echo json_encode($controller->getCartelera($_GET["billBoard"]));
+                $response = $controller->getCartelera($_GET["billBoard"]);
                 break;
             }
             if (isset($_GET['id'])) {
@@ -87,11 +87,7 @@ try {
             } else {
                 $response = $controller->toggleEstado(intval($data['id']), intval($data['estado']));
             }
-          
-            if (isset($_GET["billBoard"])) {
-                echo json_encode($controller->getCartelera($_GET["billBoard"]));
-                break;
-            }
+            break;
 
         case 'DELETE':
             if (!isset($_GET['id'])) {

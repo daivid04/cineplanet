@@ -13,17 +13,22 @@ export async function loadMovieSelect (){
   
 
   const idMovie = sessionStorage.getItem('movieId');
-  const data = await fetchFromApi('pelicula','id',idMovie);
+  const response = await fetchFromApi('pelicula','id',idMovie);
+  const data = response?.data || response;
   
+  if (!data || !data.nombre) {
+    console.error('No se pudo cargar la película con id:', idMovie);
+    return;
+  }
   
   title.innerHTML = data.nombre;
   duration.innerHTML = formatMinutes(data.duracion);
   description.innerHTML  = data.sinopsis;
-  language.innerHTML = data.idiomas;
-  formato.innerHTML = data.formatos;
+  language.innerHTML = data.idiomas_texto || data.idiomas || '';
+  formato.innerHTML = data.formatos_texto || data.formatos || '';
   img.src = data.url_imagen;
   img.alt = data.nombre;
-  genre.innerHTML = data.generos;
+  genre.innerHTML = data.generos || '';
   const btnBuy = document.getElementById('boton-comprar');
   btnBuy.dataset.id = idMovie;
 } 

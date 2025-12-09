@@ -75,4 +75,15 @@ class PeliculaController {
     public function count($soloActivos = false) {
         return $this->peliculaModel->count($soloActivos);
     }
+    public function getCartelera($limite){
+      try{
+        $limit = (int)$limite; 
+        if(!is_int($limit) ){
+          throw new Exception("Limite inválido.");
+        }
+        return $this->peliculaModel->getCartelera($limit);
+      } catch(Exception $error) {
+        throw new Exception("Error en obtención de peliculas: " . $error->getMessage());
+      }
+    }
 }

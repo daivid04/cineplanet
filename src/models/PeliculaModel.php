@@ -140,27 +140,31 @@ class PeliculaModel {
     // OBTENER PELÍCULA POR ID (Simple)
     // -------------------------------------------------
     public function getById($id) {
-        try {
-            $sql = "SELECT * FROM pelicula WHERE id_pelicula = :id";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':id' => $id]);
-            $pelicula = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT 
+                    p.id_pelicula, 
+                    p.duracion, 
+                    p.url_imagen, 
+                    p.nombre, 
+                    p.sinopsis,
+                    p.estado,
+                    GROUP_CONCAT(DISTINCT idio.idioma SEPARATOR ', ') AS idiomas,
+                    GROUP_CONCAT(DISTINCT fo.nombre SEPARATOR ', ') AS formatos,
+                    GROUP_CONCAT(DISTINCT g.nombre SEPARATOR ', ') AS generos
+                FROM pelicula p
+                LEFT JOIN idiomas_pelicula i ON p.id_pelicula = i.id_pelicula
+                LEFT JOIN formato_pelicula f ON p.id_pelicula = f.id_pelicula
+                LEFT JOIN genero_pelicula gp ON p.id_pelicula = gp.id_pelicula
+                LEFT JOIN idioma idio ON idio.id_idioma = i.id_idioma
+                LEFT JOIN formato fo ON fo.id_formato = f.id_formato
+                LEFT JOIN genero g ON g.id_genero = gp.id_genero
+                WHERE p.id_pelicula = :id
+                GROUP BY p.id_pelicula";
 
-            if ($pelicula) {
-                // Obtener idiomas
-                $pelicula['idiomas'] = $this->getIdiomasByPelicula($id);
-                $pelicula['idiomas_ids'] = array_column($pelicula['idiomas'], 'id_idioma');
-                
-                // Obtener formatos
-                $pelicula['formatos'] = $this->getFormatosByPelicula($id);
-                $pelicula['formatos_ids'] = array_column($pelicula['formatos'], 'id_formato');
-            }
-
-            return $pelicula;
-        } catch (PDOException $e) {
-            return null;
-        }
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 
     // -------------------------------------------------
     // OBTENER PELÍCULA CON DETALLES (Para listados)
@@ -462,5 +466,19 @@ class PeliculaModel {
             return $horas . 'h ' . $mins . 'min';
         }
         return $mins . ' min';
+    }
+
+    public function getCartelera ($limite) {
+      try{
+        $sql = "SELECT * FROM pelicula_cartelera LIMIT :limite";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
+        if(!$stmt->execute()){
+          throw new Exception("No se pudo ejecutar la consulta de cartelera");
+        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch (PDOException $error) {
+        throw new Exception('Error en la obtencion de cartelera' . $error->getMessage());
+      }
     }
 }

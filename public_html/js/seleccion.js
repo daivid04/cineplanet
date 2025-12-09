@@ -9,19 +9,12 @@ const duracionPelicula = document.getElementById('duracion-pelicula');
 const clasificacionPelicula = document.getElementById('clasificacion-pelicula');
 const posterPelicula = document.getElementById('poster-pelicula');
 const botonComprar = document.getElementById('boton-comprar');
-const seccionCompra = document.getElementById('seccion-compra');
-const contenedorCines = document.getElementById('contenedor-cines');
+const contenedorCines = document.getElementById('lista-cines');
 
-// Elementos de la barra de filtros
-const btnCiudad = document.getElementById('btn-ciudad');
-const btnCine = document.getElementById('btn-cine');
-const btnFecha = document.getElementById('btn-fecha');
-const dropdownCiudad = document.getElementById('dropdown-ciudad');
-const dropdownCine = document.getElementById('dropdown-cine');
-const dropdownFecha = document.getElementById('dropdown-fecha');
-const ciudadSeleccionadaTexto = document.getElementById('ciudad-seleccionada');
-const cineSeleccionadoTexto = document.getElementById('cine-seleccionado');
-const fechaSeleccionadaTexto = document.getElementById('fecha-seleccionada');
+// Elementos de los filtros (selects nativos)
+const selectCiudad = document.getElementById('filtro-ciudad');
+const selectCine = document.getElementById('filtro-cine');
+const selectFecha = document.getElementById('filtro-fecha');
 
 // ===== ESTADO =====
 const state = {
@@ -76,9 +69,7 @@ async function inicializarAplicacion() {
     } else {
         // Sin parámetros: seleccionar fecha de hoy y cargar todas las sedes
         state.date = state.dates[0]?.id; // Hoy
-        fechaSeleccionadaTexto.textContent = state.dates[0]?.nombre || 'Hoy';
-        btnCine.disabled = false;
-        btnFecha.disabled = false;
+        if (selectFecha) selectFecha.value = state.date;
         await cargarTodasLasFunciones();
     }
 }
@@ -130,26 +121,21 @@ async function procesarFiltrosURL(urlParams) {
 
     // Establecer fecha (default: hoy)
     state.date = urlFecha;
-    const fechaObj = state.dates.find(f => f.id == urlFecha);
-    if (fechaObj) {
-        fechaSeleccionadaTexto.textContent = fechaObj.nombre;
-    }
-    btnFecha.disabled = false;
+    if (selectFecha) selectFecha.value = urlFecha;
 
     if (urlCity) {
         const ciudad = state.allCities.find(c => c.id_ciudad == urlCity);
         if (ciudad) {
             state.cityId = urlCity;
-            ciudadSeleccionadaTexto.textContent = ciudad.nombre;
+            if (selectCiudad) selectCiudad.value = urlCity;
             renderCines(urlCity);
-            btnCine.disabled = false;
         }
         
         if (urlCine) {
             const cineValido = state.allCinemas.find(c => c.id_sede == urlCine);
             if (cineValido) {
                 state.cinemaId = urlCine;
-                cineSeleccionadoTexto.textContent = cineValido.nombre;
+                if (selectCine) selectCine.value = urlCine;
                 await cargarFunciones();
                 return;
             }
@@ -163,85 +149,49 @@ async function procesarFiltrosURL(urlParams) {
 // ===== RENDERIZADO DE FILTROS =====
 
 function renderCiudades() {
-    const html = state.allCities.map(ciudad => `
-        <div class="filtro-opcion" data-ciudad="${ciudad.id_ciudad}">
-            ${ciudad.nombre}
-        </div>
-    `).join('');
+    if (!selectCiudad) return;
+    
+    const html = '<option value="">Selecciona ciudad</option>' + 
+        state.allCities.map(ciudad => `
+            <option value="${ciudad.id_ciudad}">${ciudad.nombre}</option>
+        `).join('');
 
-    dropdownCiudad.innerHTML = html;
-
-    dropdownCiudad.querySelectorAll('.filtro-opcion').forEach(opcion => {
-        opcion.addEventListener('click', () => {
-            seleccionarCiudad(opcion.dataset.ciudad);
-        });
-    });
+    selectCiudad.innerHTML = html;
 }
 
 function renderCines(ciudadId) {
-    const cinesFiltrados = state.allCinemas.filter(c => c.id_ciudad == ciudadId);
+    if (!selectCine) return;
     
-    const html = cinesFiltrados.map(cine => `
-        <div class="filtro-opcion" data-cine="${cine.id_sede}">
-            ${cine.nombre}
-        </div>
-    `).join('');
+    const cinesFiltrados = ciudadId 
+        ? state.allCinemas.filter(c => c.id_ciudad == ciudadId)
+        : state.allCinemas;
+    
+    const html = '<option value="">Elige tu Cineplanet</option>' +
+        cinesFiltrados.map(cine => `
+            <option value="${cine.id_sede}">${cine.nombre}</option>
+        `).join('');
 
-    const pelicula = peliculasData.find(p => p.id === peliculaId) || peliculasData[0];
-
-    dropdownCine.querySelectorAll('.filtro-opcion').forEach(opcion => {
-        opcion.addEventListener('click', () => {
-            seleccionarCine(opcion.dataset.cine);
-        });
-    });
+    selectCine.innerHTML = html;
 }
 
 function renderFechas() {
+    if (!selectFecha) return;
+    
     const html = state.dates.map(fecha => `
-        <div class="filtro-opcion" data-fecha="${fecha.id}">
-            ${fecha.nombre}
-        </div>
+        <option value="${fecha.id}">${fecha.nombre}</option>
     `).join('');
 
-    cinesFiltrados.forEach(cine => {
-        const cineItem = document.createElement('div');
-        cineItem.className = 'cine-item'; // Por defecto cerrado
-
-        let gruposHtml = '';
-        cine.grupos.forEach(grupo => {
-            let botonesHtml = '';
-            grupo.horarios.forEach(hora => {
-                botonesHtml += `
-                    <button class="btn-horario" onclick="seleccionarHorario('${hora}', '${cine.nombre}', '${grupo.formato}', '${grupo.tipo}')">
-                        ${hora} <i class="fas fa-couch"></i>
-                    </button>
-                `;
-            });
-
-    dropdownFecha.querySelectorAll('.filtro-opcion').forEach(opcion => {
-        opcion.addEventListener('click', () => {
-            seleccionarFecha(opcion.dataset.fecha);
-        });
-    });
+    selectFecha.innerHTML = html;
 }
 
 // ===== LÓGICA DE SELECCIÓN =====
 
 function seleccionarCiudad(ciudadId) {
-    const ciudad = state.allCities.find(c => c.id_ciudad == ciudadId);
-    if (!ciudad) return;
-
     state.cityId = ciudadId;
     state.cinemaId = null;
-
-    ciudadSeleccionadaTexto.textContent = ciudad.nombre;
-    cineSeleccionadoTexto.textContent = 'Todos los cines';
-
-    cerrarTodosDropdowns();
-
-    btnCine.disabled = false;
-    btnFecha.disabled = false;
-
+    
+    if (selectCine) selectCine.value = '';
+    
     renderCines(ciudadId);
     
     // Al seleccionar ciudad, cargar todas las funciones de esa ciudad
@@ -249,6 +199,12 @@ function seleccionarCiudad(ciudadId) {
 }
 
 function seleccionarCine(cineId) {
+    if (!cineId) {
+        state.cinemaId = null;
+        cargarTodasLasFunciones();
+        return;
+    }
+    
     const cine = state.allCinemas.find(c => c.id_sede == cineId);
     if (!cine) return;
 
@@ -257,31 +213,17 @@ function seleccionarCine(cineId) {
     // Si no hay ciudad seleccionada, auto-seleccionar la ciudad del cine
     if (!state.cityId) {
         state.cityId = cine.id_ciudad;
-        const ciudad = state.allCities.find(c => c.id_ciudad == cine.id_ciudad);
-        if (ciudad) {
-            ciudadSeleccionadaTexto.textContent = ciudad.nombre;
-            renderCines(cine.id_ciudad);
-        }
+        if (selectCiudad) selectCiudad.value = cine.id_ciudad;
+        renderCines(cine.id_ciudad);
+        if (selectCine) selectCine.value = cineId;
     }
-
-    cineSeleccionadoTexto.textContent = cine.nombre;
-
-    cerrarTodosDropdowns();
-
-    btnFecha.disabled = false;
     
     // Al seleccionar cine específico, cargar solo sus funciones
     cargarFunciones();
 }
 
 function seleccionarFecha(fechaId) {
-    const fecha = state.dates.find(f => f.id == fechaId);
-    if (!fecha) return;
-
     state.date = fechaId;
-    fechaSeleccionadaTexto.textContent = fecha.nombre;
-
-    cerrarTodosDropdowns();
     
     // Si hay cine seleccionado, cargar solo ese cine; si no, cargar todas las sedes
     if (state.cinemaId) {
@@ -431,7 +373,7 @@ function renderizarFuncionesUnaSede(funciones) {
         hora: func.hora ? func.hora.substring(0, 5) : '00:00'
     })).sort((a, b) => a.hora.localeCompare(b.hora));
 
-    const cineNombre = cineSeleccionadoTexto.textContent;
+    const cineNombre = selectCine?.options[selectCine.selectedIndex]?.text || 'Cine';
     
     const horariosHTML = horarios.map(h => `
         <button class="horario-btn" 
@@ -494,42 +436,35 @@ function agregarEventosHorarios() {
 
 // ===== UTILIDADES UI =====
 
-function toggleDropdown(dropdown, button) {
-    const estaAbierto = dropdown.classList.contains('abierto');
-    cerrarTodosDropdowns();
-    if (!estaAbierto) {
-        dropdown.classList.add('abierto');
-        button.classList.add('activo');
-    }
-}
-
-function cerrarTodosDropdowns() {
-    document.querySelectorAll('.filtro-dropdown').forEach(d => d.classList.remove('abierto'));
-    document.querySelectorAll('.filtro-header').forEach(b => b.classList.remove('activo'));
-}
-
 function inicializarEventos() {
     if (botonComprar) {
         botonComprar.addEventListener('click', () => {
-            seccionCompra.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const seccionHorarios = document.querySelector('.seccion-horarios');
+            if (seccionHorarios) {
+                seccionHorarios.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
     }
 
-    btnCiudad.addEventListener('click', () => toggleDropdown(dropdownCiudad, btnCiudad));
-    btnCine.addEventListener('click', () => {
-        if (!btnCine.disabled) toggleDropdown(dropdownCine, btnCine);
-    });
-    btnFecha.addEventListener('click', () => {
-        if (!btnFecha.disabled) toggleDropdown(dropdownFecha, btnFecha);
-    });
-
-function inicializarEventos() {
-    selectCiudad.addEventListener('change', () => {
-        selectCine.value = ""; // Resetear cine al cambiar ciudad
-        renderizarHorarios();
-    });
-    selectCine.addEventListener('change', renderizarHorarios);
-    selectFecha.addEventListener('change', renderizarHorarios);
+    // Eventos para los selects
+    if (selectCiudad) {
+        selectCiudad.addEventListener('change', (e) => {
+            seleccionarCiudad(e.target.value);
+        });
+    }
+    
+    if (selectCine) {
+        selectCine.addEventListener('change', (e) => {
+            seleccionarCine(e.target.value);
+        });
+    }
+    
+    if (selectFecha) {
+        selectFecha.addEventListener('change', (e) => {
+            seleccionarFecha(e.target.value);
+        });
+    }
+}
 
 // Arrancar
 if (document.readyState === 'loading') {
