@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . "/../models/EmpleadoModel.php";
-require_once __DIR__ . "/../models/SedeModelFixed.php";
+require_once __DIR__ . "/../models/SedeModel.php";
 require_once __DIR__ . "/../models/HorarioModel.php";
 
 class EmpleadoController {
