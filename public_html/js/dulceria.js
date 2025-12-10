@@ -10,6 +10,8 @@ import { iniciarTimer, detenerTimer, getTiempoRestante } from "./components/buta
 let combos = [];
 let ordenDulceria = [];
 let totalDulceria = 0;
+let descuentoSocio = 0;
+let nombreSocio = '';
 
 // ===== INICIALIZACIÓN =====
 
@@ -17,6 +19,7 @@ async function init() {
   console.log('Inicializando dulcería...');
 
   cargarDatosFuncion();
+  await cargarDescuentosUsuario();
   await cargarCombos();
   configurarPestanas();
   configurarNavegacion();
@@ -59,6 +62,50 @@ async function cargarDatosFuncion() {
   document.getElementById('numero-entradas').textContent = numEntradas;
 }
 
+async function cargarDescuentosUsuario() {
+  const idUsuario = sessionStorage.getItem('id_usuario');
+  if (!idUsuario) return;
+
+  try {
+    const response = await fetchFromApi('tipo_socio', { usuario: idUsuario });
+    if (response.success && response.data) {
+      descuentoSocio = parseFloat(response.data.desc_dulces) || 0;
+      nombreSocio = response.data.nombre;
+      console.log(`Usuario socio: ${nombreSocio}, Descuento Dulcería: ${descuentoSocio}%`);
+
+      if (descuentoSocio > 0) {
+        mostrarNotificacionDescuento();
+      }
+    }
+  } catch (error) {
+    console.error('Error al cargar descuentos:', error);
+  }
+}
+
+function mostrarNotificacionDescuento() {
+  const container = document.querySelector('.container');
+  const banner = document.createElement('div');
+  banner.className = 'banner-descuento';
+  banner.innerHTML = `<i class="fas fa-crown"></i> ¡Eres socio <strong>${nombreSocio}</strong>! Tienes <strong>${descuentoSocio}% de descuento</strong> en dulcería.`;
+  banner.style.cssText = `
+    background: linear-gradient(90deg, #6a1b9a, #8e24aa);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    animation: slideDown 0.5s ease-out;
+  `;
+
+  const titulo = document.querySelector('h2');
+  if (titulo && titulo.parentNode) {
+    titulo.parentNode.insertBefore(banner, titulo.nextSibling);
+  } else if (container) {
+    container.insertBefore(banner, container.firstChild);
+  }
+}
+
 async function cargarCombos() {
   const galeria = document.getElementById('galeria-productos');
   galeria.innerHTML = '<p class="cargando">Cargando combos...</p>';
@@ -88,6 +135,18 @@ function renderizarCombos() {
   }
 
   combos.forEach(combo => {
+    const precioOriginal = parseFloat(combo.precio);
+    let precioFinal = precioOriginal;
+    let htmlPrecio = `S/${precioOriginal.toFixed(2)}`;
+
+    if (descuentoSocio > 0) {
+      precioFinal = precioOriginal * (1 - descuentoSocio / 100);
+      htmlPrecio = `
+        <span class="precio-tachado" style="text-decoration: line-through; color: #999; font-size: 0.8em;">S/${precioOriginal.toFixed(2)}</span>
+        <span class="precio-descuento" style="color: #e91e63; font-weight: bold;">S/${precioFinal.toFixed(2)}</span>
+      `;
+    }
+
     const card = document.createElement('div');
     card.className = 'tarjeta-producto';
     card.innerHTML = `
@@ -98,21 +157,21 @@ function renderizarCombos() {
       <div class="info-producto">
         <h4>${combo.nombre}</h4>
         <p class="descripcion">${combo.descripcion || 'Delicioso combo'}</p>
-        <p class="precio">Precio: <strong>S/${parseFloat(combo.precio).toFixed(2)}</strong></p>
-        <button class="btn-agregar" data-id="${combo.id_combo}">
+        <div class="precio">${htmlPrecio}</div>
+        <button class="btn-agregar" onclick="agregarCombo(${combo.id_combo}, '${combo.nombre}', ${precioFinal})">
           <i class="fas fa-shopping-cart"></i> Agregar
         </button>
       </div>
     `;
-
-    card.querySelector('.btn-agregar').addEventListener('click', () => agregarCombo(combo));
     galeria.appendChild(card);
   });
 }
 
 // ===== ORDEN =====
 
-function agregarCombo(combo) {
+// ===== ORDEN =====
+
+window.agregarCombo = function (id, nombre, precio) {
   // Límite: máximo combos = cantidad de entradas
   const cantidadEntradas = parseInt(sessionStorage.getItem('cantidadEntradas')) || 10;
 
@@ -122,17 +181,17 @@ function agregarCombo(combo) {
   }
 
   ordenDulceria.push({
-    id: combo.id_combo,
-    nombre: combo.nombre,
-    precio: parseFloat(combo.precio)
+    id: id,
+    nombre: nombre,
+    precio: parseFloat(precio)
   });
 
-  totalDulceria += parseFloat(combo.precio);
+  totalDulceria += parseFloat(precio);
   actualizarOrden();
-  mostrarNotificacion(`${combo.nombre} agregado (${ordenDulceria.length}/${cantidadEntradas})`);
+  mostrarNotificacion(`${nombre} agregado (${ordenDulceria.length}/${cantidadEntradas})`);
 }
 
-function eliminarItem(id) {
+window.eliminarItem = function (id) {
   const index = ordenDulceria.findIndex(item => item.id == id);
   if (index > -1) {
     totalDulceria -= ordenDulceria[index].precio;

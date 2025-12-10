@@ -39,39 +39,50 @@ try {
         $stmt = $conn->prepare($sql);
         $stmt->execute([":documento" => $documento]);
         
-        $socio = $stmt->fetch(PDO::FETCH_ASSOC);
+        $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $usuario_encontrado = null;
 
-        if ($socio) {
-            // ¡Usuario encontrado! Ahora verificamos la contraseña
-            
-            // password_verify() compara la contraseña ingresada con el hash guardado
+        foreach ($socios as $socio) {
+            // 1. Verificar con password_verify (hash)
             if (password_verify($contrasena_ingresada, $socio["contrasena"])) {
-                
-                // ¡Éxito! Contraseña correcta.
-                // Preparamos los datos del usuario para devolver al frontend
-                // No incluimos la contraseña en la respuesta
-                $usuario_data = [
-                    "id_usuario" => $socio["id_usuario"],
-                    "nombre" => $socio["nombre"],
-                    "apellido" => $socio["apellido"],
-                    "documento" => $socio["documento"],
-                    "id_tipo_socio" => $socio["id_tipo_socio"]
-                ];
-                
-                $response = [
-                    "ok" => true,
-                    "usuario" => $usuario_data
-                ];
-                
-            } else {
-                // Contraseña incorrecta
+                $usuario_encontrado = $socio;
+                break;
+            }
+            // 2. Verificar texto plano (Legacy/Inseguro - pero necesario para datos actuales)
+            if ($contrasena_ingresada === $socio["contrasena"]) {
+                $usuario_encontrado = $socio;
+                break;
+            }
+        }
+
+        if ($usuario_encontrado) {
+            // ¡Éxito! Contraseña correcta.
+            $socio = $usuario_encontrado;
+            
+            $usuario_data = [
+                "id_usuario" => $socio["id_usuario"],
+                "nombre" => $socio["nombre"],
+                "apellido" => $socio["apellido"],
+                "documento" => $socio["documento"],
+                "id_tipo_socio" => $socio["id_tipo_socio"]
+            ];
+            
+            $response = [
+                "ok" => true,
+                "usuario" => $usuario_data
+            ];
+            
+        } else {
+            // Ningún usuario coincidió con la contraseña, o no se encontró el documento
+            if (count($socios) > 0) {
+                // El documento existe, pero la contraseña no coincidió para ninguno
                 http_response_code(401); // No autorizado
                 $response = ["ok" => false, "error" => "Documento o contraseña incorrecta"];
+            } else {
+                // Documento no encontrado
+                http_response_code(404); // No encontrado
+                $response = ["ok" => false, "error" => "Socio no encontrado"];
             }
-        } else {
-            // Usuario (documento) no encontrado
-            http_response_code(404); // No encontrado
-            $response = ["ok" => false, "error" => "Socio no encontrado"];
         }
         
     } else {

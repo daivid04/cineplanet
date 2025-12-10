@@ -80,6 +80,27 @@ class TipoSocioModel {
     }
 
     // -------------------------------------------------
+    // OBTENER TIPO DE SOCIO POR USUARIO
+    // -------------------------------------------------
+    public function getByUsuario($idUsuario) {
+        if (!is_numeric($idUsuario)) {
+            return null;
+        }
+
+        try {
+            $sql = "SELECT ts.id_socio, ts.nombre, ts.desc_dulces, ts.desc_boleto, ts.puntos_por_sol 
+                    FROM tipo_socio ts
+                    JOIN socio s ON ts.id_socio = s.id_tipo_socio
+                    WHERE s.id_usuario = :id_usuario AND ts.estado = 1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([":id_usuario" => $idUsuario]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
+    // -------------------------------------------------
     // OBTENER TODOS LOS TIPOS DE SOCIO
     // -------------------------------------------------
     public function getAll($soloActivos = false) {

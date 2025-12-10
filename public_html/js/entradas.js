@@ -11,6 +11,8 @@ let cantButacasReservadas = 0;
 let cantEntradasSeleccionadas = 0;
 let entradasDetalle = []; // Array de { id_tipo_entrada, tipo, categoria, cantidad, precio }
 let tiposEntrada = []; // Tipos de BD
+let descuentoSocio = 0;
+let nombreSocio = '';
 
 // ===== ELEMENTOS DOM =====
 let numeroButacasSpan;
@@ -86,6 +88,50 @@ function renderizarTiposEntrada() {
   configurarControlesCantidad();
 }
 
+async function cargarDescuentosUsuario() {
+  const idUsuario = sessionStorage.getItem('id_usuario');
+  if (!idUsuario) return;
+
+  try {
+    const response = await fetchFromApi('tipo_socio', { usuario: idUsuario });
+    if (response.success && response.data) {
+      descuentoSocio = parseFloat(response.data.desc_boleto) || 0;
+      nombreSocio = response.data.nombre;
+      console.log(`Usuario socio: ${nombreSocio}, Descuento: ${descuentoSocio}%`);
+
+      if (descuentoSocio > 0) {
+        mostrarNotificacionDescuento();
+      }
+    }
+  } catch (error) {
+    console.error('Error al cargar descuentos:', error);
+  }
+}
+
+function mostrarNotificacionDescuento() {
+  const container = document.querySelector('.container');
+  const banner = document.createElement('div');
+  banner.className = 'banner-descuento';
+  banner.innerHTML = `<i class="fas fa-crown"></i> ¡Eres socio <strong>${nombreSocio}</strong>! Tienes <strong>${descuentoSocio}% de descuento</strong> en entradas.`;
+  banner.style.cssText = `
+    background: linear-gradient(90deg, #6a1b9a, #8e24aa);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    animation: slideDown 0.5s ease-out;
+  `;
+
+  const titulo = document.getElementById('titulo-entradas');
+  if (titulo && titulo.parentNode) {
+    titulo.parentNode.insertBefore(banner, titulo.nextSibling);
+  } else if (container) {
+    container.insertBefore(banner, container.firstChild);
+  }
+}
+
 function crearItemEntrada(tipo) {
   const categoriaLabel = {
     'adulto': '',
@@ -94,15 +140,27 @@ function crearItemEntrada(tipo) {
     'conadis': '<span class="tag-categoria conadis">Conadis</span>'
   };
 
+  const precioOriginal = parseFloat(tipo.precio);
+  let precioFinal = precioOriginal;
+  let htmlPrecio = `S/${precioOriginal.toFixed(2)}`;
+
+  if (descuentoSocio > 0) {
+    precioFinal = precioOriginal * (1 - descuentoSocio / 100);
+    htmlPrecio = `
+      <span class="precio-tachado" style="text-decoration: line-through; color: #999; font-size: 0.9em;">S/${precioOriginal.toFixed(2)}</span>
+      <span class="precio-descuento" style="color: #e91e63; font-weight: bold;">S/${precioFinal.toFixed(2)}</span>
+    `;
+  }
+
   return `
     <div class="item-entrada" 
          data-id="${tipo.id_tipo_entrada}" 
-         data-precio="${tipo.precio}" 
+         data-precio="${precioFinal.toFixed(2)}" 
          data-categoria="${tipo.categoria}">
       <div class="info">
         <h4>${tipo.nombre} ${categoriaLabel[tipo.categoria] || ''}</h4>
         <span class="descripcion">${tipo.descripcion || ''}</span>
-        <div class="precio-normal">S/${parseFloat(tipo.precio).toFixed(2)}</div>
+        <div class="precio-normal">${htmlPrecio}</div>
       </div>
       <div class="control-cantidad">
         <button class="btn-restar" disabled>-</button>
@@ -260,6 +318,7 @@ async function inicializarPagina() {
 
   inicializarElementos();
   await cargarDatosFuncion();
+  await cargarDescuentosUsuario(); // Cargar descuentos antes de renderizar
   await cargarTiposEntrada();
   configurarTemporizador();
   configurarNavegacion();

@@ -33,6 +33,8 @@ try {
         case 'GET':
             if (isset($_GET['id'])) {
                 $response = $controller->getById(intval($_GET['id']));
+            } elseif (isset($_GET['usuario'])) {
+                $response = $controller->getByUsuario(intval($_GET['usuario']));
             } else {
                 $soloActivos = isset($_GET['activos']) && $_GET['activos'] == '1';
                 $response = $controller->getAll($soloActivos);

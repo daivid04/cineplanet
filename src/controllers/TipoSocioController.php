@@ -30,6 +30,20 @@ class TipoSocioController {
         }
     }
 
+    public function getByUsuario($idUsuario) {
+        try {
+            $tipoSocio = $this->tipoSocioModel->getByUsuario($idUsuario);
+            
+            if (!$tipoSocio) {
+                return ["success" => false, "message" => "Usuario no tiene membresía activa"];
+            }
+
+            return ["success" => true, "data" => $tipoSocio];
+        } catch (Exception $e) {
+            return ["success" => false, "message" => $e->getMessage()];
+        }
+    }
+
     public function getAll($soloActivos = false) {
         try {
             $tiposSocio = $this->tipoSocioModel->getAll($soloActivos);
