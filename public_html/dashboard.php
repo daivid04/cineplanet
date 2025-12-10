@@ -18,16 +18,34 @@ try {
     } else {
         $data = [
             'empleados' => [],
-            'stats' => []
+            'stats' => [
+                'total_empleados' => 0,
+                'nuevas_contrataciones' => 0,
+                'turnos_activos' => 0,
+                'ausencias' => 0
+            ],
+            'charts' => [
+                'sedes' => ['labels' => [], 'values' => []],
+                'cargos' => ['labels' => [], 'values' => []]
+            ]
         ];
-        echo "<div style='background:red;color:white;padding:10px;'>Error: " . $response['message'] . "</div>";
+        // Error silenciado para producción
     }
 } catch (Exception $e) {
     $data = [
         'empleados' => [],
-        'stats' => []
+        'stats' => [
+            'total_empleados' => 0,
+            'nuevas_contrataciones' => 0,
+            'turnos_activos' => 0,
+            'ausencias' => 0
+        ],
+        'charts' => [
+            'sedes' => ['labels' => [], 'values' => []],
+            'cargos' => ['labels' => [], 'values' => []]
+        ]
     ];
-    echo "<div style='background:red;color:white;padding:10px;'>Excepción: " . $e->getMessage() . "</div>";
+    // Error silenciado para producción
 }
 
 // Variables para la vista

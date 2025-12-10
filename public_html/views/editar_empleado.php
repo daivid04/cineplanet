@@ -14,7 +14,7 @@ $empleado = null;
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if (!$id) {
-    header("Location: /cineplanet/public_html/empleados.php");
+    header("Location: ../empleados.php");
     exit;
 }
 
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $controller->update($id, $data);
 
     if ($result['success']) {
-        $message = "Empleado actualizado exitosamente. <a href='/cineplanet/public_html/empleados.php' class='underline'>Volver a la lista</a>";
+        $message = "Empleado actualizado exitosamente. <a href='../empleados.php' class='underline'>Volver a la lista</a>";
         // Recargar datos
         $empleadoResult = $controller->getById($id);
         if ($empleadoResult['success']) {
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-cineplanet-dark text-white p-6 flex justify-between items-center">
             <h1 class="text-2xl font-bold">Editar Empleado</h1>
-            <a href="/cineplanet/public_html/empleados.php" class="text-gray-300 hover:text-white">
+            <a href="../empleados.php" class="text-gray-300 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="flex justify-end pt-4">
-                    <a href="/cineplanet/public_html/empleados.php" class="mr-4 rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cineplanet-blue focus:ring-offset-2">Cancelar</a>
+                    <a href="../empleados.php" class="mr-4 rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cineplanet-blue focus:ring-offset-2">Cancelar</a>
                     <button type="submit" class="rounded-md border border-transparent bg-cineplanet-blue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-cineplanet-blue focus:ring-offset-2">Actualizar Empleado</button>
                 </div>
             </form>
