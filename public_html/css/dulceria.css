@@ -1,0 +1,613 @@
+:root {
+    --color-header-bg: #003964;
+    /* Dark blue header */
+    --color-bg-body: #f2f2f2;
+    /* Light grey background */
+    --color-text-primary: #333;
+    --color-text-secondary: #666;
+    --color-blue-btn: #0055a5;
+    --color-blue-btn-hover: #004488;
+    --color-red-price: #e91e63;
+    /* Pinkish red for total */
+    --color-red-btn-outline: #e91e63;
+    --font-family: 'Roboto', Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--color-bg-body);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Header --- */
+.header-dulceria {
+    background-color: var(--color-header-bg);
+    color: white;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-izquierda,
+.header-derecha {
+    display: flex;
+    align-items: center;
+    width: 200px;
+    /* Balance center */
+}
+
+.header-derecha {
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.separador-header {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 0 5px;
+}
+
+.btn-atras {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-centro {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.header-centro h2 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.icono-header {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    /* Slightly larger */
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Layout Wrapper --- */
+.layout-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    overflow-y: auto;
+    /* Allow scrolling if height exceeds viewport */
+}
+
+.contenedor-compra {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    /* Limit width to create side spaces */
+    background-color: transparent;
+    gap: 20px;
+    align-items: flex-start;
+    /* Prevent stretching */
+}
+
+/* --- Sidebar (Resumen) --- */
+.panel-resumen {
+    width: 280px;
+    background-color: #f9f9f9;
+    /* Slightly off-white */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    /* No border, just clean look */
+}
+
+.pelicula-poster {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px;
+    background-color: #ddd;
+    position: relative;
+}
+
+.pelicula-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.panel-resumen h3 {
+    color: #003964;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.pelicula-detalles {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.info-funcion {
+    margin-bottom: 20px;
+}
+
+.info-funcion p {
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-funcion strong {
+    color: #003964;
+    font-weight: bold;
+}
+
+.info-funcion i {
+    width: 16px;
+    text-align: center;
+    color: #666;
+}
+
+.info-compra {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+    margin-bottom: 10px;
+}
+
+.info-compra p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #003964;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.total-resumen {
+    margin-bottom: 20px;
+}
+
+.texto-total {
+    font-size: 1.1rem;
+    color: var(--color-red-price);
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.precio-total {
+    font-weight: bold;
+}
+
+.btn-ver-resumen {
+    background: transparent;
+    border: 1px solid var(--color-red-btn-outline);
+    color: var(--color-red-btn-outline);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.btn-ver-resumen:hover {
+    background: var(--color-red-btn-outline);
+    color: white;
+}
+
+/* --- Main Content (Dulceria) --- */
+.panel-dulceria {
+    flex: 1;
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top Bar: Progress & Timer */
+.barra-superior-dulceria {
+    display: flex;
+    justify-content: center;
+    /* Center everything */
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 0 20px;
+    position: relative;
+    /* For absolute positioning of timer if needed, but flex is better */
+}
+
+.progreso-compra {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    /* Lines connect directly */
+}
+
+.paso {
+    color: #ccc;
+    font-size: 1.4rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paso.completado {
+    color: #ccc;
+}
+
+.paso.activo {
+    color: #003964;
+}
+
+.paso.activo i {
+    font-size: 1.6rem;
+    /* Slightly larger active icon */
+}
+
+.linea-paso {
+    width: 40px;
+    height: 1px;
+    background-color: #ccc;
+    margin: 0 5px;
+}
+
+.timer-container {
+    font-size: 1.1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    right: 20px;
+    /* Position to the right as in image */
+}
+
+/* Categories Tabs */
+.pestanas-dulceria {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    border-bottom: none;
+}
+
+.pestana-dulceria {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    width: 90px;
+    opacity: 1;
+    /* Always visible */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.pestana-dulceria:hover {
+    opacity: 1;
+}
+
+.icono-contenedor {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    font-size: 1.8rem;
+    color: #555;
+    /* Default grey */
+}
+
+/* Active State */
+.pestana-dulceria.activa .icono-contenedor {
+    color: #e91e63;
+    /* Or specific color per icon if needed, but image shows colorful icons */
+}
+
+/* Underline for active tab */
+.pestana-dulceria.activa::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: #003964;
+    /* Dark blue underline */
+}
+
+.pestana-dulceria span {
+    font-size: 0.8rem;
+    text-align: center;
+    line-height: 1.2;
+    color: #333;
+    font-weight: normal;
+}
+
+.pestana-dulceria.activa span {
+    font-weight: bold;
+    color: #003964;
+}
+
+/* Product Grid */
+.galeria-productos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columns as in image */
+    gap: 20px;
+}
+
+.tarjeta-producto {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.imagen-producto {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.imagen-producto img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.info-producto h4 {
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: #333;
+    min-height: 2.5em;
+}
+
+.descripcion {
+    font-size: 0.7rem;
+    color: #777;
+    margin-bottom: 15px;
+    line-height: 1.3;
+    min-height: 3.9em;
+    /* Approx 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.precio {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.precio strong {
+    font-size: 1.1rem;
+    color: #333;
+    display: block;
+    /* Or inline */
+}
+
+.btn-agregar {
+    background-color: var(--color-blue-btn);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+    margin-top: auto;
+}
+
+.btn-agregar:hover {
+    background-color: var(--color-blue-btn-hover);
+}
+
+/* --- Bottom Panel (Order Summary) --- */
+.panel-inferior-dulceria {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px 10px 0 0;
+    /* Rounded top */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    /* Ensure it aligns with the main content if outside layout-wrapper */
+}
+
+.seccion-orden h3 {
+    font-size: 1.2rem;
+    color: #000;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.seccion-orden h3 i {
+    font-size: 1rem;
+    color: #333;
+}
+
+.contenedor-orden {
+    background-color: #f4f6f8;
+    /* Light grey background for the list */
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mensaje-orden-vacia {
+    color: #666;
+    text-align: center;
+    font-style: italic;
+}
+
+.lista-orden {
+    width: 100%;
+}
+
+.item-orden {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.item-orden:last-child {
+    border-bottom: none;
+}
+
+.detalle-item {
+    display: flex;
+    gap: 10px;
+    color: #000;
+    font-weight: bold;
+}
+
+.nombre-item {
+    text-transform: uppercase;
+}
+
+.precio-item {
+    font-weight: bold;
+    color: #000;
+}
+
+.btn-eliminar-item {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 15px;
+}
+
+.btn-eliminar-item:hover {
+    color: #e91e63;
+}
+
+.panel-inferior-dulceria {
+    display: flex;
+    flex-direction: column;
+}
+
+.seccion-orden {
+    margin-bottom: 20px;
+}
+
+.btn-continuar-dulceria {
+    background-color: #e91e63;
+    /* Pink/Red */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-end;
+    /* Align to right */
+    transition: background 0.3s;
+}
+
+.btn-continuar-dulceria:hover {
+    background-color: #c2185b;
+}
+
+/* Adjust layout to match image where button is to the right of the list? 
+   In the image, the button is outside the grey box, to the right.
+*/
+.contenedor-orden-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.contenedor-orden {
+    flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .contenedor-compra {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .panel-resumen {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .galeria-productos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

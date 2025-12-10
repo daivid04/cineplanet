@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../src/services/conexion.php';
-require_once __DIR__ . '/../../src/controllers/EmpleadoControllerV2.php';
+require_once __DIR__ . '/../../src/controllers/EmpleadoController.php';
 
 $controller = new EmpleadoController($conn);
 $sedesResult = $controller->getSedes();

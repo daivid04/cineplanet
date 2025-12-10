@@ -16,8 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'OPTIONS') {
 }
 
 // Incluir archivos necesarios
+require_once __DIR__ . "/../../config/config.php";
 require_once __DIR__ . "/../../src/services/conexion.php";
-require_once __DIR__ . "/../../src/controllers/funcion_controller.php";
+require_once __DIR__ . "/../../src/controllers/FuncionController.php";
 
 // Inicializar el controlador
 $funcionController = new FuncionController($conn);
@@ -127,7 +128,9 @@ try {
             }
             // Obtener todas las funciones
             else {
-                $response = $funcionController->getAll();
+                $soloActivos = isset($_GET['activos']) && $_GET['activos'] == '1';
+                $soloFuturas = isset($_GET['futuras']) && $_GET['futuras'] == '1';
+                $response = $funcionController->getAll($soloActivos, $soloFuturas);
             }
             break;
 
@@ -162,6 +165,18 @@ try {
             if (!$response['success']) {
                 http_response_code(400); // Bad Request
             }
+            break;
+
+        // ========== PATCH - CAMBIAR ESTADO ==========
+        case 'PATCH':
+            if (!$input || !isset($input['id']) || !isset($input['estado'])) {
+                throw new Exception("Se requieren: id, estado");
+            }
+
+            $response = $funcionController->toggleEstado(
+                intval($input['id']), 
+                intval($input['estado'])
+            );
             break;
 
         // ========== DELETE - ELIMINAR FUNCIÓN ==========

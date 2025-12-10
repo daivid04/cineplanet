@@ -5,7 +5,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json; charset=utf-8");
 
 require_once "../../src/services/conexion.php";
-require_once "../../src/controllers/usuariocontroller.php";
+require_once "../../src/controllers/UsuarioController.php";
 
 $controller = new UsuarioController($conn);
 $method = $_SERVER["REQUEST_METHOD"];

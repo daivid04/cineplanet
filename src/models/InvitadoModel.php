@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/usuario_model.php";
+require_once __DIR__ . "/UsuarioModel.php";
 
 class InvitadoModel extends UsuarioModel {
 

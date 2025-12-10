@@ -1,424 +1,653 @@
-// ===== DATOS DE PELÍCULAS =====
-const peliculas = [
-    {
-        id: 1,
-        nombre: "Tron Ares",
-        genero: "Ciencia Ficción",
-        clasificacion: "+14",
-        duracion: "2h",
-        imagenUrl: "../assets/images/tron.jpg",
-        esEstreno: true,
-        categoria: "cartelera",
-        ciudad: ["lima", "arequipa"],
-        cine: ["alcazar"],
-        generoFiltro: "ciencia-ficcion",
-        idioma: "doblada",
-        formato: "2d",
-        censura: "14"
-    },
-    {
-        id: 2,
-        nombre: "Amores Perros 25 Aniversario",
-        genero: "Thriller",
-        clasificacion: "+18",
-        duracion: "2h 34min",
-        imagenUrl: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=400&h=600&fit=crop",
-        esEstreno: true,
-        categoria: "cartelera",
-        ciudad: ["lima"],
-        cine: ["brasil"],
-        generoFiltro: "drama",
-        idioma: "subtitulada",
-        formato: "regular",
-        censura: "14"
-    },
-    {
-        id: 3,
-        nombre: "Dora: Aventura Mágicas en el Reino de las Sirenas",
-        genero: "Animación",
-        clasificacion: "APT",
-        duracion: "55min",
-        imagenUrl: "https://images.unsplash.com/photo-1571847140471-1d7766e825ea?w=400&h=600&fit=crop",
-        esEstreno: true,
-        categoria: "cartelera",
-        ciudad: ["lima", "cusco"],
-        cine: ["alcazar", "arequipa-mall"],
-        generoFiltro: "anime",
-        idioma: "doblada",
-        formato: "2d",
-        censura: "14"
-    },
-    {
-        id: 4,
-        nombre: "Downton Abbey El Gran Final",
-        genero: "Drama",
-        clasificacion: "+13",
-        duracion: "2h 5min",
-        imagenUrl: "https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400&h=600&fit=crop",
-        esEstreno: true,
-        categoria: "cartelera",
-        ciudad: ["lima", "trujillo"],
-        cine: ["brasil"],
-        generoFiltro: "drama",
-        idioma: "subtitulada",
-        formato: "prime",
-        censura: "14"
-    },
-    {
-        id: 5,
-        nombre: "El Poder del Exorcista",
-        genero: "Terror",
-        clasificacion: "+14",
-        duracion: "1h 36min",
-        imagenUrl: "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400&h=600&fit=crop",
-        esEstreno: true,
-        categoria: "cartelera",
-        ciudad: ["lima", "arequipa"],
-        cine: ["alcazar"],
-        generoFiltro: "terror",
-        idioma: "doblada",
-        formato: "2d",
-        censura: "14"
-    },
-    {
-        id: 6,
-        nombre: "It (Eso) [2017]",
-        genero: "Terror",
-        clasificacion: "+14",
-        duracion: "2h 21min",
-        imagenUrl: "https://images.unsplash.com/photo-1574267432644-f74f8ec5ba38?w=400&h=600&fit=crop",
-        esEstreno: true,
-        categoria: "cartelera",
-        ciudad: ["lima", "tacna"],
-        cine: ["brasil"],
-        generoFiltro: "terror",
-        idioma: "subtitulada",
-        formato: "3d",
-        censura: "14"
-    },
-    {
-        id: 7,
-        nombre: "Chainsaw Man",
-        genero: "Anime/Acción",
-        clasificacion: "+18",
-        imagenUrl: "../assets/images/chaninsaw.jpg",
-        esEstreno: true,
-        duracion: "1h 45min",
-        categoria: "preventa",
-        ciudad: ["lima"],
-        cine: ["alcazar"],
-        generoFiltro: "anime",
-        idioma: "subtitulada",
-        formato: "2d",
-        censura: "14"
-    },
-    {
-        id: 8,
-        nombre: "Catástrofe en el Aire",
-        genero: "Acción",
-        clasificacion: "+13",
-        imagenUrl: "../assets/images/catastrofe.jpg",
-        esEstreno: false,
-        duracion: "2h 10min",
-        categoria: "preventa",
-        ciudad: ["lima", "arequipa"],
-        cine: ["brasil"],
-        generoFiltro: "ciencia-ficcion",
-        idioma: "doblada",
-        formato: "regular",
-        censura: "14"
-    },
-    {
-        id: 9,
-        nombre: "Good Boy",
-        genero: "Terror",
-        clasificacion: "+16",
-        imagenUrl: "../assets/images/goodboy.jpg",
-        esEstreno: true,
-        duracion: "1h 28min",
-        categoria: "proximamente",
-        ciudad: ["lima"],
-        cine: ["alcazar"],
-        generoFiltro: "terror",
-        idioma: "doblada",
-        formato: "2d",
-        censura: "14"
-    },
-    {
-        id: 10,
-        nombre: "Teléfono Negro 2",
-        genero: "Terror",
-        clasificacion: "+16",
-        imagenUrl: "../assets/images/telefono-negro2.jpg",
-        esEstreno: false,
-        duracion: "1h 52min",
-        categoria: "proximamente",
-        ciudad: ["lima", "cusco"],
-        cine: ["brasil"],
-        generoFiltro: "terror-gore",
-        idioma: "subtitulada",
-        formato: "prime",
-        censura: "14"
-    }
-];
+/**
+ * peliculas.js
+ * Controlador principal para la página de Películas
+ * Maneja carga de películas, filtros dinámicos y categorías
+ */
 
-// ===== ESTADO DE LA APLICACIÓN =====
-let categoriaActual = "cartelera";
-let filtrosActivos = {
-    ciudad: [],
-    cine: [],
-    dia: null,
-    genero: [],
-    idioma: [],
-    formato: [],
-    censura: []
+// ======================================
+// CONFIGURACIÓN Y CONSTANTES
+// ======================================
+const API_BASE = '../api';
+
+// Estado global de la aplicación
+const appState = {
+    peliculas: [],              // Películas base (todas)
+    peliculasConFunciones: [],  // Películas con sus funciones (para filtros de ciudad/cine/día)
+    filteredPeliculas: [],
+    categoriaActual: 'cartelera',
+    diaSeleccionado: null,      // Fecha seleccionada para filtrar
+    filtros: {
+        ciudades: [],
+        cines: [],
+        generos: [],
+        idiomas: [],
+        formatos: [],
+        censuras: []
+    }
 };
 
-// ===== ELEMENTOS DEL DOM =====
-const galeria = document.getElementById('galeria-peliculas');
-const pestanas = document.querySelectorAll('.pestana');
-const botonesFiltrHeader = document.querySelectorAll('.filtro-header');
-
-// ===== FUNCIONES PRINCIPALES =====
+// ======================================
+// FUNCIONES DE API
+// ======================================
 
 /**
- * Crea el HTML de una tarjeta de película
+ * Fetch genérico para las APIs
  */
-function crearTarjetaPelicula(pelicula) {
-    const etiquetaEstreno = pelicula.esEstreno
-        ? '<div class="etiqueta-estreno">Estreno</div>'
-        : "";
+async function fetchApi(endpoint, params = {}) {
+    try {
+        let url = `${API_BASE}/${endpoint}`;
+        const queryParams = new URLSearchParams(params);
+        if (queryParams.toString()) {
+            url += `?${queryParams.toString()}`;
+        }
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Error al obtener datos de ${endpoint}:`, error);
+        return null;
+    }
+}
+
+/**
+ * Cargar todas las películas
+ */
+async function cargarPeliculas() {
+    const response = await fetchApi('pelicula_api.php', { activos: '1' });
+    // getAll devuelve { success, data, total }
+    if (response && response.success && Array.isArray(response.data)) {
+        appState.peliculas = response.data;
+        appState.filteredPeliculas = [...response.data];
+    }
+    return appState.peliculas;
+}
+
+/**
+ * Cargar películas en cartelera (con toda la info)
+ */
+async function cargarCartelera() {
+    // Usar endpoint activos que devuelve nombre, duracion, idiomas_texto, formatos_texto
+    const response = await fetchApi('pelicula_api.php', { activos: '1' });
+    if (response && response.success && Array.isArray(response.data)) {
+        return response.data;
+    }
+    return [];
+}
+
+/**
+ * Cargar películas con funciones (para filtros de ciudad/cine/día)
+ * @param {Object} filtros - Objeto con filtros opcionales {fecha, id_ciudad}
+ */
+async function cargarPeliculasConFunciones(filtros = {}) {
+    const params = { accion: 'agrupadas_por_pelicula' };
+
+    if (filtros.fecha) {
+        params.fecha = filtros.fecha;
+    }
+    if (filtros.id_ciudad) {
+        params.id_ciudad = filtros.id_ciudad;
+    }
+
+    const response = await fetchApi('funcion_api.php', params);
+    if (response && response.success && Array.isArray(response.data)) {
+        return response.data;
+    }
+    return [];
+}
+
+// ======================================
+// FUNCIONES DE CARGA DE FILTROS
+// ======================================
+
+/**
+ * Cargar ciudades desde la API
+ */
+async function cargarCiudades() {
+    const response = await fetchApi('ciudad_api.php', { activos: '1' });
+    if (response && response.success && Array.isArray(response.data)) {
+        renderFiltroOpciones('filtro-ciudad', response.data, 'id_ciudad', 'nombre', 'ciudad');
+    }
+}
+
+/**
+ * Cargar sedes/cines desde la API
+ */
+async function cargarSedes() {
+    const response = await fetchApi('sede_api.php', { activos: '1' });
+    if (response && response.success && Array.isArray(response.data)) {
+        renderFiltroOpciones('filtro-cine', response.data, 'id_sede', 'nombre', 'cine');
+    }
+}
+
+/**
+ * Cargar idiomas desde la API
+ */
+async function cargarIdiomas() {
+    const response = await fetchApi('idioma_api.php', { activos: '1' });
+    if (response && response.success && Array.isArray(response.data)) {
+        // Usar texto como valor para comparar con idiomas_texto de películas
+        renderFiltroOpciones('filtro-idioma', response.data, 'id_idioma', 'idioma', 'idioma', true);
+    }
+}
+
+/**
+ * Cargar formatos desde la API
+ */
+async function cargarFormatos() {
+    const response = await fetchApi('formato_api.php', { activos: '1' });
+    if (response && response.success && Array.isArray(response.data)) {
+        // Usar texto como valor para comparar con formatos_texto de películas
+        renderFiltroOpciones('filtro-formato', response.data, 'id_formato', 'nombre', 'formato', true);
+    }
+}
+
+/**
+ * Renderizar opciones de filtro dinámicamente
+ * @param {boolean} useTextAsValue - Si true, usa el texto como valor (para idiomas/formatos)
+ */
+function renderFiltroOpciones(containerId, items, valueKey, textKey, name, useTextAsValue = false) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = items.map(item => {
+        const value = useTextAsValue ? item[textKey] : item[valueKey];
+        return `
+            <label class="filtro-opcion">
+                <input type="checkbox" name="${name}" value="${value}" data-text="${item[textKey]}" />
+                <span>${item[textKey]}</span>
+            </label>
+        `;
+    }).join('');
+}
+
+/**
+ * Generar opciones de días (próximos 7 días)
+ */
+function cargarDias() {
+    const container = document.getElementById('filtro-dia');
+    if (!container) return;
+
+    const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+    let html = '';
+    const hoy = new Date();
+
+    for (let i = 0; i < 7; i++) {
+        const fecha = new Date(hoy);
+        fecha.setDate(hoy.getDate() + i);
+
+        const diaNombre = i === 0 ? 'Hoy' : dias[fecha.getDay()];
+        const fechaStr = `${diaNombre} ${fecha.getDate()} ${meses[fecha.getMonth()]}`;
+        const valorFecha = fecha.toISOString().split('T')[0];
+
+        html += `
+            <label class="filtro-opcion">
+                <input type="radio" name="dia" value="${valorFecha}" ${i === 0 ? 'checked' : ''} />
+                <span>${fechaStr}</span>
+            </label>
+        `;
+    }
+
+    container.innerHTML = html;
+}
+
+/**
+ * Generar filtros de géneros - Intenta cargar desde API, si no usa estáticos
+ */
+async function generarFiltrosGenero() {
+    const container = document.getElementById('filtro-genero');
+    if (!container) return;
+
+    // Intentar cargar desde API (si existe genero_api.php)
+    try {
+        const response = await fetchApi('genero_api.php', { activos: '1' });
+        if (response && response.success && Array.isArray(response.data) && response.data.length > 0) {
+            renderFiltroOpciones('filtro-genero', response.data, 'id_genero', 'nombre', 'genero');
+            return;
+        }
+    } catch (e) {
+        // API no existe, usar fallback
+    }
+
+    // Fallback: géneros estáticos comunes
+    const generos = [
+        { id: 'accion', nombre: 'Acción' },
+        { id: 'animacion', nombre: 'Animación' },
+        { id: 'aventura', nombre: 'Aventura' },
+        { id: 'ciencia-ficcion', nombre: 'Ciencia Ficción' },
+        { id: 'comedia', nombre: 'Comedia' },
+        { id: 'drama', nombre: 'Drama' },
+        { id: 'fantasia', nombre: 'Fantasía' },
+        { id: 'romance', nombre: 'Romance' },
+        { id: 'suspenso', nombre: 'Suspenso' },
+        { id: 'terror', nombre: 'Terror' }
+    ];
+
+    container.innerHTML = generos.map(genero => `
+        <label class="filtro-opcion">
+            <input type="checkbox" name="genero" value="${genero.id}" />
+            <span>${genero.nombre}</span>
+        </label>
+    `).join('');
+}
+
+/**
+ * Generar filtros de censura
+ */
+function cargarCensuras() {
+    const container = document.getElementById('filtro-censura');
+    if (!container) return;
+
+    const censuras = [
+        { value: 'apt', texto: 'Apto para todos' },
+        { value: '+7', texto: '+7' },
+        { value: '+12', texto: '+12' },
+        { value: '+14', texto: '+14' },
+        { value: '+18', texto: '+18' }
+    ];
+
+    container.innerHTML = censuras.map(c => `
+        <label class="filtro-opcion">
+            <input type="checkbox" name="censura" value="${c.value}" />
+            <span>${c.texto}</span>
+        </label>
+    `).join('');
+}
+
+// ======================================
+// FUNCIONES DE RENDERIZADO
+// ======================================
+
+/**
+ * Formatear duración en horas y minutos
+ */
+function formatearDuracion(minutos) {
+    if (!minutos) return '';
+    const horas = Math.floor(minutos / 60);
+    const mins = minutos % 60;
+    if (horas > 0) {
+        return `${horas}h ${mins}min`;
+    }
+    return `${mins}min`;
+}
+
+/**
+ * Template de tarjeta de película
+ */
+function crearTarjetaPelicula(pelicula, esEstreno = false) {
+    const duracionFormateada = formatearDuracion(pelicula.duracion);
+    // Extraer primer formato como género visual
+    const formato = pelicula.formatos_texto ? pelicula.formatos_texto.split(',')[0].trim() : 'General';
+    // Clasificación (por ahora +14 como ejemplo, se podría agregar campo en BD)
+    const clasificacion = '+14';
 
     return `
-        <article class="tarjeta-pelicula" data-id="${pelicula.id}">
-            ${etiquetaEstreno}
+        <article class="tarjeta-pelicula" data-id="${pelicula.id_pelicula}">
+            ${esEstreno ? '<span class="etiqueta-estreno">Estreno</span>' : ''}
             <div class="contenedor-imagen-pelicula">
-                <img 
-                    src="${pelicula.imagenUrl}" 
-                    alt="Póster de ${pelicula.nombre}"
-                    class="imagen-pelicula"
-                    loading="lazy"
-                    onerror="this.src='https://via.placeholder.com/300x450/95a5a6/ffffff?text=Sin+Imagen'"
-                />
+                <img src="${pelicula.url_imagen || '../assets/images/placeholder.svg'}" 
+                     alt="${pelicula.nombre}" 
+                     class="imagen-pelicula"
+                     onerror="this.src='../assets/images/placeholder.svg'" />
             </div>
             <div class="informacion-pelicula">
-                <h2 class="nombre-pelicula">${pelicula.nombre}</h2>
-                <p class="genero-pelicula">${pelicula.genero}, ${pelicula.duracion}</p>
-                <span class="clasificacion-pelicula">${pelicula.clasificacion}</span>
+                <h3 class="nombre-pelicula">${pelicula.nombre || 'Sin título'}</h3>
+                <p class="genero-pelicula">${formato}, ${duracionFormateada}, ${clasificacion}</p>
             </div>
         </article>
     `;
 }
 
 /**
- * Filtra las películas según los filtros activos
+ * Renderizar galería de películas
  */
-function filtrarPeliculas(listaPeliculas) {
-    return listaPeliculas.filter(pelicula => {
-        // Filtro por ciudad
-        if (filtrosActivos.ciudad.length > 0) {
-            const tieneciudad = filtrosActivos.ciudad.some(ciudad =>
-                pelicula.ciudad.includes(ciudad)
-            );
-            if (!tieneciudad) return false;
-        }
-
-        // Filtro por cine
-        if (filtrosActivos.cine.length > 0) {
-            const tieneCine = filtrosActivos.cine.some(cine =>
-                pelicula.cine.includes(cine)
-            );
-            if (!tieneCine) return false;
-        }
-
-        // Filtro por género
-        if (filtrosActivos.genero.length > 0) {
-            if (!filtrosActivos.genero.includes(pelicula.generoFiltro)) {
-                return false;
-            }
-        }
-
-        // Filtro por idioma
-        if (filtrosActivos.idioma.length > 0) {
-            if (!filtrosActivos.idioma.includes(pelicula.idioma)) {
-                return false;
-            }
-        }
-
-        // Filtro por formato
-        if (filtrosActivos.formato.length > 0) {
-            if (!filtrosActivos.formato.includes(pelicula.formato)) {
-                return false;
-            }
-        }
-
-        // Filtro por censura
-        if (filtrosActivos.censura.length > 0) {
-            if (!filtrosActivos.censura.includes(pelicula.censura)) {
-                return false;
-            }
-        }
-
-        return true;
-    });
-}
-
-/**
- * Renderiza las películas en la galería
- */
-function renderizarPeliculas() {
+function renderizarPeliculas(peliculas) {
+    const galeria = document.getElementById('galeria-peliculas');
     if (!galeria) return;
 
-    galeria.innerHTML = '<p class="mensaje-cargando">Cargando películas...</p>';
+    if (!peliculas || peliculas.length === 0) {
+        galeria.innerHTML = `
+            <div class="mensaje-cargando">
+                No se encontraron películas con los filtros seleccionados.
+            </div>
+        `;
+        return;
+    }
 
-    setTimeout(() => {
-        // Filtra por categoría
-        let peliculasFiltradas = peliculas.filter(
-            pelicula => pelicula.categoria === categoriaActual
-        );
-
-        // Aplica filtros adicionales
-        peliculasFiltradas = filtrarPeliculas(peliculasFiltradas);
-
-        if (peliculasFiltradas.length === 0) {
-            galeria.innerHTML = '<p class="mensaje-cargando">No hay películas disponibles con los filtros seleccionados</p>';
-            return;
-        }
-
-        const htmlTarjetas = peliculasFiltradas
-            .map(pelicula => crearTarjetaPelicula(pelicula))
-            .join("");
-
-        galeria.innerHTML = htmlTarjetas;
-
-        // Agrega eventos de click
-        agregarEventosClickTarjetas();
-    }, 300);
+    galeria.innerHTML = peliculas.map((pelicula, index) =>
+        crearTarjetaPelicula(pelicula, index < 3) // Marcar las primeras 3 como estreno
+    ).join('');
 }
 
 /**
- * Cambia la categoría activa
+ * Mostrar mensaje de carga
  */
-function cambiarCategoria(categoria) {
-    categoriaActual = categoria;
+function mostrarCargando() {
+    const galeria = document.getElementById('galeria-peliculas');
+    if (galeria) {
+        galeria.innerHTML = `
+            <div class="mensaje-cargando">
+                <span>Cargando películas...</span>
+            </div>
+        `;
+    }
+}
 
-    // Actualiza el estado visual de las pestañas
-    pestanas.forEach(pestana => {
-        if (pestana.dataset.categoria === categoria) {
-            pestana.classList.add('activa');
-        } else {
-            pestana.classList.remove('activa');
-        }
+// ======================================
+// FUNCIONES DE FILTROS
+// ======================================
+
+/**
+ * Configurar eventos de expansión/colapso de filtros
+ */
+function setupFiltrosAccordion() {
+    const headers = document.querySelectorAll('.filtro-header');
+
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            const filtroNombre = header.dataset.filtro;
+            const contenido = document.getElementById(`filtro-${filtroNombre}`);
+
+            if (contenido) {
+                // Toggle clase expandido
+                header.classList.toggle('expandido');
+                contenido.classList.toggle('expandido');
+            }
+        });
     });
 
-    renderizarPeliculas();
+    // Expandir el primer filtro por defecto
+    const primerHeader = document.querySelector('.filtro-header');
+    const primerContenido = document.querySelector('.filtro-contenido');
+    if (primerHeader && primerContenido) {
+        primerHeader.classList.add('expandido');
+        primerContenido.classList.add('expandido');
+    }
 }
 
 /**
- * Maneja el toggle de los filtros
+ * Obtener filtros seleccionados
  */
-function toggleFiltro(boton) {
-    const contenido = boton.nextElementSibling;
-    const estaExpandido = contenido.classList.contains('expandido');
+function obtenerFiltrosSeleccionados() {
+    const filtros = {
+        ciudades: [],
+        cines: [],
+        dia: null,
+        generos: [],
+        idiomas: [],
+        formatos: [],
+        censuras: []
+    };
 
-    if (estaExpandido) {
-        contenido.classList.remove('expandido');
-        boton.classList.remove('expandido');
+    // Ciudades
+    document.querySelectorAll('input[name="ciudad"]:checked').forEach(input => {
+        filtros.ciudades.push(input.value);
+    });
+
+    // Cines
+    document.querySelectorAll('input[name="cine"]:checked').forEach(input => {
+        filtros.cines.push(input.value);
+    });
+
+    // Día
+    const diaSeleccionado = document.querySelector('input[name="dia"]:checked');
+    if (diaSeleccionado) {
+        filtros.dia = diaSeleccionado.value;
+    }
+
+    // Géneros
+    document.querySelectorAll('input[name="genero"]:checked').forEach(input => {
+        filtros.generos.push(input.value);
+    });
+
+    // Idiomas
+    document.querySelectorAll('input[name="idioma"]:checked').forEach(input => {
+        filtros.idiomas.push(input.value);
+    });
+
+    // Formatos
+    document.querySelectorAll('input[name="formato"]:checked').forEach(input => {
+        filtros.formatos.push(input.value);
+    });
+
+    // Censuras
+    document.querySelectorAll('input[name="censura"]:checked').forEach(input => {
+        filtros.censuras.push(input.value);
+    });
+
+    return filtros;
+}
+
+/**
+ * Aplicar filtros a las películas
+ * Combina filtros de funciones (ciudad/cine/día) con filtros de película (idioma/formato)
+ */
+async function aplicarFiltros() {
+    const filtros = obtenerFiltrosSeleccionados();
+
+    // Si hay filtros de ciudad, cine o día, necesitamos usar las funciones
+    const usarFiltrosFunciones = filtros.ciudades.length > 0 ||
+        filtros.cines.length > 0 ||
+        filtros.dia;
+
+    let peliculasFiltradas;
+
+    if (usarFiltrosFunciones) {
+        // Construir parámetros para la API
+        const apiParams = {};
+
+        if (filtros.dia) {
+            apiParams.fecha = filtros.dia;
+        }
+
+        // Si solo hay una ciudad seleccionada, filtrar desde la API
+        if (filtros.ciudades.length === 1) {
+            apiParams.id_ciudad = filtros.ciudades[0];
+        }
+
+        // Cargar películas con funciones
+        const peliculasConFunciones = await cargarPeliculasConFunciones(apiParams);
+
+        // Filtrar por ciudad (si hay múltiples ciudades seleccionadas)
+        if (filtros.ciudades.length > 1) {
+            peliculasFiltradas = peliculasConFunciones.filter(p => {
+                if (!p.funciones || p.funciones.length === 0) return false;
+                return p.funciones.some(f =>
+                    filtros.ciudades.includes(String(f.id_ciudad))
+                );
+            });
+        } else {
+            peliculasFiltradas = [...peliculasConFunciones];
+        }
+
+        // Filtrar por cine (sede)
+        if (filtros.cines.length > 0) {
+            peliculasFiltradas = peliculasFiltradas.filter(p => {
+                if (!p.funciones || p.funciones.length === 0) return false;
+                return p.funciones.some(f =>
+                    filtros.cines.includes(String(f.id_sede))
+                );
+            });
+        }
+
+        // Enriquecer películas con datos completos (idiomas, formatos)
+        peliculasFiltradas = peliculasFiltradas.map(pf => {
+            const peliculaCompleta = appState.peliculas.find(p => p.id_pelicula === pf.id_pelicula);
+            return {
+                ...pf,
+                idiomas_texto: peliculaCompleta?.idiomas_texto || '',
+                formatos_texto: peliculaCompleta?.formatos_texto || ''
+            };
+        });
     } else {
-        contenido.classList.add('expandido');
-        boton.classList.add('expandido');
+        // Si no hay filtros de funciones, usar las películas base
+        peliculasFiltradas = [...appState.peliculas];
     }
+
+    // Filtrar por idioma (si la película tiene idiomas_texto)
+    if (filtros.idiomas.length > 0) {
+        peliculasFiltradas = peliculasFiltradas.filter(p => {
+            if (!p.idiomas_texto) return false;
+            const idiomasPelicula = p.idiomas_texto.toLowerCase();
+            return filtros.idiomas.some(idiomaId => {
+                return idiomasPelicula.includes(idiomaId.toLowerCase());
+            });
+        });
+    }
+
+    // Filtrar por formato
+    if (filtros.formatos.length > 0) {
+        peliculasFiltradas = peliculasFiltradas.filter(p => {
+            if (!p.formatos_texto) return false;
+            const formatosPelicula = p.formatos_texto.toLowerCase();
+            return filtros.formatos.some(formatoId => {
+                return formatosPelicula.includes(formatoId.toLowerCase());
+            });
+        });
+    }
+
+    appState.filteredPeliculas = peliculasFiltradas;
+    renderizarPeliculas(peliculasFiltradas);
 }
 
 /**
- * Maneja los cambios en los checkboxes de filtros
+ * Configurar eventos de cambio en filtros
  */
-function manejarCambioFiltro(event) {
-    const input = event.target;
-    const nombre = input.name;
-    const valor = input.value;
+function setupFiltrosEventos() {
+    const panelFiltros = document.querySelector('.panel-filtros');
+    if (!panelFiltros) return;
 
-    if (input.type === 'checkbox') {
-        if (input.checked) {
-            if (!filtrosActivos[nombre].includes(valor)) {
-                filtrosActivos[nombre].push(valor);
+    panelFiltros.addEventListener('change', async (e) => {
+        if (e.target.matches('input[type="checkbox"], input[type="radio"]')) {
+            // Mostrar carga para filtros que requieren API (ciudad, cine, día)
+            const nombreFiltro = e.target.name;
+            if (['ciudad', 'cine', 'dia'].includes(nombreFiltro)) {
+                mostrarCargando();
             }
-        } else {
-            filtrosActivos[nombre] = filtrosActivos[nombre].filter(v => v !== valor);
+            await aplicarFiltros();
         }
-    } else if (input.type === 'radio') {
-        filtrosActivos[nombre] = valor;
+    });
+}
+
+// ======================================
+// FUNCIONES DE PESTAÑAS/CATEGORÍAS
+// ======================================
+
+/**
+ * Configurar eventos de pestañas
+ */
+function setupPestanas() {
+    const pestanas = document.querySelectorAll('.pestana');
+
+    pestanas.forEach(pestana => {
+        pestana.addEventListener('click', async () => {
+            // Remover clase activa de todas
+            pestanas.forEach(p => p.classList.remove('activa'));
+            // Agregar clase activa a la seleccionada
+            pestana.classList.add('activa');
+
+            const categoria = pestana.dataset.categoria;
+            appState.categoriaActual = categoria;
+
+            mostrarCargando();
+
+            // Cargar películas según categoría
+            await cargarPeliculasPorCategoria(categoria);
+        });
+    });
+}
+
+/**
+ * Cargar películas según categoría
+ */
+async function cargarPeliculasPorCategoria(categoria) {
+    switch (categoria) {
+        case 'cartelera':
+            // Películas activas (en cartelera)
+            appState.peliculas = await cargarCartelera();
+            break;
+        case 'preventa':
+            // Para preventa, por ahora mostramos mensaje
+            appState.peliculas = [];
+            break;
+        case 'proximamente':
+            // Para próximamente, películas con fecha futura
+            appState.peliculas = [];
+            break;
+        default:
+            appState.peliculas = await cargarCartelera();
     }
 
-    console.log('Filtros activos:', filtrosActivos);
-    renderizarPeliculas();
+    appState.filteredPeliculas = [...appState.peliculas];
+    await aplicarFiltros();
 }
 
+// ======================================
+// FUNCIONES DE EVENTOS
+// ======================================
+
 /**
- * Agrega eventos de click a las tarjetas
+ * Configurar clic en tarjeta de película
  */
-function agregarEventosClickTarjetas() {
-    const tarjetas = document.querySelectorAll('.tarjeta-pelicula');
+function setupClickPeliculas() {
+    const galeria = document.getElementById('galeria-peliculas');
+    if (!galeria) return;
 
-    tarjetas.forEach(tarjeta => {
-        tarjeta.addEventListener('click', () => {
-            const idPelicula = tarjeta.dataset.id;
-            const pelicula = peliculas.find(p => p.id === Number(idPelicula));
-
-            if (pelicula) {
-                console.log('Película seleccionada:', pelicula);
-                // Redirige a la página de selección
-                window.location.href = `seleccion.html?id=${idPelicula}`;
+    galeria.addEventListener('click', (e) => {
+        const tarjeta = e.target.closest('.tarjeta-pelicula');
+        if (tarjeta) {
+            const peliculaId = tarjeta.dataset.id;
+            if (peliculaId) {
+                // Guardar ID en sessionStorage para la siguiente página
+                sessionStorage.setItem('movieId', peliculaId);
+                // Redirigir a la página de selección
+                window.location.href = `seleccion.html?id=${peliculaId}`;
             }
-        });
+        }
     });
 }
+
+// ======================================
+// INICIALIZACIÓN
+// ======================================
 
 /**
- * Inicializa los eventos de las pestañas
+ * Inicializar la página
  */
-function inicializarEventosPestanas() {
-    pestanas.forEach(pestana => {
-        pestana.addEventListener('click', () => {
-            const categoria = pestana.dataset.categoria;
-            cambiarCategoria(categoria);
-        });
-    });
+async function init() {
+    console.log('Inicializando página de Películas...');
+
+    // Mostrar estado de carga
+    mostrarCargando();
+
+    // Configurar UI
+    setupFiltrosAccordion();
+    setupPestanas();
+    setupFiltrosEventos();
+    setupClickPeliculas();
+
+    // Cargar filtros dinámicos en paralelo
+    await Promise.all([
+        cargarCiudades(),
+        cargarSedes(),
+        cargarIdiomas(),
+        cargarFormatos(),
+        generarFiltrosGenero()
+    ]);
+
+    // Cargar filtros estáticos
+    cargarDias();
+    cargarCensuras();
+
+    // Cargar películas iniciales (cartelera)
+    await cargarPeliculasPorCategoria('cartelera');
+
+    console.log('Página de Películas inicializada correctamente');
 }
 
-/**
- * Inicializa los eventos de los filtros
- */
-function inicializarEventosFiltros() {
-    // Eventos para expandir/colapsar filtros
-    botonesFiltrHeader.forEach(boton => {
-        boton.addEventListener('click', () => {
-            toggleFiltro(boton);
-        });
-    });
-
-    // Eventos para checkboxes y radios
-    const inputsFiltros = document.querySelectorAll('.filtro-opcion input');
-    inputsFiltros.forEach(input => {
-        input.addEventListener('change', manejarCambioFiltro);
-    });
-}
-
-/**
- * Inicializa la aplicación
- */
-function inicializarAplicacion() {
-    console.log('Inicializando página de películas...');
-
-    // Inicializa eventos
-    inicializarEventosPestanas();
-    inicializarEventosFiltros();
-
-    // Renderiza películas iniciales
-    renderizarPeliculas();
-
-    console.log('Aplicación iniciada correctamente');
-}
-
-// ===== INICIO DE LA APLICACIÓN =====
-document.addEventListener('DOMContentLoaded', inicializarAplicacion);
+// Ejecutar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', init);

@@ -1,6 +1,6 @@
 <?php
 // Actualicé este archivo para que incluya la 'contrasena'
-require_once __DIR__ . "/usuario_model.php";
+require_once __DIR__ . "/UsuarioModel.php";
 
 class SocioModel extends UsuarioModel {
     

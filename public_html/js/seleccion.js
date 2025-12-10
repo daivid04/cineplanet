@@ -1,483 +1,474 @@
+
+import { fetchFromApi } from "./data-manager.js";
+import { loadMovieSelect } from "./components/select/seleccion-template.js";
+
 // ===== ELEMENTOS DEL DOM =====
+const tituloPelicula = document.getElementById('titulo-pelicula');
+const generoPelicula = document.getElementById('genero-pelicula');
+const duracionPelicula = document.getElementById('duracion-pelicula');
+const clasificacionPelicula = document.getElementById('clasificacion-pelicula');
+const posterPelicula = document.getElementById('poster-pelicula');
 const botonComprar = document.getElementById('boton-comprar');
-const seccionCompra = document.getElementById('seccion-compra');
-const contenedorCines = document.getElementById('contenedor-cines');
-const botonesIdioma = document.querySelectorAll('.opcion-idioma');
+const contenedorCines = document.getElementById('lista-cines');
 
-// Elementos de la barra de filtros
-const btnCiudad = document.getElementById('btn-ciudad');
-const btnCine = document.getElementById('btn-cine');
-const btnFecha = document.getElementById('btn-fecha');
-const dropdownCiudad = document.getElementById('dropdown-ciudad');
-const dropdownCine = document.getElementById('dropdown-cine');
-const dropdownFecha = document.getElementById('dropdown-fecha');
-const ciudadSeleccionadaTexto = document.getElementById('ciudad-seleccionada');
-const cineSeleccionadoTexto = document.getElementById('cine-seleccionado');
-const fechaSeleccionadaTexto = document.getElementById('fecha-seleccionada');
+// Elementos de los filtros (selects nativos)
+const selectCiudad = document.getElementById('filtro-ciudad');
+const selectCine = document.getElementById('filtro-cine');
+const selectFecha = document.getElementById('filtro-fecha');
 
-// ===== ESTADO DE FILTROS =====
-let filtrosSeleccionados = {
-    ciudad: null,
-    cine: null,
-    fecha: null
+// ===== ESTADO =====
+const state = {
+  movieId: null,
+  cityId: null,
+  cinemaId: null,
+  date: null,
+  allCities: [],
+  allCinemas: [],
+  dates: []
 };
 
-// ===== DATOS ESTÁTICOS (simulados) =====
-const ciudadesDisponibles = [
-    { id: 'arequipa', nombre: 'Arequipa' },
-    { id: 'tacna', nombre: 'Tacna' },
-    { id: 'lima', nombre: 'Lima' },
-    { id: 'cusco', nombre: 'Cusco' }
-];
+// ===== INICIALIZACIÓN =====
+async function inicializarAplicacion() {
+  console.log('Inicializando página de selección...');
 
-const cinesPorCiudad = {
-    'arequipa': [
-        { id: 'alcazar', nombre: 'CP Alcazar' },
-        { id: 'mall-plaza', nombre: 'CP Arequipa Mall Plaza' },
-        { id: 'paseo-central', nombre: 'CP Arequipa Paseo Central' },
-        { id: 'real-plaza', nombre: 'CP Arequipa Real Plaza' }
-    ],
-    'tacna': [
-        { id: 'tacna', nombre: 'CP Tacna' }
-    ],
-    'lima': [
-        { id: 'san-miguel', nombre: 'CP San Miguel' },
-        { id: 'jockey-plaza', nombre: 'CP Jockey Plaza' }
-    ],
-    'cusco': [
-        { id: 'cusco', nombre: 'CP Cusco' }
-    ]
-};
+  // 1. Obtener ID de película de la URL
+  const urlParams = new URLSearchParams(window.location.search);
+  state.movieId = urlParams.get('id');
 
-const fechasDisponibles = [
-    { id: 'hoy', nombre: 'Hoy Jueves 13' },
-    { id: 'manana', nombre: 'Mañana Viernes 14' },
-    { id: 'sabado', nombre: 'Sábado 15' },
-    { id: 'domingo', nombre: 'Domingo 16' }
-];
+  if (state.movieId) {
+    sessionStorage.setItem('movieId', state.movieId);
+  } else {
+    state.movieId = sessionStorage.getItem('movieId');
+  }
 
-const funcionesPorCine = {
-    'alcazar': [
-        {
-            formato: '2D',
-            tipo: 'REGULAR',
-            horarios: ['14:30', '17:00', '20:30']
-        },
-        {
-            formato: '3D',
-            tipo: 'DOBLADA',
-            horarios: ['15:30', '18:30', '21:30']
-        }
-    ],
-    'mall-plaza': [
-        {
-            formato: '2D',
-            tipo: 'REGULAR',
-            horarios: ['15:00', '18:30', '21:00']
-        }
-    ],
-    'paseo-central': [
-        {
-            formato: '2D',
-            tipo: 'REGULAR',
-            horarios: ['16:00', '19:00']
-        },
-        {
-            formato: 'PRIME',
-            tipo: 'DOBLADA',
-            horarios: ['20:00']
-        }
-    ],
-    'real-plaza': [
-        {
-            formato: '2D',
-            tipo: 'REGULAR',
-            horarios: ['14:00', '17:30', '20:00']
-        },
-        {
-            formato: '3D',
-            tipo: 'DOBLADA',
-            horarios: ['16:00', '19:30', '22:00']
-        }
-    ],
-    'tacna': [
-        {
-            formato: '2D',
-            tipo: 'REGULAR',
-            horarios: ['17:10', '18:00', '19:20', '20:10', '21:30', '22:20']
-        },
-        {
-            formato: '2D',
-            tipo: 'DOBLADA',
-            horarios: ['14:00', '16:30', '19:00']
-        }
-    ],
-    'san-miguel': [
-        {
-            formato: '2D',
-            tipo: 'REGULAR',
-            horarios: ['13:00', '15:30', '18:00', '20:30']
-        }
-    ],
-    'jockey-plaza': [
-        {
-            formato: 'PRIME',
-            tipo: 'REGULAR',
-            horarios: ['14:00', '17:00', '20:00']
-        }
-    ],
-    'cusco': [
-        {
-            formato: '2D',
-            tipo: 'REGULAR',
-            horarios: ['15:00', '18:00', '21:00']
-        }
-    ]
-};
+  if (!state.movieId) {
+    alert("No se ha seleccionado una película");
+    window.location.href = "index.html";
+    return;
+  }
 
-// ===== FUNCIONES PRINCIPALES =====
+  // 2. Cargar datos de la película (Header)
+  await loadMovieSelect();
 
-/**
- * Scroll suave al botón comprar
- */
-function scrollACompra() {
-    seccionCompra.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+  // 3. Cargar datos maestros (Ciudades y Sedes)
+  await cargarDatosMaestros();
+
+  // 4. Generar fechas (Próximos 7 días)
+  generarFechas();
+
+  // 5. Configurar eventos
+  inicializarEventos();
+
+  // 6. Procesar filtros de URL o cargar todo
+  const urlCity = urlParams.get('ciudad');
+  const urlCine = urlParams.get('cine');
+  const urlFecha = urlParams.get('fecha');
+
+  if (urlCity || urlCine || urlFecha) {
+    await procesarFiltrosURL(urlParams);
+  } else {
+    // Sin parámetros: seleccionar fecha de hoy y cargar todas las sedes
+    state.date = state.dates[0]?.id; // Hoy
+    if (selectFecha) selectFecha.value = state.date;
+    await cargarTodasLasFunciones();
+  }
+}
+
+async function cargarDatosMaestros() {
+  try {
+    const [citiesRes, cinemasRes] = await Promise.all([
+      fetchFromApi('ciudad'),
+      fetchFromApi('sede')
+    ]);
+
+    state.allCities = citiesRes.data || citiesRes || [];
+    state.allCinemas = cinemasRes.data || cinemasRes || [];
+
+    renderCiudades();
+  } catch (error) {
+    console.error("Error cargando datos maestros:", error);
+  }
+}
+
+function generarFechas() {
+  const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+  state.dates = [];
+  const hoy = new Date();
+
+  for (let i = 0; i < 7; i++) {
+    const fecha = new Date(hoy);
+    fecha.setDate(hoy.getDate() + i);
+
+    const diaStr = i === 0 ? 'Hoy' : (i === 1 ? 'Mañana' : diasSemana[fecha.getDay()]);
+    const fechaStr = `${diaStr} ${fecha.getDate()} ${meses[fecha.getMonth()]}`;
+    const valor = fecha.toISOString().split('T')[0]; // YYYY-MM-DD
+
+    state.dates.push({
+      id: valor,
+      nombre: fechaStr
     });
+  }
+
+  renderFechas();
 }
 
-/**
- * Cambia el idioma seleccionado
- */
-function cambiarIdioma(boton) {
-    botonesIdioma.forEach(btn => btn.classList.remove('activa'));
-    boton.classList.add('activa');
+async function procesarFiltrosURL(urlParams) {
+  const urlCity = urlParams.get('ciudad');
+  const urlCine = urlParams.get('cine');
+  const urlFecha = urlParams.get('fecha') || state.dates[0]?.id;
 
-    const idioma = boton.dataset.idioma;
-    console.log('Idioma seleccionado:', idioma);
-}
+  // Establecer fecha (default: hoy)
+  state.date = urlFecha;
+  if (selectFecha) selectFecha.value = urlFecha;
 
-/**
- * Inicializa las opciones de ciudad
- */
-function cargarCiudades() {
-    const html = ciudadesDisponibles.map(ciudad => `
-        <div class="filtro-opcion" data-ciudad="${ciudad.id}">
-            ${ciudad.nombre}
-        </div>
-    `).join('');
-
-    dropdownCiudad.innerHTML = html;
-
-    // Agregar eventos a las opciones
-    dropdownCiudad.querySelectorAll('.filtro-opcion').forEach(opcion => {
-        opcion.addEventListener('click', () => {
-            seleccionarCiudad(opcion.dataset.ciudad);
-        });
-    });
-}
-
-/**
- * Selecciona una ciudad y actualiza los filtros dependientes
- */
-function seleccionarCiudad(ciudadId) {
-    const ciudad = ciudadesDisponibles.find(c => c.id === ciudadId);
-
-    filtrosSeleccionados.ciudad = ciudadId;
-    filtrosSeleccionados.cine = null;
-    filtrosSeleccionados.fecha = null;
-
-    // Actualizar texto
-    ciudadSeleccionadaTexto.textContent = ciudad.nombre;
-    cineSeleccionadoTexto.textContent = 'Elige tu Cineplanet';
-    fechaSeleccionadaTexto.textContent = 'Hoy Jueves 13';
-
-    // Cerrar dropdown
-    cerrarTodosDropdowns();
-
-    // Habilitar siguiente filtro
-    btnCine.disabled = false;
-    btnFecha.disabled = true;
-
-    // Cargar cines de la ciudad
-    cargarCines(ciudadId);
-
-    // Limpiar resultados
-    contenedorCines.innerHTML = '<p class=\"mensaje-seleccionar\">Selecciona un cine para ver las funciones disponibles</p>';
-}
-
-/**
- * Carga los cines de una ciudad
- */
-function cargarCines(ciudadId) {
-    const cines = cinesPorCiudad[ciudadId] || [];
-
-    const html = cines.map(cine => `
-        <div class=\"filtro-opcion\" data-cine=\"${cine.id}\">
-            ${cine.nombre}
-        </div>
-    `).join('');
-
-    dropdownCine.innerHTML = html;
-
-    // Agregar eventos a las opciones
-    dropdownCine.querySelectorAll('.filtro-opcion').forEach(opcion => {
-        opcion.addEventListener('click', () => {
-            seleccionarCine(opcion.dataset.cine);
-        });
-    });
-}
-
-/**
- * Selecciona un cine y actualiza los filtros dependientes
- */
-function seleccionarCine(cineId) {
-    const cines = cinesPorCiudad[filtrosSeleccionados.ciudad] || [];
-    const cine = cines.find(c => c.id === cineId);
-
-    filtrosSeleccionados.cine = cineId;
-    filtrosSeleccionados.fecha = null;
-
-    // Actualizar texto
-    cineSeleccionadoTexto.textContent = cine.nombre;
-    fechaSeleccionadaTexto.textContent = 'Hoy Jueves 13';
-
-    // Cerrar dropdown
-    cerrarTodosDropdowns();
-
-    // Habilitar siguiente filtro
-    btnFecha.disabled = false;
-
-    // Cargar fechas
-    cargarFechas();
-
-    // Limpiar resultados
-    contenedorCines.innerHTML = '<p class=\"mensaje-seleccionar\">Selecciona una fecha para ver las funciones disponibles</p>';
-}
-
-/**
- * Carga las fechas disponibles
- */
-function cargarFechas() {
-    const html = fechasDisponibles.map(fecha => `
-        <div class=\"filtro-opcion\" data-fecha=\"${fecha.id}\">
-            ${fecha.nombre}
-        </div>
-    `).join('');
-
-    dropdownFecha.innerHTML = html;
-
-    // Agregar eventos a las opciones
-    dropdownFecha.querySelectorAll('.filtro-opcion').forEach(opcion => {
-        opcion.addEventListener('click', () => {
-            seleccionarFecha(opcion.dataset.fecha);
-        });
-    });
-}
-
-/**
- * Selecciona una fecha y muestra los resultados
- */
-function seleccionarFecha(fechaId) {
-    const fecha = fechasDisponibles.find(f => f.id === fechaId);
-
-    filtrosSeleccionados.fecha = fechaId;
-
-    // Actualizar texto
-    fechaSeleccionadaTexto.textContent = fecha.nombre;
-
-    // Cerrar dropdown
-    cerrarTodosDropdowns();
-
-    // Mostrar resultados
-    renderizarCines();
-}
-
-/**
- * Alterna la visibilidad de un dropdown
- */
-function toggleDropdown(dropdown, button) {
-    const estaAbierto = dropdown.classList.contains('abierto');
-
-    // Cerrar todos los dropdowns
-    cerrarTodosDropdowns();
-
-    // Si no estaba abierto, abrirlo
-    if (!estaAbierto) {
-        dropdown.classList.add('abierto');
-        button.classList.add('activo');
+  if (urlCity) {
+    const ciudad = state.allCities.find(c => c.id_ciudad == urlCity);
+    if (ciudad) {
+      state.cityId = urlCity;
+      if (selectCiudad) selectCiudad.value = urlCity;
+      renderCines(urlCity);
     }
+
+    if (urlCine) {
+      const cineValido = state.allCinemas.find(c => c.id_sede == urlCine);
+      if (cineValido) {
+        state.cinemaId = urlCine;
+        if (selectCine) selectCine.value = urlCine;
+        await cargarFunciones();
+        return;
+      }
+    }
+  }
+
+  // Si no hay cine específico, cargar todas las funciones
+  await cargarTodasLasFunciones();
 }
 
-/**
- * Cierra todos los dropdowns
- */
-function cerrarTodosDropdowns() {
-    document.querySelectorAll('.filtro-dropdown').forEach(d => d.classList.remove('abierto'));
-    document.querySelectorAll('.filtro-header').forEach(b => b.classList.remove('activo'));
+// ===== RENDERIZADO DE FILTROS =====
+
+function renderCiudades() {
+  if (!selectCiudad) return;
+
+  const html = '<option value="">Selecciona ciudad</option>' +
+    state.allCities.map(ciudad => `
+            <option value="${ciudad.id_ciudad}">${ciudad.nombre}</option>
+        `).join('');
+
+  selectCiudad.innerHTML = html;
 }
 
-/**
- * Crea el HTML de una tarjeta de cine con funciones
- */
-function crearTarjetaCine(cine, funciones) {
-    const funcionesHTML = funciones.map(funcion => `
-        <div class="funcion-grupo">
-            <div class="info-formato">
-                <span class="badge-formato">${funcion.formato}</span>
-                <span class="texto-formato">${funcion.tipo}</span>
-            </div>
-            <div class="grid-horarios">
-                ${funcion.horarios.map(hora => `
-                    <button class="horario-btn" data-cine="${cine.nombre}" data-hora="${hora}" data-formato="${funcion.formato}">
-                        <span class="horario-hora">${hora}</span>
-                    </button>
-                `).join('')}
-            </div>
-        </div>
+function renderCines(ciudadId) {
+  if (!selectCine) return;
+
+  const cinesFiltrados = ciudadId
+    ? state.allCinemas.filter(c => c.id_ciudad == ciudadId)
+    : state.allCinemas;
+
+  const html = '<option value="">Elige tu Cineplanet</option>' +
+    cinesFiltrados.map(cine => `
+            <option value="${cine.id_sede}">${cine.nombre}</option>
+        `).join('');
+
+  selectCine.innerHTML = html;
+}
+
+function renderFechas() {
+  if (!selectFecha) return;
+
+  const html = state.dates.map(fecha => `
+        <option value="${fecha.id}">${fecha.nombre}</option>
     `).join('');
+
+  selectFecha.innerHTML = html;
+}
+
+// ===== LÓGICA DE SELECCIÓN =====
+
+function seleccionarCiudad(ciudadId) {
+  state.cityId = ciudadId;
+  state.cinemaId = null;
+
+  if (selectCine) selectCine.value = '';
+
+  renderCines(ciudadId);
+
+  // Al seleccionar ciudad, cargar todas las funciones de esa ciudad
+  cargarTodasLasFunciones();
+}
+
+function seleccionarCine(cineId) {
+  if (!cineId) {
+    state.cinemaId = null;
+    cargarTodasLasFunciones();
+    return;
+  }
+
+  const cine = state.allCinemas.find(c => c.id_sede == cineId);
+  if (!cine) return;
+
+  state.cinemaId = cineId;
+
+  // Si no hay ciudad seleccionada, auto-seleccionar la ciudad del cine
+  if (!state.cityId) {
+    state.cityId = cine.id_ciudad;
+    if (selectCiudad) selectCiudad.value = cine.id_ciudad;
+    renderCines(cine.id_ciudad);
+    if (selectCine) selectCine.value = cineId;
+  }
+
+  // Al seleccionar cine específico, cargar solo sus funciones
+  cargarFunciones();
+}
+
+function seleccionarFecha(fechaId) {
+  state.date = fechaId;
+
+  // Si hay cine seleccionado, cargar solo ese cine; si no, cargar todas las sedes
+  if (state.cinemaId) {
+    cargarFunciones();
+  } else {
+    cargarTodasLasFunciones();
+  }
+}
+
+// ===== CARGA Y RENDERIZADO DE FUNCIONES =====
+
+async function cargarTodasLasFunciones() {
+  if (!state.movieId || !state.date) return;
+
+  contenedorCines.innerHTML = '<p class="mensaje-seleccionar">Cargando funciones...</p>';
+
+  try {
+    const params = {
+      accion: 'con_filtros',
+      id_pelicula: state.movieId,
+      fecha: state.date
+    };
+
+    // Agregar filtro de ciudad si está seleccionada
+    if (state.cityId) {
+      params.id_ciudad = state.cityId;
+    }
+
+    const response = await fetchFromApi('funcion', params);
+    const funciones = response.data || response || [];
+    renderizarTodasLasFunciones(funciones);
+
+  } catch (error) {
+    console.error("Error cargando funciones:", error);
+    contenedorCines.innerHTML = '<p class="mensaje-seleccionar">Error al cargar funciones. Intenta nuevamente.</p>';
+  }
+}
+
+async function cargarFunciones() {
+  if (!state.movieId || !state.cinemaId || !state.date) return;
+
+  contenedorCines.innerHTML = '<p class="mensaje-seleccionar">Cargando funciones...</p>';
+
+  try {
+    const response = await fetchFromApi('funcion', {
+      accion: 'con_filtros',
+      id_pelicula: state.movieId,
+      id_sede: state.cinemaId,
+      fecha: state.date
+    });
+
+    const funciones = response.data || response || [];
+    renderizarFuncionesUnaSede(funciones);
+
+  } catch (error) {
+    console.error("Error cargando funciones:", error);
+    contenedorCines.innerHTML = '<p class="mensaje-seleccionar">Error al cargar funciones. Intenta nuevamente.</p>';
+  }
+}
+
+/**
+ * Renderiza funciones agrupadas por SEDE (cuando no se ha seleccionado un cine específico)
+ */
+function renderizarTodasLasFunciones(funciones) {
+  if (!Array.isArray(funciones) || funciones.length === 0) {
+    contenedorCines.innerHTML = '<p class="mensaje-seleccionar">No hay funciones disponibles para esta fecha.</p>';
+    return;
+  }
+
+  // Agrupar por sede
+  const sedesMap = {};
+
+  funciones.forEach(func => {
+    const sedeId = func.id_sede;
+    const sedeNombre = func.sede_nombre || 'Cine';
+
+    if (!sedesMap[sedeId]) {
+      sedesMap[sedeId] = {
+        nombre: sedeNombre,
+        horarios: []
+      };
+    }
+
+    const hora = func.hora ? func.hora.substring(0, 5) : '00:00';
+    sedesMap[sedeId].horarios.push({
+      id: func.id_funcion,
+      hora: hora
+    });
+  });
+
+  // Ordenar horarios dentro de cada sede
+  Object.values(sedesMap).forEach(sede => {
+    sede.horarios.sort((a, b) => a.hora.localeCompare(b.hora));
+  });
+
+  // Generar HTML para todas las sedes
+  const sedesHTML = Object.entries(sedesMap).map(([sedeId, sede]) => {
+    const horariosHTML = sede.horarios.map(h => `
+            <button class="horario-btn" 
+                    data-cine="${sede.nombre}" 
+                    data-hora="${h.hora}" 
+                    data-id-funcion="${h.id}">
+                <span class="horario-hora">${h.hora}</span>
+            </button>
+        `).join('');
 
     return `
+            <div class="cine-card">
+                <button class="cine-header" data-sede-id="${sedeId}">
+                    <h3 class="cine-nombre">${sede.nombre}</h3>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 10l-4 4-4-4" />
+                    </svg>
+                </button>
+                <div class="cine-contenido">
+                    <div class="funcion-grupo">
+                        <div class="info-formato">
+                            <span class="badge-formato">2D</span>
+                            <span class="texto-formato">DOBLADA</span>
+                        </div>
+                        <div class="grid-horarios">
+                            ${horariosHTML}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+  }).join('');
+
+  contenedorCines.innerHTML = sedesHTML;
+  agregarEventosCineHeaders();
+  agregarEventosHorarios();
+}
+
+/**
+ * Renderiza funciones de UNA SOLA SEDE (cuando ya se seleccionó un cine)
+ */
+function renderizarFuncionesUnaSede(funciones) {
+  if (!Array.isArray(funciones) || funciones.length === 0) {
+    contenedorCines.innerHTML = '<p class="mensaje-seleccionar">No hay funciones disponibles para esta fecha.</p>';
+    return;
+  }
+
+  // Ordenar horarios
+  const horarios = funciones.map(func => ({
+    id: func.id_funcion,
+    hora: func.hora ? func.hora.substring(0, 5) : '00:00'
+  })).sort((a, b) => a.hora.localeCompare(b.hora));
+
+  const cineNombre = selectCine?.options[selectCine.selectedIndex]?.text || 'Cine';
+
+  const horariosHTML = horarios.map(h => `
+        <button class="horario-btn" 
+                data-cine="${cineNombre}" 
+                data-hora="${h.hora}" 
+                data-id-funcion="${h.id}">
+            <span class="horario-hora">${h.hora}</span>
+        </button>
+    `).join('');
+
+  const cardHTML = `
         <div class="cine-card">
-            <button class="cine-header" data-cine-nombre="${cine.nombre}">
-                <h3 class="cine-nombre">${cine.nombre}</h3>
-                <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor">
+            <button class="cine-header">
+                <h3 class="cine-nombre">${cineNombre}</h3>
+                <svg class="icono-flecha" viewBox="0 0 24 24" fill="currentColor" style="transform: rotate(180deg);">
                     <path d="M16 10l-4 4-4-4" />
                 </svg>
             </button>
-            <div class="cine-contenido">
-                ${funcionesHTML}
+            <div class="cine-contenido expandido">
+                <div class="funcion-grupo">
+                    <div class="info-formato">
+                        <span class="badge-formato">2D</span>
+                        <span class="texto-formato">DOBLADA</span>
+                    </div>
+                    <div class="grid-horarios">
+                        ${horariosHTML}
+                    </div>
+                </div>
             </div>
         </div>
     `;
-}
 
-function renderizarCines() {
-    if (!filtrosSeleccionados.ciudad || !filtrosSeleccionados.cine || !filtrosSeleccionados.fecha) {
-        contenedorCines.innerHTML = '<p class="mensaje-seleccionar">Selecciona ciudad, cine y fecha para ver las funciones disponibles</p>';
-        return;
-    }
-
-    const cines = cinesPorCiudad[filtrosSeleccionados.ciudad] || [];
-    const cineSeleccionado = cines.find(c => c.id === filtrosSeleccionados.cine);
-
-    if (!cineSeleccionado) {
-        contenedorCines.innerHTML = '<p class="mensaje-seleccionar">No se encontró el cine seleccionado</p>';
-        return;
-    }
-
-    const funciones = funcionesPorCine[filtrosSeleccionados.cine] || [];
-
-    if (funciones.length === 0) {
-        contenedorCines.innerHTML = '<p class="mensaje-seleccionar">No hay funciones disponibles para este cine</p>';
-        return;
-    }
-
-    const html = crearTarjetaCine(cineSeleccionado, funciones);
-    contenedorCines.innerHTML = html;
-    agregarEventosCineHeaders();
-    agregarEventosHorarios();
+  contenedorCines.innerHTML = cardHTML;
+  agregarEventosHorarios();
 }
 
 function agregarEventosCineHeaders() {
-    const headers = document.querySelectorAll('.cine-header');
-    headers.forEach(header => {
-        header.addEventListener('click', () => {
-            const contenido = header.nextElementSibling;
-            contenido.classList.toggle('expandido');
-            const icono = header.querySelector('.icono-flecha');
-            if (contenido.classList.contains('expandido')) {
-                icono.style.transform = 'rotate(180deg)';
-            } else {
-                icono.style.transform = 'rotate(0deg)';
-            }
-        });
+  document.querySelectorAll('.cine-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const contenido = header.nextElementSibling;
+      const icono = header.querySelector('.icono-flecha');
+      contenido.classList.toggle('expandido');
+      icono.style.transform = contenido.classList.contains('expandido') ? 'rotate(180deg)' : 'rotate(0deg)';
     });
+  });
 }
 
 function agregarEventosHorarios() {
-    const botonesHorario = document.querySelectorAll('.horario-btn');
-    botonesHorario.forEach(boton => {
-        boton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const cine = boton.dataset.cine;
-            const hora = boton.dataset.hora;
-            const formato = boton.dataset.formato;
-
-            // Obtener datos de la película desde el URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const peliculaId = urlParams.get('id') || '1';
-
-            // Redirigir a la página de butacas
-            const params = new URLSearchParams({
-                pelicula: peliculaId,
-                cine: cine,
-                hora: hora,
-                formato: formato,
-                ciudad: filtrosSeleccionados.ciudad,
-                fecha: fechaSeleccionadaTexto.textContent
-            });
-
-            window.location.href = `butacas.html?${params.toString()}`;
-        });
+  const botonesHorario = document.querySelectorAll('.horario-btn');
+  botonesHorario.forEach(boton => {
+    boton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idFuncion = boton.dataset.idFuncion;
+      sessionStorage.setItem('id_funcion', idFuncion);
+      // Redirigir a butacas con el ID de la función
+      window.location.href = `butacas.html?id_funcion=${idFuncion}`;
     });
+  });
 }
 
-function cargarDatosPelicula() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const peliculaId = urlParams.get('id');
-    if (peliculaId) {
-        console.log('Cargando película con ID:', peliculaId);
-    }
-}
-
-function inicializarEventosFiltros() {
-    btnCiudad.addEventListener('click', () => {
-        toggleDropdown(dropdownCiudad, btnCiudad);
-    });
-
-    btnCine.addEventListener('click', () => {
-        if (!btnCine.disabled) {
-            toggleDropdown(dropdownCine, btnCine);
-        }
-    });
-
-    btnFecha.addEventListener('click', () => {
-        if (!btnFecha.disabled) {
-            toggleDropdown(dropdownFecha, btnFecha);
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.filtro-item')) {
-            cerrarTodosDropdowns();
-        }
-    });
-}
+// ===== UTILIDADES UI =====
 
 function inicializarEventos() {
-    if (botonComprar) {
-        botonComprar.addEventListener('click', scrollACompra);
-    }
-    botonesIdioma.forEach(boton => {
-        boton.addEventListener('click', () => {
-            cambiarIdioma(boton);
-        });
+  if (botonComprar) {
+    botonComprar.addEventListener('click', () => {
+      const seccionHorarios = document.querySelector('.seccion-horarios');
+      if (seccionHorarios) {
+        seccionHorarios.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
-    inicializarEventosFiltros();
+  }
+
+  // Eventos para los selects
+  if (selectCiudad) {
+    selectCiudad.addEventListener('change', (e) => {
+      seleccionarCiudad(e.target.value);
+    });
+  }
+
+  if (selectCine) {
+    selectCine.addEventListener('change', (e) => {
+      seleccionarCine(e.target.value);
+    });
+  }
+
+  if (selectFecha) {
+    selectFecha.addEventListener('change', (e) => {
+      seleccionarFecha(e.target.value);
+    });
+  }
 }
 
-function inicializarAplicacion() {
-    console.log('Inicializando página de selección...');
-    cargarDatosPelicula();
-    cargarCiudades();
-    inicializarEventos();
-    console.log('Página de selección lista');
-}
-
+// Arrancar
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', inicializarAplicacion);
+  document.addEventListener('DOMContentLoaded', inicializarAplicacion);
 } else {
-    inicializarAplicacion();
+  inicializarAplicacion();
 }

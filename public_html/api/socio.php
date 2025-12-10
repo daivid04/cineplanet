@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 header("Content-Type: application/json; charset=utf-8");
 
 require_once __DIR__ .  "/../../src/services/conexion.php";
-require_once __DIR__ . "/../../src/controllers/socio_controler.php";
+require_once __DIR__ . "/../../src/controllers/SocioController.php";
 
 $controller = new SocioController($conn);
 

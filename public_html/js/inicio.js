@@ -1,116 +1,8 @@
+import { setupMovies } from "./components/movie/peliculas.js";
+import { setupFilter } from "./components/filtro/filter.js";
+
 // ===== DATOS DE PELÍCULAS =====
-const peliculas = [
-    {
-        id: 1,
-        nombre: "Teléfono Negro 2",
-        genero: "Terror",
-        clasificacion: "+16",
-        imagenUrl: "/public_html/assets/images/telefono-negro2.jpg",
-        esEstreno: false,
-        tamano: "grande",
-        categoria: "cartelera",
-    },
-    {
-        id: 2,
-        nombre: "Chainsaw Man",
-        genero: "Anime/Acción",
-        clasificacion: "+18",
-        imagenUrl: "/public_html/assets/images/chaninsaw.jpg",
-        esEstreno: true,
-        tamano: "normal",
-        categoria: "cartelera",
-    },
-    {
-        id: 3,
-        nombre: "Catástrofe en el Aire",
-        genero: "Acción",
-        clasificacion: "+13",
-        imagenUrl: "/public_html/assets/images/catastrofe.jpg",
-        esEstreno: true,
-        tamano: "normal",
-        categoria: "cartelera",
-    },
 
-    {
-        id: 5,
-        nombre: "Goood Boy",
-        genero: "Terror",
-        clasificacion: "+16",
-        imagenUrl: "/public_html/assets/images/goodboy.jpg",
-        esEstreno: true,
-        tamano: "mediana",
-        categoria: "cartelera",
-    },
-    {
-        id: 6,
-        nombre: "Tron",
-        genero: "Ciencia Ficción",
-        clasificacion: "+13",
-        imagenUrl: "/public_html/assets/images/tron.jpg",
-        esEstreno: false,
-        tamano: "normal",
-        categoria: "cartelera",
-    },
-    {
-        id: 7,
-        nombre: "Próximamente 1",
-        genero: "Aventura",
-        clasificacion: "+13",
-        imagenUrl: "https://via.placeholder.com/300x450/8e44ad/ffffff?text=Próximamente",
-        esEstreno: false,
-        tamano: "normal",
-        categoria: "proximamente",
-    },
-    {
-        id: 8,
-        nombre: "Preventa Especial",
-        genero: "Drama",
-        clasificacion: "ATP",
-        imagenUrl: "https://via.placeholder.com/300x450/c0392b/ffffff?text=Preventa",
-        esEstreno: true,
-        tamano: "normal",
-        categoria: "preventa",
-    },
-];
-
-// ===== FUNCIONES PRINCIPALES =====
-
-/**
- * Crea el HTML de una tarjeta de película
- * @param {Object} pelicula - Objeto con los datos de la película
- * @returns {string} HTML de la tarjeta
- */
-function crearTarjetaPelicula(pelicula) {
-    const clasesTamano = pelicula.tamano || "normal";
-    const etiquetaEstreno = pelicula.esEstreno
-        ? '<div class="etiqueta-estreno">Estreno</div>'
-        : "";
-
-    return `
-    <article class="tarjeta-pelicula ${clasesTamano}" data-id="${pelicula.id}">
-      ${etiquetaEstreno}
-      <div class="contenedor-imagen-pelicula">
-        <img 
-          src="${pelicula.imagenUrl}" 
-          alt="Póster de ${pelicula.nombre}"
-          class="imagen-pelicula"
-          loading="lazy"
-          onerror="this.src='https://via.placeholder.com/300x450/95a5a6/ffffff?text=Sin+Imagen'"
-        />
-      </div>
-      <div class="informacion-pelicula">
-        <h2 class="nombre-pelicula">${pelicula.nombre}</h2>
-        <p class="genero-pelicula">${pelicula.genero}</p>
-        <span class="clasificacion-pelicula">${pelicula.clasificacion}</span>
-      </div>
-    </article>
-  `;
-}
-
-/**
- * Renderiza todas las películas en la galería
- * @param {Array} listaPeliculas - Array de objetos de películas
- */
 function renderizarPeliculas(listaPeliculas) {
     const galeria = document.getElementById("galeria-peliculas");
 
@@ -142,17 +34,6 @@ function renderizarPeliculas(listaPeliculas) {
     }, 300);
 }
 
-/**
- * Filtra y renderiza películas por categoría
- * @param {string} categoria - Categoría de películas a mostrar
- */
-function filtrarPorCategoria(categoria) {
-    const peliculasFiltradas = peliculas.filter(
-        (pelicula) => pelicula.categoria === categoria
-    );
-
-    renderizarPeliculas(peliculasFiltradas);
-}
 
 /**
  * Maneja el cambio de pestaña
@@ -203,14 +84,6 @@ function manejarClickPelicula(idPelicula) {
     }
 }
 
-/**
- * Maneja el evento de click en el botón filtrar
- */
-function manejarClickFiltrar() {
-    console.log("Botón filtrar clickeado");
-    // Aquí puedes agregar la lógica de filtrado
-    alert("Función de filtrado en desarrollo");
-}
 
 /**
  * Maneja el evento de click en los botones de filtro
@@ -223,23 +96,6 @@ function manejarClickBotonFiltro(tipoFiltro) {
 }
 
 /**
- * Inicializa los eventos de los botones de filtro
- */
-function inicializarEventosFiltros() {
-    const botonesFiltro = document.querySelectorAll(".boton-filtro");
-    const botonFiltrar = document.querySelector(".boton-filtrar");
-
-    botonesFiltro.forEach((boton) => {
-        boton.addEventListener("click", () => {
-            const tipoFiltro = boton.dataset.filtro;
-            manejarClickBotonFiltro(tipoFiltro);
-        });
-    });
-
-    if (botonFiltrar) {
-        botonFiltrar.addEventListener("click", manejarClickFiltrar);
-    }
-}/**
  * Inicializa los eventos de las pestañas de categorías
  */
 function inicializarEventosPestanas() {
@@ -273,18 +129,18 @@ function inicializarEventoVerMas() {
  */
 function inicializarAplicacion() {
     console.log("Iniciando aplicación Cineplanet...");
-
-    // Inicializa eventos de filtros
-    inicializarEventosFiltros();
+    
+    // Inicializa filtros
+    setupFilter();
+    
+    // Renderiza películas
+    setupMovies();
 
     // Inicializa eventos de pestañas
     inicializarEventosPestanas();
 
     // Inicializa evento del botón ver más
     inicializarEventoVerMas();
-
-    // Renderiza las películas de la categoría inicial (cartelera)
-    filtrarPorCategoria("cartelera");
 
     console.log("Aplicación iniciada correctamente");
 }
