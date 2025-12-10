@@ -32,10 +32,11 @@ CREATE TABLE sala(
 
 CREATE TABLE asiento(
     id_asiento INT PRIMARY KEY AUTO_INCREMENT,
-    estado BOOL NOT NULL,
+    estado ENUM('libre', 'ocupado', 'reservado') NOT NULL DEFAULT 'libre',
     fila_asiento VARCHAR(5) NOT NULL,
     columna_asiento VARCHAR(5) NOT NULL,
     id_sala INT NOT NULL,
+    es_silla_ruedas BOOL NOT NULL DEFAULT 0,
     FOREIGN KEY (id_sala) REFERENCES sala(id_sala) 
     ON UPDATE CASCADE 
     ON DELETE CASCADE
@@ -104,7 +105,8 @@ CREATE TABLE combos(
     id_combo INT PRIMARY KEY AUTO_INCREMENT,
     precio FLOAT NOT NULL,
     nombre VARCHAR(50) NOT NULL,
-    estado BOOL NOT NULL DEFAULT 1
+    estado BOOL NOT NULL DEFAULT 1,
+    url_combo VARCHAR(200)
 );
 
 CREATE TABLE usuario(
@@ -222,14 +224,28 @@ CREATE TABLE compra_cliente(
     ON DELETE RESTRICT
 );
 
+-- Tipos de entrada (General, Niño, Mayor, Conadis, etc.)
+CREATE TABLE tipo_entrada(
+    id_tipo_entrada INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    categoria ENUM('adulto', 'nino', 'mayor', 'conadis') NOT NULL,
+    precio DECIMAL(6,2) NOT NULL,
+    descripcion VARCHAR(200),
+    estado BOOL DEFAULT 1
+);
+
 CREATE TABLE descripcion_asiento(
     id_descripcion INT PRIMARY KEY AUTO_INCREMENT,
     id_asiento INT NOT NULL,
     id_compra_boleto INT NOT NULL,
+    id_tipo_entrada INT NOT NULL,
     FOREIGN KEY (id_asiento) REFERENCES asiento(id_asiento) 
     ON UPDATE CASCADE 
     ON DELETE RESTRICT,
     FOREIGN KEY (id_compra_boleto) REFERENCES compra_boleto(id_compra_boleto) 
+    ON UPDATE CASCADE 
+    ON DELETE RESTRICT,
+    FOREIGN KEY (id_tipo_entrada) REFERENCES tipo_entrada(id_tipo_entrada) 
     ON UPDATE CASCADE 
     ON DELETE RESTRICT
 );

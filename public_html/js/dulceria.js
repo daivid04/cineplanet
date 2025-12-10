@@ -1,375 +1,252 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // ========================================
-    // VARIABLES GLOBALES
-    // ========================================
-    const cantButacasReservadas = parseInt(localStorage.getItem('numeroButacasSeleccionadas')) || 2;
-    const cantEntradasSeleccionadas = parseInt(localStorage.getItem('numeroEntradasSeleccionadas')) || 2;
-    let ordenDulceria = [];
-    let totalOrden = 0;
-    // Base total from tickets (S/30.00 as per image)
-    let totalEntradas = parseFloat(localStorage.getItem('totalEntradas')) || 30.00;
+/**
+ * Dulcería - Página de combos y productos
+ * Patrón simple como el resto de la app
+ */
 
-    // Referencias a elementos del DOM
-    const galeriaProductos = document.getElementById('galeria-productos');
-    const pestanasDulceria = document.querySelectorAll('.pestana-dulceria');
-    const timerDisplay = document.getElementById('timer-display');
-    const precioTotalSpan = document.getElementById('precio-total');
-    const listaOrden = document.getElementById('lista-orden');
-    const mensajeOrdenVacia = document.getElementById('mensaje-orden-vacia');
-    const btnContinuar = document.getElementById('btn-continuar-dulceria');
+import { fetchFromApi } from "./data-manager.js";
+import { iniciarTimer, detenerTimer, getTiempoRestante } from "./components/butaca/timer.js";
 
-    // Inicializar información en el panel resumen
-    const elButacas = document.getElementById('numero-butacas');
-    const elEntradas = document.getElementById('numero-entradas');
-    if (elButacas) elButacas.textContent = cantButacasReservadas;
-    if (elEntradas) elEntradas.textContent = cantEntradasSeleccionadas;
+// ===== ESTADO =====
+let combos = [];
+let ordenDulceria = [];
+let totalDulceria = 0;
 
-    // Cargar datos de la reserva desde localStorage
-    const reservaData = JSON.parse(localStorage.getItem('reservaButacas'));
+// ===== INICIALIZACIÓN =====
 
-    if (reservaData) {
-        const elTitulo = document.getElementById('movie-title');
-        const elDetalles = document.getElementById('movie-details');
-        const elCine = document.getElementById('cinema-name');
-        const elFecha = document.getElementById('showtime-date');
-        const elHora = document.getElementById('showtime-time');
-        const elSala = document.getElementById('room-name');
-        const elPoster = document.getElementById('poster-img');
+async function init() {
+  console.log('Inicializando dulcería...');
 
-        if (elTitulo) elTitulo.textContent = reservaData.titulo;
-        if (elDetalles) elDetalles.textContent = `${reservaData.formato}, ${reservaData.tipo || 'REGULAR'}`;
-        if (elCine) elCine.textContent = reservaData.cine;
-        if (elFecha) elFecha.textContent = reservaData.fecha;
-        if (elHora) elHora.textContent = reservaData.hora;
-        if (elSala) elSala.textContent = reservaData.sala;
-        if (elPoster && reservaData.imagenUrl) elPoster.src = reservaData.imagenUrl;
+  cargarDatosFuncion();
+  await cargarCombos();
+  configurarPestanas();
+  configurarNavegacion();
+  configurarTimer();
+  actualizarOrden();
+
+  console.log('Dulcería lista');
+}
+
+async function cargarDatosFuncion() {
+  const idFuncion = sessionStorage.getItem('id_funcion');
+  if (!idFuncion) return;
+
+  try {
+    const response = await fetchFromApi('funcion', 'id', idFuncion);
+    const data = response.data;
+
+    if (data) {
+      document.getElementById('movie-title').textContent = data.pelicula_nombre || '';
+      document.getElementById('movie-details').textContent = data.formatos || '';
+      document.getElementById('cinema-name').textContent = data.sede_nombre || '';
+      document.getElementById('showtime-date').textContent = data.fecha || '';
+      document.getElementById('showtime-time').textContent = data.hora || '';
+      document.getElementById('room-name').textContent = `SALA ${data.numero_sala || ''}`;
+
+      // Poster
+      const posterImg = document.getElementById('poster-img');
+      if (posterImg && data.pelicula_imagen) {
+        posterImg.src = data.pelicula_imagen;
+      }
     }
+  } catch (error) {
+    console.error('Error cargando función:', error);
+  }
 
-    // ========================================
-    // DATOS ESTÁTICOS DE PRODUCTOS (MATCHING IMAGE)
-    // ========================================
-    const productosDulceria = {
-        'promos-dulceras': [
-            {
-                idProducto: 1,
-                nombreProducto: 'COMBO 2 + CHOCOLATE HH',
-                descripcionProducto: 'Canchita Gigante + 2 Bebidas (32oz) + 5 MINI CHOCOLATITOS HH *Sabor de bebida sujeto a stock / canchita sin refill',
-                precioProducto: 46.00,
-                imagenProducto: '../assets/images/placeholder.svg', // Placeholder
-                categoria: 'promos-dulceras'
-            },
-            {
-                idProducto: 2,
-                nombreProducto: 'COMBO 2 + 2 DUOMÁX',
-                descripcionProducto: '1 Canchita Gigante + 2 Bebidas (32oz) + 2 Duomáx (44g). *Sabor bebida sujeto a stock / canchita sin refill',
-                precioProducto: 51.00,
-                imagenProducto: '../assets/images/placeholder.svg',
-                categoria: 'promos-dulceras'
-            },
-            {
-                idProducto: 3,
-                nombreProducto: 'COMBO 1 + B.MOOD 40',
-                descripcionProducto: '1 Canchita Grande + 1 Bebida (32oz) + 1 Biscolata Mood (40g). *Sabor bebida sujeto a stock / canchita sin refill',
-                precioProducto: 28.50,
-                imagenProducto: '../assets/images/placeholder.svg',
-                categoria: 'promos-dulceras'
-            },
-            {
-                idProducto: 4,
-                nombreProducto: 'COMBO DOS + 2M&M',
-                descripcionProducto: '1 Canchita Gigante + 2 Bebidas (32oz) + 2 M&M\'s (45g). *Sabor bebida y M&M\'s sujeto a stock / canchita sin refill',
-                precioProducto: 55.00,
-                imagenProducto: '../assets/images/placeholder.svg',
-                categoria: 'promos-dulceras'
-            },
-            {
-                idProducto: 5,
-                nombreProducto: 'COMBO UNO + M&M',
-                descripcionProducto: '1 Canchita Grande + 1 Bebida (32oz) + 1 M&M\'s (45g). *Sabor bebida y M&M\'s sujeto a stock / canchita sin refill',
-                precioProducto: 31.50,
-                imagenProducto: '../assets/images/placeholder.svg',
-                categoria: 'promos-dulceras'
-            },
-            {
-                idProducto: 6,
-                nombreProducto: 'COMBO 2 + 2 KIT KAT',
-                descripcionProducto: '1 Canchita Gigante + 2 Bebidas (32oz) + 2 Kit Kat. *Sabor bebida sujeto a stock / canchita sin refill',
-                precioProducto: 54.00,
-                imagenProducto: '../assets/images/placeholder.svg',
-                categoria: 'promos-dulceras'
-            }
-        ],
-        'promos-pelicula': [
-            {
-                idProducto: 7,
-                nombreProducto: 'COMBO PELÍCULA ESPECIAL',
-                descripcionProducto: '1 Canchita Gigante + 2 Bebidas + 1 Nachos con queso',
-                precioProducto: 65.00,
-                imagenProducto: '../assets/images/placeholder.svg',
-                categoria: 'promos-pelicula'
-            }
-        ],
-        'combos-uno-dos': [
-            {
-                idProducto: 8,
-                nombreProducto: 'COMBO PERSONAL',
-                descripcionProducto: '1 Canchita Mediana + 1 Bebida (22oz)',
-                precioProducto: 25.00,
-                imagenProducto: '../assets/images/placeholder.svg',
-                categoria: 'combos-uno-dos'
-            }
-        ],
-        'combos-compartir': [],
-        'canchitas': [],
-        'dulces': [],
-        'complementos': []
-    };
+  // Cargar info de butacas/entradas
+  const numButacas = sessionStorage.getItem('numeroButacasSeleccionadas') || '0';
+  const numEntradas = sessionStorage.getItem('cantidadEntradas') || '0';
+  document.getElementById('numero-butacas').textContent = numButacas;
+  document.getElementById('numero-entradas').textContent = numEntradas;
+}
 
-    // ========================================
-    // DATOS DE LA PELÍCULA (del localStorage o estáticos)
-    // ========================================
-    const datoPelicula = {
-        tituloPelicula: localStorage.getItem('tituloPelicula') || 'Nada es lo que Parece 3',
-        detallesPelicula: localStorage.getItem('detallesPelicula') || '2D, REGULAR, DOBLADA',
-        nombreCine: localStorage.getItem('nombreCine') || 'CP Tacna',
-        fechaFuncion: localStorage.getItem('fechaFuncion') || 'Hoy, 26 de Nov, 2025',
-        horaFuncion: localStorage.getItem('horaFuncion') || '15:30',
-        nombreSala: localStorage.getItem('nombreSala') || 'SALA 5-D',
-        imagenPelicula: localStorage.getItem('imagenPelicula') || '../assets/images/nada-es-lo-que-parece-3.jpg'
-    };
+async function cargarCombos() {
+  const galeria = document.getElementById('galeria-productos');
+  galeria.innerHTML = '<p class="cargando">Cargando combos...</p>';
 
-    // Actualizar información de la película en el panel resumen
-    const elTitle = document.getElementById('movie-title');
-    if (elTitle) elTitle.textContent = datoPelicula.tituloPelicula;
+  try {
+    const response = await fetchFromApi('combo');
 
-    const elDetails = document.getElementById('movie-details');
-    if (elDetails) elDetails.textContent = datoPelicula.detallesPelicula;
-
-    const elCinema = document.getElementById('cinema-name');
-    if (elCinema) elCinema.textContent = datoPelicula.nombreCine;
-
-    const elDate = document.getElementById('showtime-date');
-    if (elDate) elDate.textContent = datoPelicula.fechaFuncion;
-
-    const elTime = document.getElementById('showtime-time');
-    if (elTime) elTime.textContent = datoPelicula.horaFuncion;
-
-    const elRoom = document.getElementById('room-name');
-    if (elRoom) elRoom.textContent = datoPelicula.nombreSala;
-
-    // ========================================
-    // FUNCIONES PRINCIPALES
-    // ========================================
-
-    // Función para renderizar productos según categoría
-    function renderizarProductos(categoria) {
-        galeriaProductos.innerHTML = '';
-        const productosCategoria = productosDulceria[categoria] || [];
-
-        if (productosCategoria.length === 0) {
-            galeriaProductos.innerHTML = '<p style="text-align: center; color: #999; padding: 40px; width: 100%;">No hay productos disponibles en esta categoría.</p>';
-            return;
-        }
-
-        productosCategoria.forEach(producto => {
-            const cardProducto = crearCardProducto(producto);
-            galeriaProductos.appendChild(cardProducto);
-        });
+    if (response.success && response.data) {
+      combos = response.data;
+      renderizarCombos();
+    } else {
+      galeria.innerHTML = '<p class="error">No hay combos disponibles</p>';
     }
+  } catch (error) {
+    console.error('Error cargando combos:', error);
+    galeria.innerHTML = '<p class="error">Error al cargar combos</p>';
+  }
+}
 
-    // Función para crear card de producto
-    function crearCardProducto(producto) {
-        const card = document.createElement('div');
-        card.className = 'tarjeta-producto'; // Matches CSS
-        card.innerHTML = `
-            <div class="imagen-producto">
-                <img src="${producto.imagenProducto}" alt="${producto.nombreProducto}" onerror="this.src='../assets/images/placeholder.svg'">
-            </div>
-            <div class="info-producto">
-                <h4>${producto.nombreProducto}</h4>
-                <p class="descripcion">${producto.descripcionProducto}</p>
-                <p class="precio">Precio desde: <strong>S/${producto.precioProducto.toFixed(2)}</strong></p>
-                <button class="btn-agregar" data-id="${producto.idProducto}">
-                    <i class="fas fa-shopping-cart"></i> Agregar
-                </button>
-            </div>
-        `;
+function renderizarCombos() {
+  const galeria = document.getElementById('galeria-productos');
+  galeria.innerHTML = '';
 
-        // Event listener para agregar producto
-        const btnAgregar = card.querySelector('.btn-agregar');
-        btnAgregar.addEventListener('click', () => agregarProductoOrden(producto));
+  if (combos.length === 0) {
+    galeria.innerHTML = '<p class="vacio">No hay combos disponibles</p>';
+    return;
+  }
 
-        return card;
+  combos.forEach(combo => {
+    const card = document.createElement('div');
+    card.className = 'tarjeta-producto';
+    card.innerHTML = `
+      <div class="imagen-producto">
+        <img src="${combo.url_combo || '../assets/images/placeholder.svg'}" alt="${combo.nombre}" 
+             onerror="this.src='../assets/images/placeholder.svg'">
+      </div>
+      <div class="info-producto">
+        <h4>${combo.nombre}</h4>
+        <p class="descripcion">${combo.descripcion || 'Delicioso combo'}</p>
+        <p class="precio">Precio: <strong>S/${parseFloat(combo.precio).toFixed(2)}</strong></p>
+        <button class="btn-agregar" data-id="${combo.id_combo}">
+          <i class="fas fa-shopping-cart"></i> Agregar
+        </button>
+      </div>
+    `;
+
+    card.querySelector('.btn-agregar').addEventListener('click', () => agregarCombo(combo));
+    galeria.appendChild(card);
+  });
+}
+
+// ===== ORDEN =====
+
+function agregarCombo(combo) {
+  // Límite: máximo combos = cantidad de entradas
+  const cantidadEntradas = parseInt(sessionStorage.getItem('cantidadEntradas')) || 10;
+
+  if (ordenDulceria.length >= cantidadEntradas) {
+    mostrarNotificacion(`Máximo ${cantidadEntradas} combos (1 por entrada)`);
+    return;
+  }
+
+  ordenDulceria.push({
+    id: combo.id_combo,
+    nombre: combo.nombre,
+    precio: parseFloat(combo.precio)
+  });
+
+  totalDulceria += parseFloat(combo.precio);
+  actualizarOrden();
+  mostrarNotificacion(`${combo.nombre} agregado (${ordenDulceria.length}/${cantidadEntradas})`);
+}
+
+function eliminarItem(id) {
+  const index = ordenDulceria.findIndex(item => item.id == id);
+  if (index > -1) {
+    totalDulceria -= ordenDulceria[index].precio;
+    ordenDulceria.splice(index, 1);
+    actualizarOrden();
+  }
+}
+
+function actualizarOrden() {
+  const lista = document.getElementById('lista-orden');
+  const mensaje = document.getElementById('mensaje-orden-vacia');
+  const totalEntradas = parseFloat(sessionStorage.getItem('totalEntradas')) || 0;
+
+  // Actualizar total
+  const totalGeneral = totalEntradas + totalDulceria;
+  document.getElementById('precio-total').textContent = `S/${totalGeneral.toFixed(2)}`;
+
+  if (ordenDulceria.length === 0) {
+    lista.style.display = 'none';
+    mensaje.style.display = 'block';
+    return;
+  }
+
+  lista.style.display = 'block';
+  mensaje.style.display = 'none';
+  lista.innerHTML = '';
+
+  // Agrupar por ID
+  const agrupado = {};
+  ordenDulceria.forEach(item => {
+    if (!agrupado[item.id]) {
+      agrupado[item.id] = { ...item, cantidad: 0 };
     }
+    agrupado[item.id].cantidad++;
+  });
 
-    // Función para agregar producto a la orden
-    function agregarProductoOrden(producto) {
-        ordenDulceria.push(producto);
-        totalOrden += producto.precioProducto;
-        actualizarTotal();
-        actualizarListaOrden();
+  Object.values(agrupado).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'item-orden';
+    div.innerHTML = `
+      <div class="detalle-item">
+        <span class="cantidad-item">${item.cantidad} x</span>
+        <span class="nombre-item">${item.nombre}</span>
+      </div>
+      <div class="precio-acciones">
+        <span class="precio-item">S/${(item.precio * item.cantidad).toFixed(2)}</span>
+        <button class="btn-eliminar-item" data-id="${item.id}">
+          <i class="far fa-trash-alt"></i>
+        </button>
+      </div>
+    `;
 
-        // Feedback visual
-        mostrarNotificacion(`${producto.nombreProducto} agregado`);
+    div.querySelector('.btn-eliminar-item').addEventListener('click', () => eliminarItem(item.id));
+    lista.appendChild(div);
+  });
+}
+
+// ===== NAVEGACIÓN =====
+
+function configurarPestanas() {
+  // Por ahora solo una categoría (combos)
+  // Se puede expandir para productos individuales
+}
+
+function configurarNavegacion() {
+  document.getElementById('btn-cerrar')?.addEventListener('click', () => {
+    if (confirm('¿Deseas salir de la compra?')) {
+      detenerTimer();
+      sessionStorage.clear();
+      window.location.href = '../../index.html';
     }
+  });
 
-    // Función para actualizar la lista visual de la orden
-    function actualizarListaOrden() {
-        if (ordenDulceria.length === 0) {
-            listaOrden.style.display = 'none';
-            mensajeOrdenVacia.style.display = 'block';
-            return;
-        }
+  document.getElementById('btn-continuar-dulceria')?.addEventListener('click', () => {
+    // Guardar orden
+    sessionStorage.setItem('ordenDulceria', JSON.stringify(ordenDulceria));
+    sessionStorage.setItem('totalDulceria', totalDulceria.toFixed(2));
+    sessionStorage.setItem('tiempoRestante', getTiempoRestante().toString());
 
-        listaOrden.style.display = 'block';
-        mensajeOrdenVacia.style.display = 'none';
-        listaOrden.innerHTML = '';
+    detenerTimer();
+    window.location.href = 'pago.html';
+  });
+}
 
-        // Agrupar productos por ID
-        const conteoProductos = {};
-        ordenDulceria.forEach(prod => {
-            if (!conteoProductos[prod.idProducto]) {
-                conteoProductos[prod.idProducto] = { ...prod, cantidad: 0 };
-            }
-            conteoProductos[prod.idProducto].cantidad++;
-        });
+function configurarTimer() {
+  const tiempoGuardado = sessionStorage.getItem('tiempoRestante');
+  const minutos = tiempoGuardado ? Math.ceil(parseInt(tiempoGuardado) / 60) : 4;
 
-        Object.values(conteoProductos).forEach(item => {
-            const itemElement = document.createElement('div');
-            itemElement.className = 'item-orden';
-            itemElement.innerHTML = `
-                <div class="detalle-item">
-                    <span class="cantidad-item">${item.cantidad} x</span>
-                    <span class="nombre-item">${item.nombreProducto}</span>
-                </div>
-                <div class="precio-acciones" style="display: flex; align-items: center;">
-                    <span class="precio-item">S/${(item.precioProducto * item.cantidad).toFixed(2)}</span>
-                    <button class="btn-eliminar-item" data-id="${item.idProducto}">
-                        <i class="far fa-trash-alt"></i>
-                    </button>
-                </div>
-            `;
+  const timerDisplay = document.getElementById('timer-display');
+  iniciarTimer(timerDisplay, onTiempoAgotado, minutos);
+}
 
-            // Event listener para eliminar
-            itemElement.querySelector('.btn-eliminar-item').addEventListener('click', () => {
-                eliminarProductoOrden(item.idProducto);
-            });
+function onTiempoAgotado() {
+  alert('Se agotó el tiempo. Serás redirigido al inicio.');
+  sessionStorage.clear();
+  window.location.href = '../../index.html';
+}
 
-            listaOrden.appendChild(itemElement);
-        });
-    }
+function mostrarNotificacion(mensaje) {
+  const notif = document.createElement('div');
+  notif.className = 'notificacion';
+  notif.textContent = mensaje;
+  notif.style.cssText = `
+    position: fixed; bottom: 100px; right: 20px;
+    background: #333; color: white; padding: 12px 24px;
+    border-radius: 4px; z-index: 10000;
+  `;
+  document.body.appendChild(notif);
+  setTimeout(() => notif.remove(), 2000);
+}
 
-    // Función para eliminar producto de la orden (uno por uno)
-    function eliminarProductoOrden(idProducto) {
-        const index = ordenDulceria.findIndex(p => p.idProducto == idProducto);
-        if (index > -1) {
-            const productoEliminado = ordenDulceria[index];
-            totalOrden -= productoEliminado.precioProducto;
-            ordenDulceria.splice(index, 1);
-            actualizarTotal();
-            actualizarListaOrden();
-        }
-    }
-
-    // Función para actualizar el total
-    function actualizarTotal() {
-        const totalGeneral = totalEntradas + totalOrden;
-        if (precioTotalSpan) precioTotalSpan.textContent = `S/${totalGeneral.toFixed(2)}`;
-    }
-
-    // Función para mostrar notificación
-    function mostrarNotificacion(mensaje) {
-        const notificacion = document.createElement('div');
-        notificacion.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #333;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 10000;
-            font-size: 0.9rem;
-            animation: fadeIn 0.3s;
-        `;
-        notificacion.textContent = mensaje;
-        document.body.appendChild(notificacion);
-
-        setTimeout(() => {
-            notificacion.style.opacity = '0';
-            notificacion.style.transition = 'opacity 0.3s';
-            setTimeout(() => notificacion.remove(), 300);
-        }, 2000);
-    }
-
-    // ========================================
-    // EVENT LISTENERS
-    // ========================================
-
-    // Event listener para cambiar categoría
-    pestanasDulceria.forEach(pestana => {
-        pestana.addEventListener('click', () => {
-            pestanasDulceria.forEach(p => p.classList.remove('activa'));
-            pestana.classList.add('activa');
-            const categoria = pestana.getAttribute('data-categoria');
-            renderizarProductos(categoria);
-        });
-    });
-
-    // Event listener para botón cerrar
-    const btnCerrar = document.getElementById('btn-cerrar');
-    if (btnCerrar) {
-        btnCerrar.addEventListener('click', () => {
-            if (confirm('¿Estás seguro de que deseas cancelar tu compra?')) {
-                localStorage.clear();
-                window.location.href = '../index.html';
-            }
-        });
-    }
-
-    // Event listener para botón Continuar
-    if (btnContinuar) {
-        btnContinuar.addEventListener('click', () => {
-            // Guardar orden en localStorage
-            localStorage.setItem('ordenDulceria', JSON.stringify(ordenDulceria));
-            localStorage.setItem('totalOrdenDulceria', totalOrden);
-
-            // Redirigir a la página de pago
-            window.location.href = 'pago.html';
-        });
-    }
-
-    // ========================================
-    // TEMPORIZADOR
-    // ========================================
-    let tiempoMinutos = 4;
-    let tiempoSegundos = 37; // Matching image roughly
-
-    const actualizarTemporizador = () => {
-        if (tiempoSegundos === 0) {
-            if (tiempoMinutos === 0) {
-                alert('Se agotó el tiempo para completar tu compra.');
-                localStorage.clear();
-                window.location.href = '../index.html';
-                return;
-            }
-            tiempoMinutos--;
-            tiempoSegundos = 59;
-        } else {
-            tiempoSegundos--;
-        }
-
-        const minutosDisplay = String(tiempoMinutos).padStart(2, '0');
-        const segundosDisplay = String(tiempoSegundos).padStart(2, '0');
-        if (timerDisplay) timerDisplay.textContent = `${minutosDisplay}:${segundosDisplay}`;
-    };
-
-    setInterval(actualizarTemporizador, 1000);
-
-    // ========================================
-    // INICIALIZACIÓN
-    // ========================================
-    renderizarProductos('promos-dulceras');
-    actualizarTotal();
-});
+// ===== INIT =====
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}

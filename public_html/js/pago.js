@@ -1,184 +1,206 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Retrieve data
-    const datoPelicula = {
-        titulo: localStorage.getItem('tituloPelicula') || 'Nada es lo que Parece 3',
-        detalles: localStorage.getItem('detallesPelicula') || '2D, REGULAR, DOBLADA',
-        cine: localStorage.getItem('nombreCine') || 'CP Tacna',
-        fecha: localStorage.getItem('fechaFuncion') || 'Hoy, 26 de Nov, 2025',
-        hora: localStorage.getItem('horaFuncion') || '15:30',
-        sala: localStorage.getItem('nombreSala') || 'SALA 5-D',
-        poster: localStorage.getItem('imagenPelicula') || '../assets/images/poster-placeholder.jpg'
-    };
+/**
+ * Pago - Página de resumen y confirmación de pago
+ * Usa sessionStorage para datos de la compra
+ */
 
-    // Fallback data for demo purposes if localStorage is empty
-    const butacas = JSON.parse(localStorage.getItem('butacasSeleccionadas')) || ['K10', 'K9'];
-    const cantButacas = parseInt(localStorage.getItem('numeroButacasSeleccionadas')) || butacas.length;
+import { fetchFromApi } from "./data-manager.js";
+import { iniciarTimer, detenerTimer, getTiempoRestante } from "./components/butaca/timer.js";
 
-    const entradas = JSON.parse(localStorage.getItem('entradasSeleccionadas')) || [{ tipo: 'General 2D OL', cantidad: 2, precio: 15.00 }];
-    const totalEntradas = parseFloat(localStorage.getItem('totalEntradas')) || 30.00;
+// ===== INICIALIZACIÓN =====
 
-    const ordenDulceria = JSON.parse(localStorage.getItem('ordenDulceria')) || [];
-    const totalDulceria = parseFloat(localStorage.getItem('totalOrdenDulceria')) || 0.00;
+async function init() {
+  console.log('Inicializando página de pago...');
 
-    const totalGeneral = totalEntradas + totalDulceria;
+  await cargarDatosFuncion();
+  cargarResumenCompra();
+  configurarTimer();
+  configurarNavegacion();
 
-    // Render Sidebar Info
-    const elTitle = document.getElementById('movie-title');
-    if (elTitle) elTitle.textContent = datoPelicula.titulo;
+  console.log('Página de pago lista');
+}
 
-    const elDetails = document.getElementById('movie-details');
-    if (elDetails) elDetails.textContent = datoPelicula.detalles;
+async function cargarDatosFuncion() {
+  const idFuncion = sessionStorage.getItem('id_funcion');
+  if (!idFuncion) return;
 
-    const elCinema = document.getElementById('cinema-name');
-    if (elCinema) elCinema.textContent = datoPelicula.cine;
+  try {
+    const response = await fetchFromApi('funcion', 'id', idFuncion);
+    const data = response.data;
 
-    const elDate = document.getElementById('showtime-date');
-    if (elDate) elDate.textContent = datoPelicula.fecha;
+    if (data) {
+      document.getElementById('movie-title').textContent = data.pelicula_nombre || '';
+      document.getElementById('movie-details').textContent = data.formatos || '';
+      document.getElementById('cinema-name').textContent = data.sede_nombre || '';
+      document.getElementById('showtime-date').textContent = data.fecha || '';
+      document.getElementById('showtime-time').textContent = data.hora || '';
+      document.getElementById('room-name').textContent = `SALA ${data.numero_sala || ''}`;
 
-    const elTime = document.getElementById('showtime-time');
-    if (elTime) elTime.textContent = datoPelicula.hora;
-
-    const elRoom = document.getElementById('room-name');
-    if (elRoom) elRoom.textContent = datoPelicula.sala;
-
-    const elPoster = document.getElementById('poster-img');
-    if (elPoster) elPoster.src = datoPelicula.poster;
-
-    const elNumButacas = document.getElementById('numero-butacas');
-    if (elNumButacas) elNumButacas.textContent = cantButacas;
-
-    // Calculate total tickets count
-    const cantEntradas = entradas.reduce((acc, curr) => acc + curr.cantidad, 0);
-    const elNumEntradas = document.getElementById('numero-entradas');
-    if (elNumEntradas) elNumEntradas.textContent = cantEntradas;
-
-    const elNumDulceria = document.getElementById('numero-dulceria');
-    if (elNumDulceria) elNumDulceria.textContent = ordenDulceria.length;
-
-    const elTotalLateral = document.getElementById('precio-total-lateral');
-    if (elTotalLateral) elTotalLateral.textContent = `S/${totalGeneral.toFixed(2)}`;
-
-    // Render Main Summary Card
-
-    // Butacas
-    const elResumenButacas = document.getElementById('resumen-butacas');
-    if (elResumenButacas) elResumenButacas.textContent = butacas.join(', ');
-
-    const elCantButacas = document.getElementById('cant-butacas');
-    if (elCantButacas) elCantButacas.textContent = cantButacas;
-
-    // Entradas
-    if (entradas.length > 0) {
-        const entrada = entradas[0]; // Simplified
-        const elTipoEntrada = document.getElementById('tipo-entrada');
-        if (elTipoEntrada) elTipoEntrada.textContent = entrada.tipo || 'General 2D OL';
-
-        const elCantEntradas = document.getElementById('cant-entradas');
-        if (elCantEntradas) elCantEntradas.textContent = entrada.cantidad || cantEntradas;
-
-        const elPrecioEntradas = document.getElementById('precio-entradas');
-        if (elPrecioEntradas) elPrecioEntradas.textContent = `S/${totalEntradas.toFixed(2)}`;
-
-        const elSubtotalEntradas = document.getElementById('subtotal-entradas');
-        if (elSubtotalEntradas) elSubtotalEntradas.textContent = `S/${totalEntradas.toFixed(2)}`;
+      const posterImg = document.getElementById('poster-img');
+      if (posterImg && data.pelicula_imagen) {
+        posterImg.src = data.pelicula_imagen;
+      }
     }
+  } catch (error) {
+    console.error('Error cargando función:', error);
+  }
+}
 
-    // Dulcería
-    const seccionDulceria = document.getElementById('seccion-dulceria-resumen');
-    if (seccionDulceria) {
-        if (ordenDulceria.length > 0) {
-            // Group items
-            const conteoProductos = {};
-            ordenDulceria.forEach(prod => {
-                if (!conteoProductos[prod.idProducto]) {
-                    conteoProductos[prod.idProducto] = { ...prod, cantidad: 0 };
-                }
-                conteoProductos[prod.idProducto].cantidad++;
-            });
+function cargarResumenCompra() {
+  // === BUTACAS ===
+  const butacas = JSON.parse(sessionStorage.getItem('reservaButacas')) || [];
+  const numButacas = sessionStorage.getItem('numeroButacasSeleccionadas') || '0';
 
-            Object.values(conteoProductos).forEach(item => {
-                const subtotalItem = item.precioProducto * item.cantidad;
-                const div = document.createElement('div');
-                div.className = 'fila-resumen';
-                div.innerHTML = `
-                    <div class="detalle-producto">
-                        <span>${item.nombreProducto}</span>
-                        <small>${item.categoria === 'promos-dulceras' ? '(Salado)' : ''}</small>
-                    </div>
-                    <span class="cantidad-resumen">Cant. ${item.cantidad}</span>
-                    <span class="precio-resumen">S/${subtotalItem.toFixed(2)}</span>
-                `;
-                seccionDulceria.appendChild(div);
-            });
+  document.getElementById('numero-butacas').textContent = numButacas;
+  document.getElementById('cant-butacas').textContent = numButacas;
+  document.getElementById('resumen-butacas').textContent =
+    Array.isArray(butacas) ? butacas.join(', ') : butacas;
 
-            // Subtotal Dulceria row
-            const divSubtotal = document.createElement('div');
-            divSubtotal.className = 'subtotal-resumen';
-            divSubtotal.innerHTML = `<span>Sub-Total <span>S/${totalDulceria.toFixed(2)}</span></span>`;
-            seccionDulceria.appendChild(divSubtotal);
-        } else {
-            seccionDulceria.innerHTML += '<p style="font-size: 0.9rem; color: #777;">No seleccionaste productos.</p>';
+  // === ENTRADAS ===
+  const entradasDetalle = JSON.parse(sessionStorage.getItem('entradasDetalle')) || [];
+  const totalEntradas = parseFloat(sessionStorage.getItem('totalEntradas')) || 0;
+  const cantEntradas = sessionStorage.getItem('cantidadEntradas') || '0';
+
+  document.getElementById('numero-entradas').textContent = cantEntradas;
+
+  // Renderizar detalle de entradas
+  const seccionEntradas = document.querySelector('.seccion-resumen:nth-child(2)');
+  if (seccionEntradas && entradasDetalle.length > 0) {
+    let htmlEntradas = '<h4>Entradas:</h4>';
+
+    entradasDetalle.forEach(entrada => {
+      const subtotal = entrada.cantidad * entrada.precio;
+      htmlEntradas += `
+        <div class="fila-resumen">
+          <div class="detalle-producto">
+            <span>${entrada.tipo}</span>
+            <small class="categoria-${entrada.categoria}">${getCategoriaLabel(entrada.categoria)}</small>
+          </div>
+          <span class="cantidad-resumen">Cant. ${entrada.cantidad}</span>
+          <span class="precio-resumen">S/${subtotal.toFixed(2)}</span>
+        </div>
+      `;
+    });
+
+    htmlEntradas += `
+      <div class="subtotal-resumen">
+        <span>Sub-Total <span>S/${totalEntradas.toFixed(2)}</span></span>
+      </div>
+    `;
+
+    seccionEntradas.innerHTML = htmlEntradas;
+  }
+
+  // === DULCERÍA ===
+  const ordenDulceria = JSON.parse(sessionStorage.getItem('ordenDulceria')) || [];
+  const totalDulceria = parseFloat(sessionStorage.getItem('totalDulceria')) || 0;
+
+  document.getElementById('numero-dulceria').textContent = ordenDulceria.length;
+
+  const seccionDulceria = document.getElementById('seccion-dulceria-resumen');
+  if (seccionDulceria) {
+    seccionDulceria.innerHTML = '<h4>Dulcería:</h4>';
+
+    if (ordenDulceria.length > 0) {
+      // Agrupar por ID
+      const agrupado = {};
+      ordenDulceria.forEach(item => {
+        if (!agrupado[item.id]) {
+          agrupado[item.id] = { ...item, cantidad: 0 };
         }
+        agrupado[item.id].cantidad++;
+      });
+
+      Object.values(agrupado).forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        seccionDulceria.innerHTML += `
+          <div class="fila-resumen">
+            <div class="detalle-producto">
+              <span>${item.nombre}</span>
+            </div>
+            <span class="cantidad-resumen">Cant. ${item.cantidad}</span>
+            <span class="precio-resumen">S/${subtotal.toFixed(2)}</span>
+          </div>
+        `;
+      });
+
+      seccionDulceria.innerHTML += `
+        <div class="subtotal-resumen">
+          <span>Sub-Total <span>S/${totalDulceria.toFixed(2)}</span></span>
+        </div>
+      `;
+    } else {
+      seccionDulceria.innerHTML += '<p class="sin-productos">No seleccionaste productos.</p>';
     }
+  }
 
-    // Total Final
-    const elTotalFinal = document.getElementById('precio-total-final');
-    if (elTotalFinal) elTotalFinal.textContent = `S/${totalGeneral.toFixed(2)}`;
+  // === TOTAL GENERAL ===
+  const totalGeneral = totalEntradas + totalDulceria;
+  document.getElementById('precio-total-lateral').textContent = `S/${totalGeneral.toFixed(2)}`;
+  document.getElementById('precio-total-final').textContent = `S/${totalGeneral.toFixed(2)}`;
 
-    // Timer Logic
-    let tiempoMinutos = 4;
-    let tiempoSegundos = 37;
-    const timerDisplay = document.getElementById('timer-display');
+  // Guardar total final en sessionStorage
+  sessionStorage.setItem('totalCompra', totalGeneral.toFixed(2));
+}
 
-    if (timerDisplay) {
-        setInterval(() => {
-            if (tiempoSegundos === 0) {
-                if (tiempoMinutos === 0) {
-                    alert('Tiempo agotado');
-                    window.location.href = '../index.html';
-                    return;
-                }
-                tiempoMinutos--;
-                tiempoSegundos = 59;
-            } else {
-                tiempoSegundos--;
-            }
-            timerDisplay.textContent = `${String(tiempoMinutos).padStart(2, '0')}:${String(tiempoSegundos).padStart(2, '0')}`;
-        }, 1000);
+function getCategoriaLabel(categoria) {
+  const labels = {
+    'adulto': '',
+    'nino': '(Niño)',
+    'mayor': '(60+ años)',
+    'conadis': '(Conadis)'
+  };
+  return labels[categoria] || '';
+}
+
+// ===== TIMER =====
+
+function configurarTimer() {
+  const tiempoGuardado = sessionStorage.getItem('tiempoRestante');
+  const minutos = tiempoGuardado ? Math.ceil(parseInt(tiempoGuardado) / 60) : 4;
+
+  const timerDisplay = document.getElementById('timer-display');
+  iniciarTimer(timerDisplay, onTiempoAgotado, minutos);
+}
+
+function onTiempoAgotado() {
+  alert('Se agotó el tiempo. Serás redirigido al inicio.');
+  sessionStorage.clear();
+  window.location.href = '../../index.html';
+}
+
+// ===== NAVEGACIÓN =====
+
+function configurarNavegacion() {
+  // Cerrar
+  document.getElementById('btn-cerrar')?.addEventListener('click', () => {
+    if (confirm('¿Deseas salir de la compra?')) {
+      detenerTimer();
+      sessionStorage.clear();
+      window.location.href = '../../index.html';
     }
+  });
 
-    // Buttons
-    const btnContinuar = document.querySelector('.btn-continuar-pago');
-    if (btnContinuar) {
-        btnContinuar.addEventListener('click', () => {
-            // Redirigir a la sección de medio de pago
-            window.location.href = 'medio_pago.html';
-        });
-    }
+  // Usuario
+  document.getElementById('btn-usuario')?.addEventListener('click', () => {
+    window.location.href = 'login.html';
+  });
 
-    const btnCerrarResumen = document.querySelector('.btn-cerrar-resumen');
-    if (btnCerrarResumen) {
-        btnCerrarResumen.addEventListener('click', () => {
-            window.location.href = 'dulceria.html';
-        });
-    }
+  // Cerrar resumen (volver atrás)
+  document.querySelector('.btn-cerrar-resumen')?.addEventListener('click', () => {
+    window.location.href = 'dulceria.html';
+  });
 
-    // Botón cerrar (X) del header - redirige al inicio
-    const btnCerrar = document.getElementById('btn-cerrar');
-    if (btnCerrar) {
-        btnCerrar.addEventListener('click', () => {
-            if (confirm('¿Deseas salir de la compra? Perderás tu selección.')) {
-                localStorage.clear();
-                window.location.href = '../../index.html';
-            }
-        });
-    }
+  // Continuar al método de pago
+  document.querySelector('.btn-continuar-pago')?.addEventListener('click', () => {
+    sessionStorage.setItem('tiempoRestante', getTiempoRestante().toString());
+    detenerTimer();
+    window.location.href = 'medio_pago.html';
+  });
+}
 
-    // Botón usuario del header
-    const btnUsuario = document.getElementById('btn-usuario');
-    if (btnUsuario) {
-        btnUsuario.addEventListener('click', () => {
-            window.location.href = 'login.html';
-        });
-    }
-});
+// ===== INIT =====
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}

@@ -248,6 +248,7 @@ class AsientoModel {
             $mapa[$fila][$columna] = [
                 'id' => $asiento['id_asiento'],
                 'estado' => $asiento['estado'],
+                'es_silla_ruedas' => isset($asiento['es_silla_ruedas']) ? (bool)$asiento['es_silla_ruedas'] : false,
                 'codigo' => $fila . $columna
             ];
         }
@@ -258,6 +259,29 @@ class AsientoModel {
             'columnas' => $maxColumna,
             'total' => count($asientos)
         ];
+    }
+
+    // -------------------------------------------------
+    // OBTENER ASIENTOS OCUPADOS POR FUNCIÓN
+    // -------------------------------------------------
+    public function getOcupadosByFuncion($idFuncion) {
+        try {
+            $sql = "SELECT 
+                        a.id_asiento, 
+                        a.fila_asiento, 
+                        a.columna_asiento,
+                        CONCAT(a.fila_asiento, a.columna_asiento) as codigo
+                    FROM asiento a
+                    INNER JOIN descripcion_asiento da ON a.id_asiento = da.id_asiento
+                    INNER JOIN compra_boleto cb ON da.id_compra_boleto = cb.id_compra_boleto
+                    WHERE cb.id_funcion = :id_funcion";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id_funcion' => $idFuncion]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 
     // -------------------------------------------------

@@ -208,43 +208,52 @@ class FuncionModel {
     // -------------------------------------------------
     // OBTENER FUNCIÓN POR ID
     // -------------------------------------------------
-    public function getById($id) {
-        if (!is_numeric($id)) {
-            return null;
-        }
-
-        try {
-            $sql = "SELECT 
-                        f.id_funcion,
-                        f.fecha,
-                        f.hora,
-                        f.estado,
-                        f.id_pelicula,
-                        f.id_sala,
-                        p.nombre AS pelicula_nombre,
-                        p.duracion AS pelicula_duracion,
-                        p.url_imagen AS pelicula_imagen,
-                        s.num_sala AS numero_sala,
-                        se.nombre AS sede_nombre,
-                        se.id_sede,
-                        c.nombre AS ciudad_nombre,
-                        (SELECT COUNT(*) FROM compra_boleto cb WHERE cb.id_funcion = f.id_funcion) as boletos_vendidos
-                    FROM funcion f
-                    INNER JOIN pelicula p ON f.id_pelicula = p.id_pelicula
-                    INNER JOIN sala s ON f.id_sala = s.id_sala
-                    INNER JOIN sede se ON s.id_sede = se.id_sede
-                    INNER JOIN ciudad c ON se.id_ciudad = c.id_ciudad
-                    WHERE f.id_funcion = :id";
-
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([":id" => $id]);
-
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return null;
-        }
+public function getById($id) {
+    if (!is_numeric($id)) {
+        return null;
     }
 
+    try {
+        $sql = "SELECT 
+                    f.id_funcion,
+                    f.fecha,
+                    f.hora,
+                    f.estado,
+                    f.id_pelicula,
+                    f.id_sala,
+                    p.nombre AS pelicula_nombre,
+                    p.duracion AS pelicula_duracion,
+                    p.url_imagen AS pelicula_imagen,
+                    s.num_sala AS numero_sala,
+                    se.nombre AS sede_nombre,
+                    se.id_sede,
+                    c.nombre AS ciudad_nombre,
+                    -- Subconsulta para contar boletos (se mantiene igual)
+                    (SELECT COUNT(*) FROM compra_boleto cb WHERE cb.id_funcion = f.id_funcion) as boletos_vendidos,
+                    -- Nueva lógica para concatenar formatos (Ej: '2D, 3D, IMAX')
+                    GROUP_CONCAT(DISTINCT forma.nombre SEPARATOR ', ') AS formatos
+                FROM funcion f
+                INNER JOIN pelicula p ON f.id_pelicula = p.id_pelicula
+                INNER JOIN sala s ON f.id_sala = s.id_sala
+                INNER JOIN sede se ON s.id_sede = se.id_sede
+                INNER JOIN ciudad c ON se.id_ciudad = c.id_ciudad
+                -- Joins adicionales para llegar al nombre del formato
+                LEFT JOIN formato_pelicula fo ON fo.id_pelicula = p.id_pelicula
+                LEFT JOIN formato forma ON forma.id_formato = fo.id_formato
+                WHERE f.id_funcion = :id
+                GROUP BY f.id_funcion";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([":id" => $id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+    } catch (PDOException $e) {
+        // Es buena práctica loguear el error real en un archivo de logs si es posible
+        // error_log($e->getMessage());
+        return null;
+    }
+}
     // -------------------------------------------------
     // OBTENER TODAS LAS FUNCIONES
     // -------------------------------------------------

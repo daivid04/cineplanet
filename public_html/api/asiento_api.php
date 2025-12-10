@@ -37,6 +37,9 @@ try {
         case 'GET':
             if (isset($_GET['id'])) {
                 $response = $controller->getById(intval($_GET['id']));
+            } else if (isset($_GET['funcion'])) {
+                // Obtener asientos ocupados por función
+                $response = $controller->getOcupadosByFuncion(intval($_GET['funcion']));
             } else if (isset($_GET['sala'])) {
                 $idSala = intval($_GET['sala']);
                 

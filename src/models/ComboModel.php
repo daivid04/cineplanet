@@ -44,11 +44,12 @@ class ComboModel {
         }
 
         try {
-            $sql = "INSERT INTO combos (nombre, precio, estado) VALUES (:nombre, :precio, 1)";
+            $sql = "INSERT INTO combos (nombre, precio, estado, url_combo) VALUES (:nombre, :precio, 1, :url_combo)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ":nombre" => $data["nombre"],
-                ":precio" => $data["precio"]
+                ":precio" => $data["precio"],
+                ":url_combo" => $data["url_combo"] ?? null
             ]);
 
             return [
@@ -70,7 +71,7 @@ class ComboModel {
         }
 
         try {
-            $sql = "SELECT id_combo, nombre, precio, estado FROM combos WHERE id_combo = :id";
+            $sql = "SELECT id_combo, nombre, precio, estado, url_combo FROM combos WHERE id_combo = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([":id" => $id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -84,7 +85,7 @@ class ComboModel {
     // -------------------------------------------------
     public function getAll($soloActivos = false) {
         try {
-            $sql = "SELECT id_combo, nombre, precio, estado FROM combos";
+            $sql = "SELECT id_combo, nombre, precio, estado, url_combo FROM combos";
             if ($soloActivos) {
                 $sql .= " WHERE estado = 1";
             }

@@ -114,4 +114,17 @@ class AsientoController {
     public function countBySala($idSala, $soloActivos = false) {
         return $this->asientoModel->countBySala($idSala, $soloActivos);
     }
+
+    public function getOcupadosByFuncion($idFuncion) {
+        try {
+            $ocupados = $this->asientoModel->getOcupadosByFuncion($idFuncion);
+            return [
+                "success" => true, 
+                "data" => $ocupados, 
+                "total" => count($ocupados)
+            ];
+        } catch (Exception $e) {
+            return ["success" => false, "message" => $e->getMessage()];
+        }
+    }
 }

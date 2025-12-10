@@ -2,118 +2,116 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3. Dulcería</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../css/dulceria.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3. Dulcería</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../css/dulceria.css">
 </head>
 
 <body>
-    <header class="header-dulceria">
-        <div class="header-izquierda">
-            <a href="entradas.html" class="btn-atras">
-                <i class="fas fa-chevron-left"></i> Atrás
-            </a>
-        </div>
-
-        <div class="header-centro">
-            <h2>3. Dulcería</h2>
-        </div>
-
-        <div class="header-derecha">
-            <button class="icono-header" id="btn-usuario"><i class="far fa-user-circle"></i></button>
-            <div class="separador-header"></div>
-            <button class="icono-header" id="btn-cerrar"><i class="fas fa-times"></i></button>
-        </div>
-    </header>
-
-    <div class="layout-wrapper">
-        <main class="contenedor-compra">
-            <aside class="panel-resumen">
-                <div class="pelicula-poster" id="movie-poster">
-                    <img src="../assets/images/placeholder.svg" alt="Poster" id="poster-img">
-                </div>
-                <h3 id="movie-title">Nada es lo que Parece 3</h3>
-                <p class="pelicula-detalles" id="movie-details">2D, REGULAR, DOBLADA</p>
-
-                <div class="info-funcion">
-                    <p><strong id="cinema-name">CP Tacna</strong></p>
-                    <p><i class="far fa-calendar-alt"></i> <span id="showtime-date">Hoy, 26 de Nov, 2025</span></p>
-                    <p><i class="far fa-clock"></i> <span id="showtime-time">15:30</span></p>
-                    <p><i class="far fa-circle"></i> <span id="room-name">SALA 5-D</span></p>
-                </div>
-
-                <div class="info-compra">
-                    <p><strong>Butacas:</strong> <span id="numero-butacas">2</span></p>
-                    <p><strong>Entradas:</strong> <span id="numero-entradas">2</span></p>
-                </div>
-
-                <div class="total-resumen">
-                    <p class="texto-total">Total: <span class="precio-total" id="precio-total">S/30.00</span></p>
-                </div>
-
-                <button class="btn-ver-resumen" id="btn-ver-resumen">Ver Resumen de compra</button>
-            </aside>
-
-            <section class="panel-dulceria">
-                <div class="barra-superior-dulceria">
-                    <div class="progreso-compra">
-                        <div class="paso completado"><i class="fas fa-couch"></i></div>
-                        <div class="linea-paso"></div>
-                        <div class="paso completado"><i class="fas fa-ticket-alt"></i></div>
-                        <div class="linea-paso"></div>
-                        <div class="paso activo"><i class="fas fa-popcorn"></i></div>
-                        <div class="linea-paso"></div>
-                        <div class="paso"><i class="far fa-credit-card"></i></div>
-                    </div>
-                    <div class="timer-container">
-                        <i class="far fa-clock"></i> <span id="timer-display">04:52</span>
-                    </div>
-                </div>
-
-                <!-- Pestañas de categorías -->
-                <nav class="pestanas-dulceria">
-                    <button class="pestana-dulceria activa" data-categoria="promos-dulceras">
-                        <div class="icono-contenedor"><i class="fas fa-popcorn"></i></div>
-                        <span>Promos<br>Dulceras</span>
-                    </button>
-                    <button class="pestana-dulceria" data-categoria="promos-pelicula">
-                        <div class="icono-contenedor"><i class="fas fa-film"></i></div>
-                        <span>Promos De<br>Película</span>
-                    </button>
-                    <button class="pestana-dulceria" data-categoria="combos-uno-dos">
-                        <div class="icono-contenedor"><i class="fas fa-user-friends"></i></div>
-                        <span>Combos Para<br>Uno & Dos</span>
-                    </button>
-                </nav>
-
-                <!-- Galería de productos -->
-                <div class="galeria-productos" id="galeria-productos">
-                    <!-- Los productos se cargarán dinámicamente con JavaScript -->
-                </div>
-            </section>
-        </main>
+  <header class="header-dulceria">
+    <div class="header-izquierda">
+      <a href="entradas.html" class="btn-atras">
+        <i class="fas fa-chevron-left"></i> Atrás
+      </a>
     </div>
 
-    <!-- Panel inferior de carrito y continuar -->
-    <div class="panel-inferior-dulceria">
-        <h3>Tu Orden de Dulcería <i class="fas fa-cog"></i></h3>
-        <div class="contenedor-orden-wrapper">
-            <div class="contenedor-orden" id="contenedor-orden">
-                <p class="mensaje-orden-vacia" id="mensaje-orden-vacia">Aún no tienes productos agregados a tu
-                    orden.</p>
-                <div class="lista-orden" id="lista-orden" style="display: none;">
-                    <!-- Los items seleccionados se mostrarán aquí -->
-                </div>
-            </div>
-            <button class="btn-continuar-dulceria" id="btn-continuar-dulceria">Continuar</button>
-        </div>
+    <div class="header-centro">
+      <h2>3. Dulcería</h2>
     </div>
-    </section>
+
+    <div class="header-derecha">
+      <button class="icono-header" id="btn-usuario"><i class="far fa-user-circle"></i></button>
+      <div class="separador-header"></div>
+      <button class="icono-header" id="btn-cerrar"><i class="fas fa-times"></i></button>
+    </div>
+  </header>
+
+  <div class="layout-wrapper">
+    <main class="contenedor-compra">
+      <aside class="panel-resumen">
+        <div class="pelicula-poster" id="movie-poster">
+          <img src="../assets/images/placeholder.svg" alt="Poster" id="poster-img">
+        </div>
+        <h3 id="movie-title">Nada es lo que Parece 3</h3>
+        <p class="pelicula-detalles" id="movie-details">2D, REGULAR, DOBLADA</p>
+
+        <div class="info-funcion">
+          <p><strong id="cinema-name">CP Tacna</strong></p>
+          <p><i class="far fa-calendar-alt"></i> <span id="showtime-date">Hoy, 26 de Nov, 2025</span></p>
+          <p><i class="far fa-clock"></i> <span id="showtime-time">15:30</span></p>
+          <p><i class="far fa-circle"></i> <span id="room-name">SALA 5-D</span></p>
+        </div>
+
+        <div class="info-compra">
+          <p><strong>Butacas:</strong> <span id="numero-butacas">2</span></p>
+          <p><strong>Entradas:</strong> <span id="numero-entradas">2</span></p>
+        </div>
+
+        <div class="total-resumen">
+          <p class="texto-total">Total: <span class="precio-total" id="precio-total">S/30.00</span></p>
+        </div>
+
+        <button class="btn-ver-resumen" id="btn-ver-resumen">Ver Resumen de compra</button>
+      </aside>
+
+      <section class="panel-dulceria">
+        <div class="barra-superior-dulceria">
+          <div class="progreso-compra">
+            <div class="paso completado"><i class="fas fa-couch"></i></div>
+            <div class="linea-paso"></div>
+            <div class="paso completado"><i class="fas fa-ticket-alt"></i></div>
+            <div class="linea-paso"></div>
+            <div class="paso activo"><i class="fas fa-popcorn"></i></div>
+            <div class="linea-paso"></div>
+            <div class="paso"><i class="far fa-credit-card"></i></div>
+          </div>
+          <div class="timer-container">
+            <i class="far fa-clock"></i> <span id="timer-display">04:52</span>
+          </div>
+        </div>
+
+        <!-- Pestañas de categorías -->
+        <nav class="pestanas-dulceria">
+          <button class="pestana-dulceria activa" data-categoria="promos-dulceras">
+            <div class="icono-contenedor"><i class="fas fa-popcorn"></i></div>
+            <span>Promos<br>Dulceras</span>
+          </button>
+          <button class="pestana-dulceria" data-categoria="promos-pelicula">
+            <div class="icono-contenedor"><i class="fas fa-film"></i></div>
+            <span>Promos De<br>Película</span>
+          </button>
+          <button class="pestana-dulceria" data-categoria="combos-uno-dos">
+            <div class="icono-contenedor"><i class="fas fa-user-friends"></i></div>
+            <span>Combos Para<br>Uno & Dos</span>
+          </button>
+        </nav>
+
+        <!-- Galería de productos -->
+        <div class="galeria-productos" id="galeria-productos">
+          <!-- Los productos se cargarán dinámicamente con JavaScript -->
+        </div>
+      </section>
     </main>
+  </div>
 
-    <script src="../js/dulceria.js"></script>
+  <!-- Panel inferior de carrito y continuar -->
+  <div class="panel-inferior-dulceria">
+    <h3>Tu Orden de Dulcería <i class="fas fa-cog"></i></h3>
+    <div class="contenedor-orden-wrapper">
+      <div class="contenedor-orden" id="contenedor-orden">
+        <p class="mensaje-orden-vacia" id="mensaje-orden-vacia">Aún no tienes productos agregados a tu
+          orden.</p>
+        <div class="lista-orden" id="lista-orden" style="display: none;">
+          <!-- Los items seleccionados se mostrarán aquí -->
+        </div>
+      </div>
+      <button class="btn-continuar-dulceria" id="btn-continuar-dulceria">Continuar</button>
+    </div>
+  </div>
+
+  <script type="module" src="../js/dulceria.js"></script>
 </body>
 
 </html>

@@ -2,158 +2,89 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2. Entradas</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../css/entradas.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2. Entradas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../css/entradas.css">
 </head>
 
 <body>
-    <header class="header-entradas">
-        <div class="header-izquierda">
-            <a href="butacas.html" class="icono-header">
-                <i class="fas fa-chevron-left"></i> Atrás
-            </a>
+  <header class="header-entradas">
+    <div class="header-izquierda">
+      <a href="butacas.html" class="icono-header">
+        <i class="fas fa-chevron-left"></i> Atrás
+      </a>
+    </div>
+
+    <div class="header-centro">
+      <h2>2. Entradas</h2>
+      <div class="header-progreso">
+        <i class="fas fa-couch"></i>
+        <i class="fas fa-ticket-alt paso-activo"></i>
+        <i class="fas fa-candy-cane"></i>
+        <i class="fas fa-credit-card"></i>
+      </div>
+    </div>
+
+    <div class="header-derecha">
+      <span class="icono-header icono-timer"><i class="far fa-clock"></i> <span id="timer-display">04:18</span></span>
+      <button class="icono-header" id="btn-usuario"><i class="far fa-user-circle"></i></button>
+      <button class="icono-header" id="btn-cerrar"><i class="fas fa-times"></i></button>
+    </div>
+  </header>
+
+  <main class="contenedor-compra">
+    <aside class="panel-resumen">
+      <div class="pelicula-poster" id="movie-poster"></div>
+      <h3 id="movie-title">Nada es lo que Parece 3</h3>
+      <p class="pelicula-detalles" id="movie-details">2D, REGULAR, DOBLADA</p>
+
+      <div class="info-funcion">
+        <p><i class="fas fa-map-marker-alt"></i> <strong id="cinema-name">CP Tacna</strong></p>
+        <p><i class="far fa-calendar-alt"></i> <span id="showtime-date">Hoy, 14 de Nov, 2025</span></p>
+        <p><i class="far fa-clock"></i> <span id="showtime-time">20:00</span></p>
+        <p><i class="fas fa-video"></i> <span id="room-name">SALA 3-D</span></p>
+      </div>
+
+      <p class="info-butacas">Butacas: <span id="numero-butacas">2</span></p>
+    </aside>
+
+    <section class="panel-seleccion">
+      <div class="encabezado-seleccion">
+        <h1>Selecciona tus entradas</h1>
+        <p class="instruccion">¡Combínalas como prefieras! Recuerda que deben coincidir con el número de butacas
+          que
+          seleccionaste.</p>
+      </div>
+
+      <div class="columnas-entradas">
+        <div class="columna-tipo-entradas" id="entradas-generales">
+          <h2>Tipos de Entrada</h2>
+          <!-- Los tipos de entrada se cargan dinámicamente desde la BD -->
+          <p class="cargando">Cargando tipos de entrada...</p>
         </div>
+      </div>
 
-        <div class="header-centro">
-            <h2>2. Entradas</h2>
-            <div class="header-progreso">
-                <i class="fas fa-couch"></i>
-                <i class="fas fa-ticket-alt paso-activo"></i>
-                <i class="fas fa-candy-cane"></i>
-                <i class="fas fa-credit-card"></i>
-            </div>
+      <footer class="panel-acciones">
+        <div class="seccion-codigo">
+          <div>
+            <h4>Canjea tus códigos</h4>
+            <span class="descripcion">Códigos promocionales, entradas corporativas.</span>
+          </div>
+          <input type="text" placeholder="Ingresa tu código">
+          <button class="btn-canjear" disabled>Canjear</button>
         </div>
+      </footer>
 
-        <div class="header-derecha">
-            <span class="icono-header icono-timer"><i class="far fa-clock"></i> <span
-                    id="timer-display">04:18</span></span>
-            <button class="icono-header" id="btn-usuario"><i class="far fa-user-circle"></i></button>
-            <button class="icono-header" id="btn-cerrar"><i class="fas fa-times"></i></button>
-        </div>
-    </header>
+      <div class="resumen-inferior">
+        <span class="total-seleccionadas" id="texto-resumen-entradas">Entradas seleccionadas: 0 de 2</span>
+        <button class="btn-continuar" id="btn-continuar" disabled>Continuar</button>
+      </div>
+    </section>
+  </main>
 
-    <main class="contenedor-compra">
-        <aside class="panel-resumen">
-            <div class="pelicula-poster" id="movie-poster"></div>
-            <h3 id="movie-title">Nada es lo que Parece 3</h3>
-            <p class="pelicula-detalles" id="movie-details">2D, REGULAR, DOBLADA</p>
-
-            <div class="info-funcion">
-                <p><i class="fas fa-map-marker-alt"></i> <strong id="cinema-name">CP Tacna</strong></p>
-                <p><i class="far fa-calendar-alt"></i> <span id="showtime-date">Hoy, 14 de Nov, 2025</span></p>
-                <p><i class="far fa-clock"></i> <span id="showtime-time">20:00</span></p>
-                <p><i class="fas fa-video"></i> <span id="room-name">SALA 3-D</span></p>
-            </div>
-
-            <p class="info-butacas">Butacas: <span id="numero-butacas">2</span></p>
-        </aside>
-
-        <section class="panel-seleccion">
-            <div class="encabezado-seleccion">
-                <h1>Selecciona tus entradas</h1>
-                <p class="instruccion">¡Combínalas como prefieras! Recuerda que deben coincidir con el número de butacas
-                    que
-                    seleccionaste.</p>
-            </div>
-
-            <div class="columnas-entradas">
-                <div class="columna-tipo-entradas" id="entradas-generales">
-                    <h2>Entradas generales</h2>
-
-                    <div class="item-entrada" data-precio="22.50">
-                        <div class="info">
-                            <h4>General 2D OL</h4>
-                            <span class="descripcion">Incluye servicio online.</span>
-                            <div class="precio-normal">S/22.50</div>
-                        </div>
-                        <div class="control-cantidad">
-                            <button class="btn-restar" disabled>-</button>
-                            <span class="cantidad">0</span>
-                            <button class="btn-sumar">+</button>
-                        </div>
-                    </div>
-
-                    <div class="item-entrada" data-precio="20.50">
-                        <div class="info">
-                            <h4>Mayores 60 años 2D OL</h4>
-                            <span class="descripcion">Incluye servicio online.</span>
-                            <div class="precio-normal">S/20.50 <span class="precio-bajo">Precio más bajo</span></div>
-                        </div>
-                        <div class="control-cantidad">
-                            <button class="btn-restar" disabled>-</button>
-                            <span class="cantidad">0</span>
-                            <button class="btn-sumar">+</button>
-                        </div>
-                    </div>
-
-                    <div class="item-entrada" data-precio="20.50">
-                        <div class="info">
-                            <h4>Niños 2D OL</h4>
-                            <span class="descripcion">Para niños de 2 a 11 años. Incluye servicio online.</span>
-                            <div class="precio-normal">S/20.50 <span class="precio-bajo">Precio más bajo</span></div>
-                        </div>
-                        <div class="control-cantidad">
-                            <button class="btn-restar" disabled>-</button>
-                            <span class="cantidad">0</span>
-                            <button class="btn-sumar">+</button>
-                        </div>
-                    </div>
-
-                    <div class="item-entrada" data-precio="15.50">
-                        <div class="info">
-                            <h4>Boleto Conadis 2D OL</h4>
-                            <span class="descripcion">* Descuento solo para personas con discapacidad * Se debe
-                                presentar DNI y Carnet Conadis en la taquilla antes de ingresar a la sala.</span>
-                            <div class="precio-normal">S/15.50</div>
-                        </div>
-                        <div class="control-cantidad">
-                            <button class="btn-restar" disabled>-</button>
-                            <span class="cantidad">0</span>
-                            <button class="btn-sumar">+</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="columna-tipo-entradas" id="entradas-beneficios">
-                    <h2>Tus Beneficios</h2>
-
-                    <div class="item-entrada" data-precio="11.25">
-                        <div class="info">
-                            <h4>50% Promo Amex 2025</h4>
-                            <span class="descripcion">Exclusivo con tu tarjeta American Express</span>
-                            <div class="precio-normal">S/11.25</div>
-                        </div>
-                        <div class="control-cantidad">
-                            <button class="btn-restar" disabled>-</button>
-                            <span class="cantidad">0</span>
-                            <button class="btn-sumar">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="panel-acciones">
-                <div class="seccion-codigo">
-                    <div>
-                        <h4>Canjea tus códigos</h4>
-                        <span class="descripcion">Códigos promocionales, entradas corporativas.</span>
-                    </div>
-                    <input type="text" placeholder="Ingresa tu código">
-                    <button class="btn-canjear" disabled>Canjear</button>
-                </div>
-            </footer>
-
-            <div class="resumen-inferior">
-                <span class="total-seleccionadas" id="texto-resumen-entradas">Entradas seleccionadas: 0 de 2</span>
-                <button class="btn-continuar" id="btn-continuar" disabled>Continuar</button>
-            </div>
-        </section>
-    </main>
-
-    <script src="../js/entradas.js"></script>
+  <script type="module" src="../js/entradas.js"></script>
 </body>
 
 </html>
