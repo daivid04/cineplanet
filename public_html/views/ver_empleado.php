@@ -48,7 +48,7 @@ if ($id) {
     <div class="w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-cineplanet-dark text-white p-6 flex justify-between items-center">
             <h1 class="text-2xl font-bold">Detalles del Empleado</h1>
-            <a href="../dashboard_tester.php" class="text-gray-300 hover:text-white">
+            <a href="/cineplanet/public_html/dashboard.php" class="text-gray-300 hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -61,7 +61,7 @@ if ($id) {
                     <span class="block sm:inline"><?php echo $error; ?></span>
                 </div>
                 <div class="mt-4">
-                    <a href="../dashboard_tester.php" class="text-cineplanet-blue hover:underline">Volver al dashboard</a>
+                    <a href="/cineplanet/public_html/dashboard.php" class="text-cineplanet-blue hover:underline">Volver al dashboard</a>
                 </div>
             <?php elseif ($empleado): ?>
                 <div class="flex items-center mb-8">
@@ -103,7 +103,7 @@ if ($id) {
                 </div>
 
                 <div class="mt-8 flex justify-end">
-                    <a href="../dashboard_tester.php" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cineplanet-blue focus:ring-offset-2">Volver</a>
+                    <a href="/cineplanet/public_html/dashboard.php" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cineplanet-blue focus:ring-offset-2">Volver</a>
                 </div>
             <?php endif; ?>
         </div>

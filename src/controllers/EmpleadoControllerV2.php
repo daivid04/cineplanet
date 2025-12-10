@@ -21,12 +21,29 @@ class EmpleadoController {
         try {
             $empleados = $this->empleadoModel->getAll();
             $stats = $this->empleadoModel->getStats();
+            
+            // Datos para gráficos
+            $sedesRaw = $this->empleadoModel->getEmployeesBySede();
+            $cargosRaw = $this->empleadoModel->getEmployeesByCargo();
+
+            // Formatear para Chart.js
+            $charts = [
+                'sedes' => [
+                    'labels' => array_column($sedesRaw, 'sede'),
+                    'values' => array_column($sedesRaw, 'total')
+                ],
+                'cargos' => [
+                    'labels' => array_column($cargosRaw, 'cargo'),
+                    'values' => array_column($cargosRaw, 'total')
+                ]
+            ];
 
             return [
                 "success" => true,
                 "data" => [
                     "empleados" => $empleados,
-                    "stats" => $stats
+                    "stats" => $stats,
+                    "charts" => $charts
                 ]
             ];
         } catch (Exception $e) {

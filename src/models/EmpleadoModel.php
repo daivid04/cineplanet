@@ -10,9 +10,6 @@ class EmpleadoModel {
     // -------------------------------------------------
     // OBTENER TODOS LOS EMPLEADOS
     // -------------------------------------------------
-    // -------------------------------------------------
-    // OBTENER TODOS LOS EMPLEADOS
-    // -------------------------------------------------
     public function getAll() {
         try {
             $sql = "SELECT 
@@ -160,6 +157,40 @@ class EmpleadoModel {
             throw new Exception("Error al obtener estadísticas: " . $e->getMessage());
         }
     }
+
+    // -------------------------------------------------
+    // OBTENER EMPLEADOS POR SEDE (PARA GRÁFICO)
+    // -------------------------------------------------
+    public function getEmployeesBySede() {
+        try {
+            $sql = "SELECT s.nombre as sede, COUNT(t.id_trabajador) as total 
+                    FROM trabajador t 
+                    JOIN sede s ON t.id_sede = s.id_sede 
+                    WHERE t.estado = 1 
+                    GROUP BY s.nombre";
+            $stmt = $this->conn->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Error al obtener empleados por sede: " . $e->getMessage());
+        }
+    }
+
+    // -------------------------------------------------
+    // OBTENER EMPLEADOS POR CARGO (PARA GRÁFICO)
+    // -------------------------------------------------
+    public function getEmployeesByCargo() {
+        try {
+            $sql = "SELECT tipo as cargo, COUNT(id_trabajador) as total 
+                    FROM trabajador 
+                    WHERE estado = 1 
+                    GROUP BY tipo";
+            $stmt = $this->conn->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Error al obtener empleados por cargo: " . $e->getMessage());
+        }
+    }
+
     // -------------------------------------------------
     // VALIDACIONES
     // -------------------------------------------------
@@ -284,6 +315,27 @@ class EmpleadoModel {
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Exception("Error al obtener el empleado: " . $e->getMessage());
+        }
+    }
+
+    // -------------------------------------------------
+    // ACTUALIZAR CONTRASEÑA
+    // -------------------------------------------------
+    public function updatePassword($id, $hashedPassword) {
+        if (!is_numeric($id)) {
+            throw new Exception("ID inválido.");
+        }
+
+        try {
+            // NOTA: Esto fallará si la columna 'contrasena' no existe en la tabla 'trabajador'
+            $sql = "UPDATE trabajador SET contrasena = :contrasena WHERE id_trabajador = :id";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                ":contrasena" => $hashedPassword,
+                ":id" => $id
+            ]);
+        } catch (PDOException $e) {
+            throw new Exception("Error al actualizar contraseña: " . $e->getMessage());
         }
     }
 }

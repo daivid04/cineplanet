@@ -47,7 +47,7 @@
                             </div>
                         <?php endif; ?>
 
-                        <form action="asignar_turno_tester.php" method="POST" class="space-y-6">
+                        <form action="/cineplanet/public_html/asignar_turno.php" method="POST" class="space-y-6">
                             <div>
                                 <label for="employee" class="block text-sm font-medium text-gray-700">Empleado</label>
                                 <select id="employee" name="id_trabajador" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cineplanet-blue focus:ring-cineplanet-blue p-2 border" required>
@@ -90,7 +90,7 @@
                             </div>
                             
                             <div class="flex justify-end gap-4 pt-4">
-                                <a href="horarios_tester.php" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">Cancelar</a>
+                                <a href="/cineplanet/public_html/horarios.php" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">Cancelar</a>
                                 <button type="submit" class="rounded-md border border-transparent bg-cineplanet-blue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700">Asignar Turno</button>
                             </div>
                         </form>

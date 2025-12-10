@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $controller->store($_POST);
     if ($result['success']) {
         // Redirigir a la lista de horarios con mensaje de éxito (simulado por ahora)
-        header("Location: horarios_tester.php");
+        header("Location: horarios.php");
         exit;
     } else {
         $error = $result['message'];
