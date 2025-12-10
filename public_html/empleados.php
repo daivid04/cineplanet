@@ -5,8 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Incluir conexión y controlador
-require_once __DIR__ . '/../../src/services/conexion.php';
-require_once __DIR__ . '/../../src/controllers/EmpleadoControllerV2.php';
+require_once __DIR__ . '/../src/services/conexion.php';
+require_once __DIR__ . '/../src/controllers/EmpleadoControllerV2.php';
 
 // Instanciar controlador
 try {
@@ -66,5 +66,5 @@ $pageTitle = "Gestión de Empleados";
 $activePage = "empleados";
 
 // Renderizar vista
-include __DIR__ . '/lista_empleados.php';
+include __DIR__ . '/views/lista_empleados.php';
 ?>

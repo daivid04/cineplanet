@@ -10,8 +10,9 @@ class HorarioController {
 
     public function index($search = '') {
         // Definir rango de fechas (Semana del 14 al 20 de Octubre 2024 según mockup/datos)
-        $startDate = '2024-10-14';
-        $endDate = '2024-10-20';
+        // Definir rango de fechas (Semana actual)
+        $startDate = date('Y-m-d', strtotime('monday this week'));
+        $endDate = date('Y-m-d', strtotime('sunday this week'));
 
         try {
             // Obtener todos los trabajadores
@@ -51,7 +52,7 @@ class HorarioController {
             return [
                 "success" => true,
                 "data" => $organizedData,
-                "week_range" => "Octubre 14-20, 2024", // Hardcoded for this demo matching data
+                "week_range" => date('M d', strtotime($startDate)) . " - " . date('M d, Y', strtotime($endDate)),
                 "dates" => $this->getDatesFromRange($startDate, $endDate)
             ];
 
@@ -150,8 +151,8 @@ class HorarioController {
     // -------------------------------------------------
     public function export($search = '') {
         // Definir rango de fechas (Semana del 14 al 20 de Octubre 2024 según mockup/datos)
-        $startDate = '2024-10-14';
-        $endDate = '2024-10-20';
+        $startDate = date('Y-m-d', strtotime('monday this week'));
+        $endDate = date('Y-m-d', strtotime('sunday this week'));
 
         try {
             $schedules = $this->horarioModel->getWeeklySchedules($startDate . ' 00:00:00', $endDate . ' 23:59:59', $search);
