@@ -259,7 +259,7 @@ body {
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-gris-texto);
     transition: color var(--transicion-rapida);
@@ -269,13 +269,15 @@ body {
     color: var(--color-azul-principal);
 }
 
+/* Icono + / - */
 .icono-expandir {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     color: var(--color-gris-oscuro);
     transition: transform var(--transicion-rapida);
 }
 
+/* Cambiar a - cuando está expandido */
 .filtro-header.expandido .icono-expandir {
     transform: rotate(180deg);
 }
@@ -305,16 +307,25 @@ body {
     color: var(--color-azul-principal);
 }
 
+/* Ocultar checkboxes/radios - mostrar solo texto */
 .filtro-opcion input[type="checkbox"],
 .filtro-opcion input[type="radio"] {
-    cursor: pointer;
-    width: 0.875rem;
-    height: 0.875rem;
-    accent-color: var(--color-azul-principal);
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Estilo cuando está seleccionado */
+.filtro-opcion input:checked+span {
+    color: var(--color-azul-principal);
+    font-weight: 600;
 }
 
 .filtro-opcion span {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    transition: color var(--transicion-rapida), font-weight var(--transicion-rapida);
 }
 
 /* ===== GALERÍA DE PELÍCULAS ===== */
