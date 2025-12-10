@@ -2,7 +2,7 @@
 header("Content-Type: application/json; charset=utf-8");
 
 require_once "../../src/services/conexion.php";
-require_once "../../src/controllers/invitado_controler.php";
+require_once "../../src/controllers/InvitadoController.php";
 
 $controller = new InvitadoController($conn);
 $method = $_SERVER["REQUEST_METHOD"];
