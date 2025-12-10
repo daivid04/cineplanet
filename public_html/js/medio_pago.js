@@ -268,13 +268,19 @@ function popularTicketPreview(userName, idCompra) {
   itemsContainer.innerHTML = '';
 
   // Entradas
+  // Entradas
   entradasDetalle.forEach(entrada => {
+    let etiqueta = '';
+    if (entrada.categoria === 'nino') etiqueta = '<span class="tag-ticket nino">Niño</span>';
+    else if (entrada.categoria === 'mayor') etiqueta = '<span class="tag-ticket mayor">60+</span>';
+    else if (entrada.categoria === 'conadis') etiqueta = '<span class="tag-ticket conadis">Conadis</span>';
+
     const row = document.createElement('div');
     row.className = 'detail-row';
     row.innerHTML = `
-      <span>${entrada.tipo}</span>
-      <span>Cant: ${entrada.cantidad}</span>
-      <span>S/${(entrada.cantidad * entrada.precio).toFixed(2)}</span>
+      <span style="flex: 2;">${entrada.tipo} ${etiqueta}</span>
+      <span style="flex: 1; text-align: center;">x${entrada.cantidad}</span>
+      <span style="flex: 1; text-align: right;">S/${(entrada.cantidad * entrada.precio).toFixed(2)}</span>
     `;
     itemsContainer.appendChild(row);
   });
